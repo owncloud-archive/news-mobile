@@ -1,9 +1,9 @@
 {
 	"name": "ownCloud News",
 	"description": "Mobile client for the ownCloud news app",
-	"launch_path": "/templates/index.html",
+	"launch_path": "templates/index.html",
 	"icons": {
-		"128": "/img/icon-128.png"
+		"128": "img/icon-128.png"
 	},
 	"developer": {
 		"name": "Bernhard Posselt, Alessandro Cosentino",
