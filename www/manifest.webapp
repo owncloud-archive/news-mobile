@@ -1,5 +1,5 @@
 {
-	"name": "ownCloud News app",
+	"name": "ownCloud News",
 	"description": "Mobile client for the ownCloud news app",
 	"launch_path": "/templates/index.html",
 	"icons": {
