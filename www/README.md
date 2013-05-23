@@ -1,13 +1,20 @@
 ownCloud News mobile app
 ========================
 
+Before you start
+----------------
+* Install **Apache** and place the app in **/var/www**
+* Make sure that **AllowOverride** is enabled for **/var/www** in the **/etc/apache/httpd.conf**
+
+Developing
+----------
+Simply launch the http://localhost/news-mobile/www/templates/index.html in your browser
+
+
 Firefox OS
 ----------
+How to launch the app in the simulator:
 
-How to launch the app:
-
-* Install Apache and place the app in the webroot
-* Make sure that **AllowOverride** is enabled for the webroot
 * Install the [Firefox OS Simulator](https://addons.mozilla.org/de/firefox/addon/firefox-os-simulator/)
 * Launch the simulator by going to  **Menu** > **Web Developer** > **Firefox OS Simulator**
 * Click on **Add Directory** and choose the **manifest.webapp** in the **www/*** folder
