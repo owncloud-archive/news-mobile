@@ -1,4 +1,4 @@
-ownCloud News mobile app - Get started with Developement
+ownCloud News mobile app - Development
 ========================================================
 
 Before you start
