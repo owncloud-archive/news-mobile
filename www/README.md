@@ -12,6 +12,8 @@ Before you start
 </Directory>
 ```
 
+If you want to use a different webserver for development, you need to set the [correct content type for the manifest.webapp file](https://developer.mozilla.org/en-US/docs/Web/Apps/Manifest?redirectlocale=en-US&redirectslug=Apps%2FManifest#Serving_manifests) by yourself.
+
 Developing
 ----------
 Simply launch the [http://localhost/news-mobile/www/templates/index.html](http://localhost/news-mobile/www/templates/index.html) in your browser
