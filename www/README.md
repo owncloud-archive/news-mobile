@@ -8,7 +8,7 @@ Before you start
 
 Developing
 ----------
-Simply launch the http://localhost/news-mobile/www/templates/index.html in your browser
+Simply launch the [http://localhost/news-mobile/www/templates/index.html](http://localhost/news-mobile/www/templates/index.html) in your browser
 
 
 Firefox OS
