@@ -52,11 +52,12 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				src: [
-					'app/app.js',
+					'config/app.js',
 					'config/routes.js',
-					'app/directives/*.js',
-					'app/controllers/*.js',
-					'app/services/**/*.js'
+					'controllers/**/*.js',
+					'directives/**/*.js',
+					'filters/**/*.js',
+					'services/**/*.js'
 				],
 				dest: '<%= meta.production %>app.js'
 			}
@@ -74,7 +75,14 @@ module.exports = function(grunt) {
 		},
 
 		jshint: {
-			files: ['Gruntfile.js', 'app/**/*.js', 'tests/**/*.js', 'config/*.js'],
+			files: [
+				'Gruntfile.js', 
+				'controllers/**/*.js',
+				'directives/**/*.js',
+				'filters/**/*.js',
+				'services/**/*.js',
+				'tests/**/*.js', 
+				'config/*.js'],
 			options: {
 				// options here to override JSHint defaults
 				globals: {
@@ -88,7 +96,10 @@ module.exports = function(grunt) {
 			// and wrap tasks if something changed
 			concat: {
 				files: [
-					'app/**/*.js',
+					'controllers/**/*.js',
+					'directives/**/*.js',
+					'filters/**/*.js',
+					'services/**/*.js',
 					'config/*.js'
 				],
 				tasks: ['build']
