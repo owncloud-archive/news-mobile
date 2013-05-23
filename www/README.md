@@ -6,13 +6,14 @@ Before you start
 * Install **Apache** and place the app in **/var/www**
 * Make sure that **AllowOverride** is enabled for **/var/www** in the **/etc/apache/httpd.conf**
 
+	<Directory "/var/www">
+ 		AllowOverride All
+	</Directory>
+
 Developing
 ----------
 Simply launch the [http://localhost/news-mobile/www/templates/index.html](http://localhost/news-mobile/www/templates/index.html) in your browser
 
-	<Directory "/var/www">
- 		AllowOverride All
-	</Directory>
 
 
 Firefox OS
