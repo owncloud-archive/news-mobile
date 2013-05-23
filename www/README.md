@@ -6,9 +6,11 @@ Before you start
 * Install **Apache** and place the app in **/var/www**
 * Make sure that **AllowOverride** is enabled for **/var/www** in the **/etc/apache/httpd.conf**:
 
-	<Directory "/var/www">
-		AllowOverride All
-	</Directory>
+```
+<Directory "/var/www">
+	AllowOverride All
+</Directory>
+```
 
 Developing
 ----------
