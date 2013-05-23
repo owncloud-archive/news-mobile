@@ -35,10 +35,11 @@ files = [
 	'vendor/angular/angular.js',
 	'vendor/angular/angular-mocks.js',
 	'tests/stubs/app.js',
-	'app/directives/*.js',
-	'app/filters/*.js',
-	'app/services/**/*.js',
-	'app/controllers/**/*.js',
+	'config/routes.js',
+	'directives/*.js',
+	'filters/*.js',
+	'services/**/*.js',
+	'controllers/**/*.js',
 	'tests/**/*Spec.js'
 ];
 
