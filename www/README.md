@@ -10,6 +10,10 @@ Developing
 ----------
 Simply launch the [http://localhost/news-mobile/www/templates/index.html](http://localhost/news-mobile/www/templates/index.html) in your browser
 
+	<Directory "/var/www">
+ 		AllowOverride All
+	</Directory>
+
 
 Firefox OS
 ----------
