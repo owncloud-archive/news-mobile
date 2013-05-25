@@ -19,13 +19,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-html, body {
-	height: 100%;
-	width: 100%;
-}
+angular.module('News').filter('trans', ['$locale', function ($locale) {
 
-#main {
-	background-color: #ddd;
-	height: 100%;
-	width: 100%;
-}
+	return function (text) {
+
+	};
+
+}]);

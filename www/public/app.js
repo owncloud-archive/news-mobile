@@ -32,4 +32,12 @@ angular.module('News').controller('LoginController', ['$scope', function ($scope
 	$scope.val = 'test';
 
 }]);
+angular.module('News').factory('Login', ['$http', function ($http) {
+
+	return {
+		userName: '',
+		password: ''
+	};
+
+}]);
 })(window.angular, jQuery);

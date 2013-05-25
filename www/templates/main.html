@@ -1,1 +1,7 @@
-<a href="#/login">Login to app</a>
+<div id="login" ng-hide="isLoggedIn()" ng-controller="LoginController">
+	<form>
+		<label for="username">{{'Username' | trans}}</label>
+		<input type="text" name="username"/>
+		<input type="password" name="password"/>
+	</form>
+</div>

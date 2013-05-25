@@ -19,13 +19,22 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-html, body {
-	height: 100%;
-	width: 100%;
-}
+describe('Login', function() {
 
-#main {
-	background-color: #ddd;
-	height: 100%;
-	width: 100%;
-}
+	var login;
+
+	// use the news container
+	beforeEach(module('News'));
+
+	beforeEach(inject(function (Login) {
+		login = Login;
+	}));
+
+
+	it('should have an empty login name and password', function () {
+		expect(login.userName).toBe('');
+		expect(login.password).toBe('');
+	});
+
+
+});
