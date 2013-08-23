@@ -120,11 +120,11 @@ angular.module('News').controller('MainController', ['$scope', 'Login', function
             });
     };
 
-    $scope.getFeedItems = function(feedId){
+    $scope.getFeedItems = function(feedId,offset){
         $scope.action = 'FeedItems';
         $scope.feedId = feedId;
 
-        Login.getFeedItems(feedId)
+        Login.getFeedItems(feedId,offset)
             .success(function(data, status){
                 $scope.data = data;
                 console.log(data);
@@ -150,7 +150,7 @@ angular.module('News').controller('MainController', ['$scope', 'Login', function
             $scope.getFolderItems($scope.folderId,offset);
         }
         else if (type == 'All' && $scope.action == 'FeedItems'){
-            $scope.getFolderItems($scope.feedId,offset);
+            $scope.getFeedItems($scope.feedId,offset);
         }
 
     };
@@ -283,10 +283,10 @@ angular.module('News').factory('Login', ['$http', function ($http) {
             return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
         },
 
-        getFeedItems : function(feedId){
+        getFeedItems : function(feedId,offset){
             var params = {
                 "batchSize": 20, //  the number of items that should be returned, defaults to 20
-                "offset": 0, // only return older (lower than equal that id) items than the one with id 30
+                "offset": offset, // only return older (lower than equal that id) items than the one with id 30
                 "type": 0, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
                 "id": feedId, // the id of the folder or feed, Use 0 for Starred and All
                 "getRead": true // if true it returns all items, false returns only unread items
@@ -297,10 +297,6 @@ angular.module('News').factory('Login', ['$http', function ($http) {
 
 
 	};
-
-}]);
-angular.module('News').factory('StarredItems', ['$http', 'Login', function ($http, Login) {
-
 
 }]);
 })(window.angular, jQuery);

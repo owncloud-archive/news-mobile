@@ -87,11 +87,11 @@ angular.module('News').controller('MainController', ['$scope', 'Login', function
             });
     };
 
-    $scope.getFeedItems = function(feedId){
+    $scope.getFeedItems = function(feedId,offset){
         $scope.action = 'FeedItems';
         $scope.feedId = feedId;
 
-        Login.getFeedItems(feedId)
+        Login.getFeedItems(feedId,offset)
             .success(function(data, status){
                 $scope.data = data;
                 console.log(data);
@@ -117,7 +117,7 @@ angular.module('News').controller('MainController', ['$scope', 'Login', function
             $scope.getFolderItems($scope.folderId,offset);
         }
         else if (type == 'All' && $scope.action == 'FeedItems'){
-            $scope.getFolderItems($scope.feedId,offset);
+            $scope.getFeedItems($scope.feedId,offset);
         }
 
     };

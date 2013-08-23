@@ -6,7 +6,7 @@
 
 <ul ng-show="view == 'Starred' || view == 'All'">
     <li ng-repeat="item in data.items">
-        <span ng-bind="item.title"></span><br/>
+        <span ng-bind="item.id"></span><br/>
         <!--
         <div ng-bind-html-unsafe="item.body">
         -->
@@ -36,7 +36,7 @@
 <ul ng-show="view == 'Feeds'">
     <li ng-repeat="feed in data.feeds">
         <img src="{{feed.faviconLink}}" width="16" height="16"/>
-        <a href ng-click="getFeedItems(feed.id)">
+        <a href ng-click="getFeedItems(feed.id,0)">
             <span ng-bind="feed.title"></span>
         </a>
         (<span ng-bind="feed.unreadCount"></span>)
