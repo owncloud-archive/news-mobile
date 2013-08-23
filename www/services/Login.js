@@ -22,11 +22,75 @@
 angular.module('News').factory('Login', ['$http', function ($http) {
 
 	return {
-		userName: '',
-		password: '',
+		userName: 'ikacikac',
+		password: 'ikacikac',
+        present: false,
+        timerRef : null,
+        timeout: 20000,
+        hostname : 'localhost/owncloud/index.php/apps/news/api/v1-2',
+        //this.userName+":"+this.password+"@"+this.url+"/version"
+        //TODO treba odraditi servis isLoggedIn u okviru ovog fajla posto je logicki u ovoj celini
 		login: function	() {
-			$http.
-		}
+            console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
+			return $http.get("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
+		},
+
+        getFolders : function(){
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/folders", cached : false });
+        },
+
+        getFeeds : function(){
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/feeds", cached : false });
+        },
+
+        getStarredItems : function(offset){
+            var params = {
+                "batchSize": 20, //  the number of items that should be returned, defaults to 20
+                "offset": offset, // only return older (lower than equal that id) items than the one with id 30
+                "type": 2, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                "id": 0, // the id of the folder or feed, Use 0 for Starred and All
+                "getRead": true // if true it returns all items, false returns only unread items
+            };
+
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+        },
+
+        getAllItems : function(offset){
+            var params = {
+                "batchSize": 20, //  the number of items that should be returned, defaults to 20
+                "offset": offset, // only return older (lower than equal that id) items than the one with id 30
+                "type": 3, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                "id": 0, // the id of the folder or feed, Use 0 for Starred and All
+                "getRead": true // if true it returns all items, false returns only unread items
+            };
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+        },
+
+        getFolderItems : function(folderId, offset){
+            var params = {
+                "batchSize": 20, //  the number of items that should be returned, defaults to 20
+                "offset": offset, // only return older (lower than equal that id) items than the one with id 30
+                "type": 1, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                "id": folderId, // the id of the folder or feed, Use 0 for Starred and All
+                "getRead": true // if true it returns all items, false returns only unread items
+            };
+
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+        },
+
+        getFeedItems : function(feedId){
+            var params = {
+                "batchSize": 20, //  the number of items that should be returned, defaults to 20
+                "offset": 0, // only return older (lower than equal that id) items than the one with id 30
+                "type": 0, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                "id": feedId, // the id of the folder or feed, Use 0 for Starred and All
+                "getRead": true // if true it returns all items, false returns only unread items
+            };
+
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+        }
+
+
 	};
 
 }]);

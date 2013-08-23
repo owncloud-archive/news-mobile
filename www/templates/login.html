@@ -1,1 +1,14 @@
-hi {{ val }}
+<form>
+    <label for="userName">{{ 'Username' | trans }}</label>
+    <input type="text" name="userName" ng-model="data.userName"/><br/>
+    <label for="password">{{ 'Password' | trans }}</label>
+    <input type="password" name="password" ng-model="data.password"/><br/>
+    <label for="hostName">{{ 'Hostname' | trans }}</label>
+    <input type="text" name="hostHame" ng-model="data.hostname"/><br/>
+    <input type="button" value="{{'Sign in' | trans}}" ng-click="logIn()"/>
+</form>
+
+<!--
+<div id="login" ng-hide="isLoggedIn()" ng-controller="LoginController">
+</div>
+-->

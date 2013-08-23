@@ -24,6 +24,7 @@ angular.module('News').config(['$routeProvider', function ($routeProvider) {
 
 	$routeProvider.when('/', {
 		templateUrl: 'main.html',
+        controller : 'MainController'
 
 	}).when('/login', {
 		templateUrl: 'login.html',

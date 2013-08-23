@@ -22,7 +22,29 @@
 angular.module('News').filter('trans', ['$locale', function ($locale) {
 
 	return function (text) {
+        if($locale.id == "sr-rs") {
+            switch (text) {
+                case "Username" :
+                    return "Korisnicko ime";
+                case "Password" :
+                    return "Lozinka";
+                case "Hostname" :
+                    return "Lokacija servera";
+                case "Sign in" :
+                    return "Prijavi se";
+                case "All":
+                    return "Sve";
+                case "Starred":
+                    return "Favoriti";
+                case "Folders":
+                    return "Folderi";
+                default:
+                    return text;
+            }
 
+        } else if($locale.id == "en-us") {
+            return text;
+        }
 	};
 
 }]);

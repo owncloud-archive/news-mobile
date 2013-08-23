@@ -1,7 +1,44 @@
-<div id="login" ng-hide="isLoggedIn()" ng-controller="LoginController">
-	<form>
-		<label for="username">{{'Username' | trans}}</label>
-		<input type="text" name="username"/>
-		<input type="password" name="password"/>
-	</form>
-</div>
+<check-presence></check-presence>
+<input type="button" value="{{ 'All' | trans }}" ng-click="getAll(0)"/>
+<input type="button" value="{{ 'Starred' | trans }}" ng-click="getStarred(0)"/>
+<input type="button" value="{{ 'Folders' | trans }}" ng-click="getFolders()"/>
+<input type="button" value="{{ 'Top level feeds' | trans }}" ng-click="getFeeds()"/>
+
+<ul ng-show="view == 'Starred' || view == 'All'">
+    <li ng-repeat="item in data.items">
+        <span ng-bind="item.title"></span><br/>
+        <!--
+        <div ng-bind-html-unsafe="item.body">
+        -->
+        </div>
+    </li>
+    <li ng-show="data.items.length == 20">
+        <a ng-show="view == 'Starred' || view == 'All'" href ng-click="getMoreItems(view)">
+            <span>Show more!</span>
+        </a>
+        <a ng-show="action == 'Folders'" href ng-click="getMoreItems(view)">
+            <span>Show more!</span>
+        </a>
+        <a ng-show="action == 'Feeds'" href ng-click="getMoreItems(view)">
+            <span>Show more!</span>
+        </a>
+    </li>
+</ul>
+
+<ul ng-show="view == 'Folders'">
+    <li ng-repeat="folder in data.folders" >
+        <a href ng-click="getFolderItems(folder.id,0)">
+            <span>{{folder.name}}</span>
+        </a>
+    </li>
+</ul>
+
+<ul ng-show="view == 'Feeds'">
+    <li ng-repeat="feed in data.feeds">
+        <img src="{{feed.faviconLink}}" width="16" height="16"/>
+        <a href ng-click="getFeedItems(feed.id)">
+            <span ng-bind="feed.title"></span>
+        </a>
+        (<span ng-bind="feed.unreadCount"></span>)
+    </li>
+</ul>

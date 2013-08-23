@@ -19,8 +19,27 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').controller('LoginController', ['$scope', function ($scope) {
+angular.module('News').controller('LoginController', ['$scope', '$location', '$route' , 'Login', function ($scope, $location, $route, Login) {
 
-	$scope.val = 'test';
+	$scope.data = Login;
+
+    $scope.logIn = function(){
+        Login.login()
+            .success(function(data,status){
+                if(status == 200) {
+                    Login.present = true;
+                    $location.path("/");
+                }
+            })
+            .error(function(data,status){
+                alert("Status "+status+" ["+data.message+"]");
+            });
+    };
+
+    $scope.isLoggedIn = function(){
+        if(Login.present) {
+            $location.path("/");
+        }
+    };
 
 }]);
