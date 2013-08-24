@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').controller('MainController', ['$scope', 'Login', function ($scope, Login) {
+angular.module('News').controller('MainController', ['$scope', '$location' , 'Login', function ($scope, $location, Login) {
     $scope.view = '';
     $scope.action = '';
     $scope.folderId = '0';
@@ -121,5 +121,13 @@ angular.module('News').controller('MainController', ['$scope', 'Login', function
         }
 
     };
+
+    $scope.logOut = function(){
+        Login.present = false;
+        Login.killTimer();
+        $location.path('/login');
+    };
+
+    $scope.getAll();
 
 }]);

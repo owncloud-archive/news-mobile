@@ -38,6 +38,8 @@ angular.module('News').filter('trans', ['$locale', function ($locale) {
                     return "Favoriti";
                 case "Folders":
                     return "Folderi";
+                case "Show more":
+                    return 'Prikazi jos';
                 default:
                     return text;
             }

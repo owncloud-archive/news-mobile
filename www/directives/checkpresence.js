@@ -24,7 +24,7 @@ angular.module('News').directive('checkPresence', ['$http', '$location', '$timeo
         restrict : "E",
         link : function tick(){
             if(Login.timerRef){
-                $timeout.cancel(Login.timerRef);
+                Login.killTimer();
             }
             if(Login.present){
                 //$location.path('/');
@@ -38,11 +38,13 @@ angular.module('News').directive('checkPresence', ['$http', '$location', '$timeo
                         }
                         else {
                             alert("Status "+status+" ["+data.message+"]");
+                            Login.killTimer();
                             $location.path('/login');
                         }
                     })
                     .error(function(data, status){
                         alert("Status "+status+" ["+data.message+"]");
+                        Login.killTimer();
                         $location.path('/login');
                     });
             }

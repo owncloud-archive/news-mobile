@@ -19,17 +19,21 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').factory('Login', ['$http', function ($http) {
+angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $timeout) {
 
 	return {
 		userName: 'ikacikac',
 		password: 'ikacikac',
         present: false,
         timerRef : null,
-        timeout: 20000,
+        timeout: 5000,
         hostname : 'localhost/owncloud/index.php/apps/news/api/v1-2',
         //this.userName+":"+this.password+"@"+this.url+"/version"
         //TODO treba odraditi servis isLoggedIn u okviru ovog fajla posto je logicki u ovoj celini
+        killTimer : function(){
+            $timeout.cancel(this.timerRef);
+        },
+
 		login: function	() {
             console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
 			return $http.get("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");

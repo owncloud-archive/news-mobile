@@ -52,7 +52,7 @@ angular.module('News').controller('LoginController', ['$scope', '$location', '$r
     };
 
 }]);
-angular.module('News').controller('MainController', ['$scope', 'Login', function ($scope, Login) {
+angular.module('News').controller('MainController', ['$scope', '$location' , 'Login', function ($scope, $location, Login) {
     $scope.view = '';
     $scope.action = '';
     $scope.folderId = '0';
@@ -155,13 +155,21 @@ angular.module('News').controller('MainController', ['$scope', 'Login', function
 
     };
 
+    $scope.logOut = function(){
+        Login.present = false;
+        Login.killTimer();
+        $location.path('/login');
+    };
+
+    $scope.getAll();
+
 }]);
 angular.module('News').directive('checkPresence', ['$http', '$location', '$timeout','Login', function ($http, $location, $timeout, Login) {
     return {
         restrict : "E",
         link : function tick(){
             if(Login.timerRef){
-                $timeout.cancel(Login.timerRef);
+                Login.killTimer();
             }
             if(Login.present){
                 //$location.path('/');
@@ -175,11 +183,13 @@ angular.module('News').directive('checkPresence', ['$http', '$location', '$timeo
                         }
                         else {
                             alert("Status "+status+" ["+data.message+"]");
+                            Login.killTimer();
                             $location.path('/login');
                         }
                     })
                     .error(function(data, status){
                         alert("Status "+status+" ["+data.message+"]");
+                        Login.killTimer();
                         $location.path('/login');
                     });
             }
@@ -190,6 +200,15 @@ angular.module('News').directive('checkPresence', ['$http', '$location', '$timeo
 }]);
 
 
+angular.module('News').filter('short', ['$locale', function ($locale) {
+    return function(text){
+        if(text.length > 30){
+            return text.slice(0,30)+'...';
+        }
+        return text;
+    };
+
+}]);
 angular.module('News').filter('trans', ['$locale', function ($locale) {
 
 	return function (text) {
@@ -209,6 +228,8 @@ angular.module('News').filter('trans', ['$locale', function ($locale) {
                     return "Favoriti";
                 case "Folders":
                     return "Folderi";
+                case "Show more":
+                    return 'Prikazi jos';
                 default:
                     return text;
             }
@@ -224,17 +245,21 @@ angular.module('News').factory('ExceptionHandler', ['$exceptionHandler', functio
         alert(exception.message);
     };
 }]);
-angular.module('News').factory('Login', ['$http', function ($http) {
+angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $timeout) {
 
 	return {
 		userName: 'ikacikac',
 		password: 'ikacikac',
         present: false,
         timerRef : null,
-        timeout: 20000,
+        timeout: 5000,
         hostname : 'localhost/owncloud/index.php/apps/news/api/v1-2',
         //this.userName+":"+this.password+"@"+this.url+"/version"
         //TODO treba odraditi servis isLoggedIn u okviru ovog fajla posto je logicki u ovoj celini
+        killTimer : function(){
+            $timeout.cancel(this.timerRef);
+        },
+
 		login: function	() {
             console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
 			return $http.get("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");

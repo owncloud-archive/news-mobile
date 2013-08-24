@@ -1,44 +1,69 @@
 <check-presence></check-presence>
-<input type="button" value="{{ 'All' | trans }}" ng-click="getAll(0)"/>
-<input type="button" value="{{ 'Starred' | trans }}" ng-click="getStarred(0)"/>
-<input type="button" value="{{ 'Folders' | trans }}" ng-click="getFolders()"/>
-<input type="button" value="{{ 'Top level feeds' | trans }}" ng-click="getFeeds()"/>
 
-<ul ng-show="view == 'Starred' || view == 'All'">
-    <li ng-repeat="item in data.items">
-        <span ng-bind="item.id"></span><br/>
-        <!--
-        <div ng-bind-html-unsafe="item.body">
-        -->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span4"></div>
+        <div class="span4">
+
+            <div class='banner'>
+                <ul class="nav nav-pills menu">
+                    <li><a href ng-click="getAll(0)"><i class='icon-certificate icon-white'></i></a></li>
+                    <li><a href ng-click="getStarred(0)"><i class='icon-star icon-white'></i></a></li>
+                    <li><a href ng-click="getFolders()"><i class='icon-folder-open icon-white'></i></a></li>
+                    <li><a href ng-click="getFeeds()"><i class='icon-list icon-white'></i></a></li>
+                    <li class="pull-right"><a href ng-click="logOut()"><i class="icon-off icon-white"></i></a></li>
+                </ul>
+            </div>
+            <div id="caption" class="caption">{{view}}</div>
+
+            <div>
+                <ul class="nav nav-pills nav-stacked" ng-show="view == 'Starred' || view == 'All'">
+
+                    <li ng-repeat="item in data.items">
+                        <!--<strong ng-bind="item.title"></strong>-->
+                        <strong>{{item.title | short}}</strong><br/>
+                        <!--<p ng-bind-html-unsafe="item.body"></p>-->
+                    </li>
+                    <li ng-show="data.items.length == 20">
+ <!--                       <a ng-show="view == 'Starred' || view == 'All'" href ng-click="getMoreItems(view)">
+                            <span>Show more!</span>
+                        </a>
+                        <a ng-show="action == 'Folders'" href ng-click="getMoreItems(view)">
+                            <span>Show more!</span>
+                        </a>
+                        <a ng-show="action == 'Feeds'" href ng-click="getMoreItems(view)">
+                            <span>Show more!</span>
+                        </a>-->
+                        <a href ng-click="getMoreItems(view)">
+                            <span>{{ 'Show more' | trans }}</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="nav nav-pills nav-stacked" ng-show="view == 'Folders'">
+                    <li ng-repeat="folder in data.folders" >
+                        <a href ng-click="getFolderItems(folder.id,0)">
+                            <span>{{folder.name}}</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="nav nav-pills nav-stacked" ng-show="view == 'Feeds'">
+                    <li ng-repeat="feed in data.feeds">
+
+                        <a href ng-click="getFeedItems(feed.id,0)">
+                            <img src="{{feed.faviconLink}}" width="16" height="16"/>
+                            <span>{{feed.title | short}}</span>
+                            <span class="badge pull-right" ng-bind="feed.unreadCount"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="span4">
+            </div>
         </div>
-    </li>
-    <li ng-show="data.items.length == 20">
-        <a ng-show="view == 'Starred' || view == 'All'" href ng-click="getMoreItems(view)">
-            <span>Show more!</span>
-        </a>
-        <a ng-show="action == 'Folders'" href ng-click="getMoreItems(view)">
-            <span>Show more!</span>
-        </a>
-        <a ng-show="action == 'Feeds'" href ng-click="getMoreItems(view)">
-            <span>Show more!</span>
-        </a>
-    </li>
-</ul>
+    </div>
+</div>
 
-<ul ng-show="view == 'Folders'">
-    <li ng-repeat="folder in data.folders" >
-        <a href ng-click="getFolderItems(folder.id,0)">
-            <span>{{folder.name}}</span>
-        </a>
-    </li>
-</ul>
 
-<ul ng-show="view == 'Feeds'">
-    <li ng-repeat="feed in data.feeds">
-        <img src="{{feed.faviconLink}}" width="16" height="16"/>
-        <a href ng-click="getFeedItems(feed.id,0)">
-            <span ng-bind="feed.title"></span>
-        </a>
-        (<span ng-bind="feed.unreadCount"></span>)
-    </li>
-</ul>
+

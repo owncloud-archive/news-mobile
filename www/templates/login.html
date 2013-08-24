@@ -1,13 +1,39 @@
-<form>
-    <label for="userName">{{ 'Username' | trans }}</label>
-    <input type="text" name="userName" ng-model="data.userName"/><br/>
-    <label for="password">{{ 'Password' | trans }}</label>
-    <input type="password" name="password" ng-model="data.password"/><br/>
-    <label for="hostName">{{ 'Hostname' | trans }}</label>
-    <input type="text" name="hostHame" ng-model="data.hostname"/><br/>
-    <input type="button" value="{{'Sign in' | trans}}" ng-click="logIn()"/>
-</form>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span4"></div>
+        <div class="span4">
 
+            <div class="banner">
+                <img src="../images/owncloud-square-logo_shortened.png"/>
+            </div>
+
+            <div>
+                <form>
+                    <fieldset>
+                        <label for="username">{{ 'Username' | trans}}</label>
+                        <input type="text" name="userName" placeholder="Type your user name" ng-model="data.userName"/><br/>
+                        <label for="password">{{ 'Password' | trans }}</label>
+                        <input type="password" name="password" placeholder="Type password" ng-model="data.password"><br/>
+
+                        <label for="hostname">{{ 'Hostname' | trans }}</label>
+                        <input type="text" name="hostname" placeholder="Type url to connect to" ng-model="data.hostname">
+                        <br/>
+                        <br/>
+                        <div>
+                            <button class="btn btn-large btn-block" ng-click="logIn()">{{ 'Sign in' | trans }}</button>
+                        </div>
+                    </fieldset>
+                </form>
+                <div ng-show="error" class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong><i class="icon-fire icon-2x"></i>Inorrect username or password.</strong>
+                </div>
+            </div>
+            <div class="span4"></span>
+            </div>
+        </div>
+    </div>
+</div>
 <!--
 <div id="login" ng-hide="isLoggedIn()" ng-controller="LoginController">
 </div>
