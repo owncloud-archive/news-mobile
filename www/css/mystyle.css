@@ -1,0 +1,194 @@
+@font-face {
+  /*font-family: 'Albertino';
+  src: url('../fonts/Albertino_1.0.ttf');*/
+}
+.normal-font {
+  font-family: Arial;
+}
+.icon-refresh {
+  zoom: 1;
+  -moz-transform: scale(1);
+  /* Firefox */
+
+}
+i {
+  padding-right: 5px;
+}
+body {
+  font-size: 100%;
+  font-family: Arial;
+  line-height: 20px;
+}
+.header {
+  --webkit-border-bottom-left-radius: 5px;
+  --webkit-border-bottom-right-radius: 5px;
+  --moz-border-radius-bottomleft: 5px;
+  -moz-border-radius-bottomright: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  min-height: 50px;
+  background: #365e8a;
+  /* Old browsers */
+
+  background: -moz-linear-gradient(top, #365e8a 0%, #1d2d44 100%);
+  /* FF3.6+ */
+
+  background: linear-gradient(to bottom, #365e8a 0%, #1d2d44 100%);
+  /* W3C */
+
+  text-align: center;
+}
+.header img {
+  width: 70%;
+}
+.footer {
+  min-height: 20px;
+  border-top: 1px inset;
+  text-align: center;
+  font-size: 80%;
+  padding-top: 2%;
+  color: #365e8a;
+}
+.btn {
+  background-image: linear-gradient(to bottom, #1d2d44, #1d2d44);
+  border-width: 0px;
+}
+.btn,
+.btn:hover,
+.btn:focus,
+.btn:active {
+  color: white;
+}
+.btn:hover,
+.btn:focus,
+.btn:active {
+  background-color: #1d2d44;
+  background-position: 0px 0px;
+}
+.showmore {
+  padding-top: 5%;
+}
+.container-fluid .row-fluid .span4 form {
+  font-size: 120%;
+  line-height: 20px;
+  color: #1d2d44;
+  padding-top: 5%;
+}
+.container-fluid .row-fluid .span4 form label {
+  font-size: inherit;
+  line-height: inherit;
+}
+.container-fluid .row-fluid .span4 form input {
+  height: 20px;
+  width: 98%;
+  padding: 4px 1%;
+  color: #365e8a;
+}
+.container-fluid .row-fluid .span4 form .btn.btn-large {
+  padding: 4% 0px;
+}
+.container-fluid .row-fluid .span4 .caption {
+  color: #1d2d44;
+  font-size: 150%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.container-fluid .row-fluid .span4 .nav.nav-pills.menu {
+  margin-bottom: 0px;
+  margin-top: 1px;
+  padding-left: 1%;
+}
+.container-fluid .row-fluid .span4 .nav.nav-pills.menu li a {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  color: white;
+  border-radius: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 1.1em;
+  margin-right: 1px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+.container-fluid .row-fluid .span4 .nav.nav-pills.menu li a:focus,
+.container-fluid .row-fluid .span4 .nav.nav-pills.menu li a:hover {
+  background-color: transparent;
+}
+.container-fluid .row-fluid .span4 .nav.nav-pills.nav-stacked {
+  margin-top: 1px;
+  background-color: white;
+}
+.container-fluid .row-fluid .span4 .nav.nav-pills.nav-stacked li a {
+  line-height: 20px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  color: #1d2d44;
+  border-radius: none;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.container-fluid .row-fluid .span4 .nav.nav-pills.nav-stacked li a:hover,
+.container-fluid .row-fluid .span4 .nav.nav-pills.nav-stacked li a:focus {
+  background-color: transparent;
+  outline: none;
+}
+.container-fluid .row-fluid .span4 .nav.nav-pills.nav-stacked li:last-child {
+  border-bottom: 0px;
+}
+.container-fluid .row-fluid .span4 .accordion {
+  color: #1d2d44;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-heading {
+  font-family: Arial;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-heading .accordion-toggle {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: #1d2d44;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 90%;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-heading .accordion-toggle .bodybox {
+  overflow: visible;
+  white-space: normal;
+  width: 100%;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-heading .accordion-toggle a:focus,
+.container-fluid .row-fluid .span4 .accordion .accordion-heading .accordion-toggle a:hover {
+  outline: none;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-group {
+  border: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-group .accordion-body {
+  font-family: Arial;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-group .accordion-body .accordion-inner {
+  border-top: 0px;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-group .btn:first-child,
+.container-fluid .row-fluid .span4 .accordion .accordion-group .btn:last-child {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-group:last-child {
+  border-bottom: none;
+}
+.container-fluid .accordion-group {
+  margin-bottom: 0px;
+}
