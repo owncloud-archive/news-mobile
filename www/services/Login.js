@@ -2,8 +2,8 @@
  * 
  * ownCloud - News
  * 
- * @author Bernhard Posselt
- * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
+ * @author Ilija Lazarevic
+ * @copyright 2013 Ilija Lazarevic ikac.ikax@gmail.com
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -20,31 +20,36 @@
  */
 
 angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $timeout) {
-
-	return {
+    return {
 		userName: 'ikacikac',
 		password: 'ikacikac',
-        present: false,
+        present: true,
         timerRef : null,
-        timeout: 5000,
-        hostname : 'localhost/owncloud/index.php/apps/news/api/v1-2',
+        timeout: 500000,
+        hostname : 'owncloud.homenet/index.php/apps/news/api/v1-2',
         //this.userName+":"+this.password+"@"+this.url+"/version"
-        //TODO treba odraditi servis isLoggedIn u okviru ovog fajla posto je logicki u ovoj celini
         killTimer : function(){
             $timeout.cancel(this.timerRef);
         },
 
+        isPresent : function(){
+            return this.present;
+        },
+
 		login: function	() {
-            console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
-			return $http.get("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
+            //var auth = "Basic " + btoa(this.userName + ":" + this.password);
+            //$http.defaults.headers.common.Authorization = auth;
+            //console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
+			return $http({ method: 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/version", withCredentials : true });
+            //return $http({ method: 'GET', url : "http://"+this.hostname+"/version" });
 		},
 
         getFolders : function(){
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/folders", cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/folders", cached : false,  withCredentials : true });
         },
 
         getFeeds : function(){
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/feeds", cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/feeds", cached : false,  withCredentials : true });
         },
 
         getStarredItems : function(offset){
@@ -56,7 +61,7 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "getRead": true // if true it returns all items, false returns only unread items
             };
 
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
         },
 
         getAllItems : function(offset){
@@ -67,7 +72,8 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "id": 0, // the id of the folder or feed, Use 0 for Starred and All
                 "getRead": true // if true it returns all items, false returns only unread items
             };
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            //return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
+            return $http({ method : 'GET', url : "http://"+this.hostname+"/items", params : params, cached : false, withCredentials : true});
         },
 
         getFolderItems : function(folderId, offset){
@@ -79,7 +85,7 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "getRead": true // if true it returns all items, false returns only unread items
             };
 
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
         },
 
         getFeedItems : function(feedId,offset){
@@ -91,7 +97,7 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "getRead": true // if true it returns all items, false returns only unread items
             };
 
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
         }
 
 

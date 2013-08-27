@@ -2,8 +2,8 @@
  *
  * ownCloud - News
  *
- * @author Bernhard Posselt
- * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
+ * @author Ilija Lazarevic
+ * @copyright 2013 Ilija Lazarevic ikac.ikax@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -23,11 +23,12 @@ angular.module('News').directive('checkPresence', ['$http', '$location', '$timeo
     return {
         restrict : "E",
         link : function tick(){
+            console.log("direktiva");
             if(Login.timerRef){
                 Login.killTimer();
             }
-            if(Login.present){
-                //$location.path('/');
+            if(!Login.present){
+                $location.path('/login');
             }
             else {
                 Login.login()

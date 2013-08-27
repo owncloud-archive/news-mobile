@@ -5,7 +5,7 @@
         <div class="span4"></div>
         <div class="span4">
 
-            <div class='banner'>
+            <div class='header'>
                 <ul class="nav nav-pills menu">
                     <li><a href ng-click="getAll(0)"><i class='icon-certificate icon-white'></i></a></li>
                     <li><a href ng-click="getStarred(0)"><i class='icon-star icon-white'></i></a></li>
@@ -14,36 +14,66 @@
                     <li class="pull-right"><a href ng-click="logOut()"><i class="icon-off icon-white"></i></a></li>
                 </ul>
             </div>
-            <div id="caption" class="caption">{{view}}</div>
+
+            <div id="caption" class="caption">{{viewTitles[view]}}</div>
 
             <div>
-                <ul class="nav nav-pills nav-stacked" ng-show="view == 'Starred' || view == 'All'">
+                <div class="accordion" id="accordion2" class="nav nav-pills nav-stacked" ng-show="view == 'Starred' || view == 'All'">
+                    <div class="accordion-group" ng-repeat="item in data.items">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{item.id}}">
+                                <span>
+                                    <i ng-show="item.unread" class="icon-file"></i>
+                                    <i ng-hide="item.unread" class="icon-check"></i>
+                                    {{item.title}}
+                                </span>
+                            </a>
+                        </div>
+                        <div id="collapse{{item.id}}" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div class="accordion-heading">
+                                    <!--<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{item.id}}1"></a>-->
+                                    <p class="bodybox" ng-bind-html-unsafe="item.body"></p>
+                                </div>
+                            </div>
+                            <div class="btn-group pull-right">
 
-                    <li ng-repeat="item in data.items">
-                        <!--<strong ng-bind="item.title"></strong>-->
-                        <strong>{{item.title | short}}</strong><br/>
-                        <!--<p ng-bind-html-unsafe="item.body"></p>-->
-                    </li>
-                    <li ng-show="data.items.length == 20">
- <!--                       <a ng-show="view == 'Starred' || view == 'All'" href ng-click="getMoreItems(view)">
-                            <span>Show more!</span>
-                        </a>
-                        <a ng-show="action == 'Folders'" href ng-click="getMoreItems(view)">
-                            <span>Show more!</span>
-                        </a>
-                        <a ng-show="action == 'Feeds'" href ng-click="getMoreItems(view)">
-                            <span>Show more!</span>
+                                <button ng-show="!item.unread" class="btn"><i class="icon-eye-close icon-white"></i>Unread</button>
+                                <button ng-show="item.unread" class="btn"><i class="icon-eye-open icon-white"></i>Read</button>
+                                <button ng-show="!item.starred" class="btn"><i class="icon-star icon-white"></i>Star</button>
+                                <button ng-show="item.starred" class="btn"><i class="icon-star icon-white"></i>Unstar</button>
+                                <button class="btn"><i class="icon-ban-circle icon-white"></i>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showmore" ng-show="data.items.length == 20">
+                        <button class="btn btn-large btn-block" ng-click="getMoreItems(view)"><i class="icon-arrow-down icon-white"></i>{{ 'Show more' | trans }}</button>
+                        <!--<a href ng-click="getMoreItems(view)">
+                            <span><i class="icon-arrow-down"></i></span>
                         </a>-->
-                        <a href ng-click="getMoreItems(view)">
-                            <span>{{ 'Show more' | trans }}</span>
-                        </a>
-                    </li>
-                </ul>
+                    </div>
+                </div>
 
+                <!--
+                                    <ul class="nav nav-pills nav-stacked" ng-show="view == 'Starred' || view == 'All'">
+
+
+                                                    <li ng-repeat="item in data.items">
+                                                        <strong>{{item.title | short}}</strong><br/>
+                                                        <!--<p ng-bind-html-unsafe="item.body"></p><!---->
+                <!--                </li>
+                                    <li ng-show="data.items.length == 20">
+
+                                        <a href ng-click="getMoreItems(view)">
+                                            <span>{{ 'Show more' | trans }}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                -->
                 <ul class="nav nav-pills nav-stacked" ng-show="view == 'Folders'">
                     <li ng-repeat="folder in data.folders" >
                         <a href ng-click="getFolderItems(folder.id,0)">
-                            <span>{{folder.name}}</span>
+                            <span><i class='icon-folder-open'></i>{{folder.name}}</span>
                         </a>
                     </li>
                 </ul>
@@ -58,6 +88,9 @@
                         </a>
                     </li>
                 </ul>
+                <div class="footer">
+                    ownCloud News Web app
+                </div>
             </div>
             <div class="span4">
             </div>

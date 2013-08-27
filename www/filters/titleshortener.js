@@ -2,8 +2,8 @@
  *
  * ownCloud - News
  *
- * @author Bernhard Posselt
- * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
+ * @author Ilija Lazarevic
+ * @copyright 2013 Ilija Lazarevic ikac.ikac@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -21,8 +21,8 @@
 
 angular.module('News').filter('short', ['$locale', function ($locale) {
     return function(text){
-        if(text.length > 30){
-            return text.slice(0,30)+'...';
+        if(text.length > 20){
+            return text.slice(0,20)+'...';
         }
         return text;
     };

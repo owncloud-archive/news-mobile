@@ -3,8 +3,8 @@
         <div class="span4"></div>
         <div class="span4">
 
-            <div class="banner">
-                <img src="../images/owncloud-square-logo_shortened.png"/>
+            <div class="header">
+                <img src="../images/owncloud-logo-transparend-white.png"/>
             </div>
 
             <div>
@@ -23,11 +23,14 @@
                             <button class="btn btn-large btn-block" ng-click="logIn()">{{ 'Sign in' | trans }}</button>
                         </div>
                     </fieldset>
+                    <div ng-show="error" class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong><i class="icon-fire icon-2x"></i>Inorrect username or password.</strong>
+                    </div>
                 </form>
-                <div ng-show="error" class="alert alert-error">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong><i class="icon-fire icon-2x"></i>Inorrect username or password.</strong>
-                </div>
+            <div class="footer">
+                ownCloud News Web app
+            </div>
             </div>
             <div class="span4"></span>
             </div>

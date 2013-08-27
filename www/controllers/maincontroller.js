@@ -2,8 +2,8 @@
  *
  * ownCloud - News
  *
- * @author Bernhard Posselt
- * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
+ * @author Ilija Lazarevic
+ * @copyright 2013 Ilija Lazarevic ikac.ikax@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -24,6 +24,15 @@ angular.module('News').controller('MainController', ['$scope', '$location' , 'Lo
     $scope.action = '';
     $scope.folderId = '0';
     $scope.feedId = '0';
+
+    $scope.viewTitles = {
+        'All' : 'All feeds news',
+        'Starred' : 'Favourite news',
+        'Folders' : 'Feeds folders',
+        'Feeds' : 'News feeds'
+    };
+
+    console.log("controller");
 
     $scope.getStarred = function(offset){
         $scope.action = 'Starred';
@@ -128,6 +137,9 @@ angular.module('News').controller('MainController', ['$scope', '$location' , 'Lo
         $location.path('/login');
     };
 
-    $scope.getAll();
+    if(Login.isPresent()){
+        console.log('This');
+        $scope.getAll();
+    }
 
 }]);

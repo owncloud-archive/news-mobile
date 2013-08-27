@@ -46,6 +46,8 @@ module.exports = function(grunt) {
 				'<nukeawhale@gmail.com> \n' +
 				' * Copyright (c) 2013, Alessandro Cosentino ' +
 				'<cosenal@gmail.com> \n' +
+				' * Copyright (c) 2013, Ilija Lazarevic ' +
+				'<ikac.ikax@gmail.com> \n' +
 				' * This file is licensed under the Affero ' +
 				'General Public License version 3 or later. \n' +
 				' * See the COPYING file.\n */\n\n'

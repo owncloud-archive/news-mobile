@@ -5,6 +5,7 @@
 /**
  * Copyright (c) 2013, Bernhard Posselt <nukeawhale@gmail.com> 
  * Copyright (c) 2013, Alessandro Cosentino <cosenal@gmail.com> 
+ * Copyright (c) 2013, Ilija Lazarevic <ikac.ikax@gmail.com> 
  * This file is licensed under the Affero General Public License version 3 or later. 
  * See the COPYING file.
  */
@@ -57,6 +58,15 @@ angular.module('News').controller('MainController', ['$scope', '$location' , 'Lo
     $scope.action = '';
     $scope.folderId = '0';
     $scope.feedId = '0';
+
+    $scope.viewTitles = {
+        'All' : 'All feeds news',
+        'Starred' : 'Favourite news',
+        'Folders' : 'Feeds folders',
+        'Feeds' : 'News feeds'
+    };
+
+    console.log("controller");
 
     $scope.getStarred = function(offset){
         $scope.action = 'Starred';
@@ -161,18 +171,22 @@ angular.module('News').controller('MainController', ['$scope', '$location' , 'Lo
         $location.path('/login');
     };
 
-    $scope.getAll();
+    if(Login.isPresent()){
+        console.log('This');
+        $scope.getAll();
+    }
 
 }]);
 angular.module('News').directive('checkPresence', ['$http', '$location', '$timeout','Login', function ($http, $location, $timeout, Login) {
     return {
         restrict : "E",
         link : function tick(){
+            console.log("direktiva");
             if(Login.timerRef){
                 Login.killTimer();
             }
-            if(Login.present){
-                //$location.path('/');
+            if(!Login.present){
+                $location.path('/login');
             }
             else {
                 Login.login()
@@ -202,8 +216,8 @@ angular.module('News').directive('checkPresence', ['$http', '$location', '$timeo
 
 angular.module('News').filter('short', ['$locale', function ($locale) {
     return function(text){
-        if(text.length > 30){
-            return text.slice(0,30)+'...';
+        if(text.length > 20){
+            return text.slice(0,20)+'...';
         }
         return text;
     };
@@ -240,37 +254,47 @@ angular.module('News').filter('trans', ['$locale', function ($locale) {
 	};
 
 }]);
+angular.module('News').config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+}]);
+
 angular.module('News').factory('ExceptionHandler', ['$exceptionHandler', function ($exceptionHandler) {
     return function (exception, cause) {
         alert(exception.message);
     };
 }]);
 angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $timeout) {
-
-	return {
+    return {
 		userName: 'ikacikac',
 		password: 'ikacikac',
-        present: false,
+        present: true,
         timerRef : null,
-        timeout: 5000,
-        hostname : 'localhost/owncloud/index.php/apps/news/api/v1-2',
+        timeout: 500000,
+        hostname : 'owncloud.homenet/index.php/apps/news/api/v1-2',
         //this.userName+":"+this.password+"@"+this.url+"/version"
-        //TODO treba odraditi servis isLoggedIn u okviru ovog fajla posto je logicki u ovoj celini
         killTimer : function(){
             $timeout.cancel(this.timerRef);
         },
 
+        isPresent : function(){
+            return this.present;
+        },
+
 		login: function	() {
-            console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
-			return $http.get("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
+            //var auth = "Basic " + btoa(this.userName + ":" + this.password);
+            //$http.defaults.headers.common.Authorization = auth;
+            //console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
+			return $http({ method: 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/version", withCredentials : true });
+            //return $http({ method: 'GET', url : "http://"+this.hostname+"/version" });
 		},
 
         getFolders : function(){
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/folders", cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/folders", cached : false,  withCredentials : true });
         },
 
         getFeeds : function(){
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/feeds", cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/feeds", cached : false,  withCredentials : true });
         },
 
         getStarredItems : function(offset){
@@ -282,7 +306,7 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "getRead": true // if true it returns all items, false returns only unread items
             };
 
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
         },
 
         getAllItems : function(offset){
@@ -293,7 +317,8 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "id": 0, // the id of the folder or feed, Use 0 for Starred and All
                 "getRead": true // if true it returns all items, false returns only unread items
             };
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            //return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
+            return $http({ method : 'GET', url : "http://"+this.hostname+"/items", params : params, cached : false, withCredentials : true});
         },
 
         getFolderItems : function(folderId, offset){
@@ -305,7 +330,7 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "getRead": true // if true it returns all items, false returns only unread items
             };
 
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
         },
 
         getFeedItems : function(feedId,offset){
@@ -317,7 +342,7 @@ angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $
                 "getRead": true // if true it returns all items, false returns only unread items
             };
 
-            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false });
+            return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
         }
 
 
