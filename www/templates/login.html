@@ -4,28 +4,45 @@
         <div class="span4">
 
             <div class="header">
-                <img src="../images/owncloud-logo-transparend-white.png"/>
+                <img src="../images/owncloud-logo-transparent-white.png"/>
             </div>
 
             <div>
-                <form>
+                <form name="LoginForm">
                     <fieldset>
-                        <label for="username">{{ 'Username' | trans}}</label>
-                        <input type="text" name="userName" placeholder="Type your user name" ng-model="data.userName"/><br/>
-                        <label for="password">{{ 'Password' | trans }}</label>
-                        <input type="password" name="password" placeholder="Type password" ng-model="data.password"><br/>
+                        <label for="username">{{ 'Username' | translator}}</label>
+                        <input type="text" name="userName"
+                               placeholder="Type your user name"
+                               ng-model="data.userName"/>
+                        <br/>
+                        <label for="password">{{ 'Password' | translator }}</label>
+                        <input type="password" name="password"
+                               placeholder="Type password"
+                               ng-model="data.password">
+                        <br/>
 
-                        <label for="hostname">{{ 'Hostname' | trans }}</label>
-                        <input type="text" name="hostname" placeholder="Type url to connect to" ng-model="data.hostname">
+                        <label for="hostName">{{ 'Hostname' | translator }}</label>
+                        <input type="text" name="hostName"
+                               placeholder="Type url to connect to"
+                               ng-model="data.hostName"
+                               ng-pattern="urlPattern">
                         <br/>
                         <br/>
                         <div>
-                            <button class="btn btn-large btn-block" ng-click="logIn()">{{ 'Sign in' | trans }}</button>
+                            <button class="btn btn-large btn-block"
+                                    ng-click="logIn()">{{ 'Sign in' | translator}}
+                            </button>
                         </div>
                     </fieldset>
-                    <div ng-show="error" class="alert alert-error">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <strong><i class="icon-fire icon-2x"></i>Inorrect username or password.</strong>
+                    <br/>
+                    <div ng-show="LoginForm.hostName.$error.pattern"
+                         class="alert alert-error">
+                        <button type="button" class="close"
+                                data-dismiss="alert">&times;</button>
+                        <strong>
+                            <i class="icon-fire icon-2x"></i>
+                            Host name must be valid
+                        </strong>
                     </div>
                 </form>
             <div class="footer">

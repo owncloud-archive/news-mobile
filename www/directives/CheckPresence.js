@@ -19,39 +19,41 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').directive('checkPresence', ['$http', '$location', '$timeout','Login', function ($http, $location, $timeout, Login) {
-    return {
-        restrict : "E",
-        link : function tick(){
-            console.log("direktiva");
-            if(Login.timerRef){
-                Login.killTimer();
-            }
-            if(!Login.present){
-                $location.path('/login');
-            }
-            else {
-                Login.login()
-                    .success(function(data, status){
-                        if(status == 200){
-                            //alert("Status "+status+" ["+data.message+"]");
-                            $location.path('/');
-                        }
-                        else {
-                            alert("Status "+status+" ["+data.message+"]");
-                            Login.killTimer();
-                            $location.path('/login');
-                        }
-                    })
-                    .error(function(data, status){
-                        alert("Status "+status+" ["+data.message+"]");
-                        Login.killTimer();
+angular.module('News').directive('checkPresence',
+    ['$http', '$location', '$timeout', 'LoginService',
+        function ($http, $location, $timeout, LoginService) {
+            return {
+                restrict:"E",
+                link:function tick() {
+                    console.log("direktiva");
+                    if (LoginService.timerRef) {
+                        LoginService.killTimer();
+                    }
+                    if (!LoginService.present) {
                         $location.path('/login');
-                    });
-            }
-            Login.timerRef = $timeout(tick,Login.timeout);
-            console.log("ping");
-        }
-    };
-}]);
+                    }
+                    else {
+                        LoginService.login()
+                            .success(function (data, status) {
+                                if (status === 200) {
+                                    //alert("Status "+status+" ["+data.message+"]");
+                                    $location.path('/');
+                                }
+                                else {
+                                    alert("Status " + status + " [" + data.message + "]");
+                                    LoginService.killTimer();
+                                    $location.path('/login');
+                                }
+                            })
+                            .error(function (data, status) {
+                                alert("Status " + status + " [" + data.message + "]");
+                                LoginService.killTimer();
+                                $location.path('/login');
+                            });
+                    }
+                    LoginService.timerRef = $timeout(tick, LoginService.timeout);
+                    console.log("ping");
+                }
+            };
+        }]);
 

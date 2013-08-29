@@ -19,8 +19,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').factory('ExceptionHandler', ['$exceptionHandler', function ($exceptionHandler) {
-    return function (exception, cause) {
-        alert(exception.message);
-    };
-}]);
+angular.module('News').factory('ExceptionHandler',
+    ['$exceptionHandler',
+        function ($exceptionHandler) {
+            return function (exception, cause) {
+                alert(exception.message);
+            };
+        }]);

@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="showmore" ng-show="data.items.length == 20">
-                        <button class="btn btn-large btn-block" ng-click="getMoreItems(view)"><i class="icon-arrow-down icon-white"></i>{{ 'Show more' | trans }}</button>
+                        <button class="btn btn-large btn-block" ng-click="getMoreItems(view)"><i class="icon-arrow-down icon-white"></i></button>
                         <!--<a href ng-click="getMoreItems(view)">
                             <span><i class="icon-arrow-down"></i></span>
                         </a>-->
@@ -82,8 +82,9 @@
                     <li ng-repeat="feed in data.feeds">
 
                         <a href ng-click="getFeedItems(feed.id,0)">
-                            <img src="{{feed.faviconLink}}" width="16" height="16"/>
-                            <span>{{feed.title | short}}</span>
+                            <img src="{{feed.faviconLink}}" width="32"
+                                  height="32">
+                            <span>{{feed.title}}</span>
                             <span class="badge pull-right" ng-bind="feed.unreadCount"></span>
                         </a>
                     </li>

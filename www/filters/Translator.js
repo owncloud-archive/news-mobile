@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').filter('trans', ['$locale', function ($locale) {
+angular.module('News').filter('translator', ['$locale', function ($locale) {
 
 	return function (text) {
         if($locale.id === "sr-rs") {
