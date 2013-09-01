@@ -11,10 +11,12 @@
                 <form name="LoginForm">
                     <fieldset>
                         <label for="username">{{ 'Username' | translator}}</label>
+
                         <input type="text" name="userName"
                                placeholder="Type your user name"
-                               ng-model="data.userName"/>
+                               ng-model="data.userName">
                         <br/>
+
                         <label for="password">{{ 'Password' | translator }}</label>
                         <input type="password" name="password"
                                placeholder="Type password"
@@ -24,8 +26,7 @@
                         <label for="hostName">{{ 'Hostname' | translator }}</label>
                         <input type="text" name="hostName"
                                placeholder="Type url to connect to"
-                               ng-model="data.hostName"
-                               ng-pattern="urlPattern">
+                               ng-model="data.hostName">
                         <br/>
                         <br/>
                         <div>
@@ -35,13 +36,14 @@
                         </div>
                     </fieldset>
                     <br/>
-                    <div ng-show="LoginForm.hostName.$error.pattern"
-                         class="alert alert-error">
+                    <div class="alert alert-error"
+                         ng-show="userNameError || passwordError || hostNameError">
                         <button type="button" class="close"
                                 data-dismiss="alert">&times;</button>
                         <strong>
-                            <i class="icon-fire icon-2x"></i>
-                            Host name must be valid
+                            <div>{{userNameError}}</div>
+                            <div>{{passwordError}}</div>
+                            <div>{{hostNameError}}</div>
                         </strong>
                     </div>
                 </form>
@@ -49,9 +51,8 @@
                 ownCloud News Web app
             </div>
             </div>
-            <div class="span4"></span>
-            </div>
         </div>
+        <div class="span4"></div>
     </div>
 </div>
 <!--

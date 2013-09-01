@@ -15,10 +15,12 @@
                 </ul>
             </div>
 
-            <div id="caption" class="caption">{{viewTitles[view]}}</div>
+            <div id="caption" class="caption">{{actionTitles();}}</div>
 
-            <div>
-                <div class="accordion" id="accordion2" class="nav nav-pills nav-stacked" ng-show="view == 'Starred' || view == 'All'">
+            <div ng-switch="view">
+                <div class="accordion" id="accordion2"
+                     class="nav nav-pills nav-stacked"
+                     ng-switch-when="All">
                     <div class="accordion-group" ng-repeat="item in data.items">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{item.id}}">
@@ -70,18 +72,20 @@
                                     </li>
                                 </ul>
                 -->
-                <ul class="nav nav-pills nav-stacked" ng-show="view == 'Folders'">
+
+                <ul class="nav nav-pills nav-stacked" ng-switch-when="Folders">
                     <li ng-repeat="folder in data.folders" >
-                        <a href ng-click="getFolderItems(folder.id,0)">
+                        <a href
+                           ng-click="getFolderItems(folder.id,0,folder.name)">
                             <span><i class='icon-folder-open'></i>{{folder.name}}</span>
                         </a>
                     </li>
                 </ul>
 
-                <ul class="nav nav-pills nav-stacked" ng-show="view == 'Feeds'">
+                <ul class="nav nav-pills nav-stacked" ng-switch-when="Feeds">
                     <li ng-repeat="feed in data.feeds">
 
-                        <a href ng-click="getFeedItems(feed.id,0)">
+                        <a href ng-click="getFeedItems(feed.id,0,feed.title)">
                             <img src="{{feed.faviconLink}}" width="32"
                                   height="32">
                             <span>{{feed.title}}</span>
@@ -89,10 +93,12 @@
                         </a>
                     </li>
                 </ul>
-                <div class="footer">
-                    ownCloud News Web app
-                </div>
             </div>
+
+            <div class="footer">
+                ownCloud News Web app
+            </div>
+
             <div class="span4">
             </div>
         </div>

@@ -87,6 +87,9 @@ body {
 .container-fluid .row-fluid .span4 form .btn.btn-large {
   padding: 4% 0px;
 }
+.container-fluid .row-fluid .span4 .alert.alert-error {
+  font-size: small;
+}
 .container-fluid .row-fluid .span4 .caption {
   color: #1d2d44;
   font-size: 150%;

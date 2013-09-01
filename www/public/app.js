@@ -38,20 +38,54 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , 'LoginService', 'UserService',
         function ($scope, $location, $route, LoginService, UserService) {
 
-            $scope.urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
             $scope.data = UserService;
 
+            $scope.testFormFields = function () {
+                var hostNameRegExp = new RegExp(/^https?:\/\/.*$/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+                var userNameRegExp = new RegExp(/^[a-z0-9_-]{3,10}$/); // /^[a-z0-9_-]{3,16}$/
+                var passwordRegExp = new RegExp(/^[a-z0-9_-]{3,10}$/); // /^[a-z0-9_-]{6,18}$/
+
+                var userNameParseResult = userNameRegExp.test(UserService.userName);
+
+                $scope.userNameError = '';
+                $scope.passwordError = '';
+                $scope.hostNameError = '';
+
+                if (!userNameParseResult) {
+                    $scope.userNameError = "User name is not in correct format!";
+                }
+
+                var passwordParseResult = passwordRegExp.test(UserService.password);
+
+                if (!passwordParseResult) {
+                    $scope.passwordError = "Password is not in correct format!";
+                }
+
+                var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
+
+                if (!hostNameParseResult) {
+                    $scope.hostNameError = "Host name is not in correct format!";
+                }
+
+                if (hostNameParseResult && userNameParseResult && passwordParseResult) {
+                    return true;
+                }
+                return false;
+            };
+
             $scope.logIn = function () {
-                LoginService.login()
-                    .success(function (data, status) {
-                        if (status === 200) {
-                            LoginService.present = true;
-                            $location.path("/");
-                        }
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
-                    });
+                if ($scope.testFormFields()) {
+                    LoginService.login()
+                        .success(function (data, status) {
+                            if (status === 200) {
+                                LoginService.present = true;
+                                $location.path("/");
+                            }
+                        })
+                        .error(function (data, status) {
+                            alert("Status " + status + " [" + data.message + "]");
+                        });
+                }
             };
 
             $scope.isLoggedIn = function () {
@@ -65,25 +99,37 @@ angular.module('News').controller('LoginController',
 angular.module('News').controller('MainController',
     ['$scope', '$location' , 'LoginService' , 'ItemsService', 'FoldersService', 'FeedsService',
         function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
-            $scope.view = '';
-            $scope.action = '';
+            $scope.view = ''; // view is way the results are presented, all and starred is equal
+            $scope.action = ''; // action is button pressed to get the populated list
             $scope.folderId = '0';
             $scope.feedId = '0';
+            $scope.currentFolderName = '';
+            $scope.currentFeedTitle = '';
 
-            $scope.viewTitles = {
-                'All':'All feeds news',
-                'Starred':'Favourite news',
-                'Folders':'Feeds folders',
-                'Feeds':'News feeds'
+            $scope.actionTitles = function () {
+                switch ($scope.action) {
+                    case 'All':
+                        return 'All feeds articles';
+                    case 'Starred':
+                        return 'Favourite articles';
+                    case 'Folders':
+                        return 'Folders list';
+                    case 'Feeds':
+                        return 'Feeds list';
+                    case 'FolderItems':
+                        return $scope.currentFolderName + ' articles';
+                    case 'FeedItems':
+                        return $scope.currentFeedTitle + ' articles';
+                    default:
+                        return 'need $$$';
+                }
             };
-
-            console.log("controller");
 
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
                 ItemsService.getStarredItems(offset)
                     .success(function (data, status) {
-                        $scope.view = 'Starred';
+                        $scope.view = 'All'; // should not be confused with action
                         $scope.data = data;
                     })
                     .error(function (data, status) {
@@ -104,6 +150,7 @@ angular.module('News').controller('MainController',
             };
 
             $scope.getFolders = function () {
+                $scope.action = 'Folders';
                 FoldersService.getFolders()
                     .success(function (data, status) {
                         $scope.data = data;
@@ -115,6 +162,7 @@ angular.module('News').controller('MainController',
             };
 
             $scope.getFeeds = function () {
+                $scope.action = 'Feeds';
                 FeedsService.getFeeds()
                     .success(function (data, status) {
                         $scope.data = data;
@@ -125,15 +173,14 @@ angular.module('News').controller('MainController',
                     });
             };
 
-            $scope.getFolderItems = function (folderId, offset) {
+            $scope.getFolderItems = function (folderId, offset, folderName) {
                 $scope.action = 'FolderItems';
                 $scope.folderId = folderId;
+                $scope.currentFolderName = folderName;
 
-                console.log(folderId + "," + offset);
                 FoldersService.getFolderItems(folderId, offset)
                     .success(function (data, status) {
                         $scope.data = data;
-                        console.log(data);
                         $scope.view = 'All';
                     })
                     .error(function (data, status) {
@@ -141,14 +188,14 @@ angular.module('News').controller('MainController',
                     });
             };
 
-            $scope.getFeedItems = function (feedId, offset) {
+            $scope.getFeedItems = function (feedId, offset, feedTitle) {
                 $scope.action = 'FeedItems';
                 $scope.feedId = feedId;
+                $scope.currentFeedTitle = feedTitle;
 
                 FeedsService.getFeedItems(feedId, offset)
                     .success(function (data, status) {
                         $scope.data = data;
-                        console.log(data);
                         $scope.view = 'All';
                     })
                     .error(function (data, status) {
@@ -163,7 +210,7 @@ angular.module('News').controller('MainController',
                     $scope.getAll(offset);
                 }
                 else if (type === 'Starred' && $scope.action === 'Starred') {
-                    console.log($scope.action + ", " + $scope.type + ", " + offset);
+                    //console.log($scope.action + ", " + $scope.type + ", " + offset);
                     $scope.getStarred(offset);
                 }
                 else if (type === 'All' && $scope.action === 'FolderItems') {
@@ -183,7 +230,7 @@ angular.module('News').controller('MainController',
             };
 
             if (LoginService.present) {
-                console.log('This');
+                //console.log('This');
                 $scope.getAll();
             }
 

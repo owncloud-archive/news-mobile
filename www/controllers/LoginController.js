@@ -23,20 +23,54 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , 'LoginService', 'UserService',
         function ($scope, $location, $route, LoginService, UserService) {
 
-            $scope.urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
             $scope.data = UserService;
 
+            $scope.testFormFields = function () {
+                var hostNameRegExp = new RegExp(/^https?:\/\/.*$/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+                var userNameRegExp = new RegExp(/^[a-z0-9_-]{3,10}$/); // /^[a-z0-9_-]{3,16}$/
+                var passwordRegExp = new RegExp(/^[a-z0-9_-]{3,10}$/); // /^[a-z0-9_-]{6,18}$/
+
+                var userNameParseResult = userNameRegExp.test(UserService.userName);
+
+                $scope.userNameError = '';
+                $scope.passwordError = '';
+                $scope.hostNameError = '';
+
+                if (!userNameParseResult) {
+                    $scope.userNameError = "User name is not in correct format!";
+                }
+
+                var passwordParseResult = passwordRegExp.test(UserService.password);
+
+                if (!passwordParseResult) {
+                    $scope.passwordError = "Password is not in correct format!";
+                }
+
+                var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
+
+                if (!hostNameParseResult) {
+                    $scope.hostNameError = "Host name is not in correct format!";
+                }
+
+                if (hostNameParseResult && userNameParseResult && passwordParseResult) {
+                    return true;
+                }
+                return false;
+            };
+
             $scope.logIn = function () {
-                LoginService.login()
-                    .success(function (data, status) {
-                        if (status === 200) {
-                            LoginService.present = true;
-                            $location.path("/");
-                        }
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
-                    });
+                if ($scope.testFormFields()) {
+                    LoginService.login()
+                        .success(function (data, status) {
+                            if (status === 200) {
+                                LoginService.present = true;
+                                $location.path("/");
+                            }
+                        })
+                        .error(function (data, status) {
+                            alert("Status " + status + " [" + data.message + "]");
+                        });
+                }
             };
 
             $scope.isLoggedIn = function () {
