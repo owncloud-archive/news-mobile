@@ -2,8 +2,8 @@
  *
  * ownCloud - News
  *
- * @author Bernhard Posselt
- * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
+ * @author Ilija Lazarevic
+ * @copyright 2013 Ilija Lazarevic ikac.ikax@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -19,10 +19,12 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').factory('ExceptionHandler',
-    ['$exceptionHandler',
-        function ($exceptionHandler) {
-            return function (exception, cause) {
-                alert(exception.message);
-            };
-        }]);
+
+angular.module('News').factory('ExceptionsService',
+    [function () {
+        return {
+            makeNewException:function (data, status) {
+                throw {message:data.message};
+            }
+        };
+    }]);

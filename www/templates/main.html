@@ -7,7 +7,8 @@
 
             <div class='header'>
                 <ul class="nav nav-pills menu">
-                    <li><a href ng-click="getAll(0)"><i class='icon-certificate icon-white'></i></a></li>
+                    <li><a href ng-click="getAll(0)"><i
+                            class='icon-certificate icon-white'></i></a></li>
                     <li><a href ng-click="getStarred(0)"><i class='icon-star icon-white'></i></a></li>
                     <li><a href ng-click="getFolders()"><i class='icon-folder-open icon-white'></i></a></li>
                     <li><a href ng-click="getFeeds()"><i class='icon-list icon-white'></i></a></li>
@@ -27,7 +28,7 @@
                                 <span>
                                     <i ng-show="item.unread" class="icon-file"></i>
                                     <i ng-hide="item.unread" class="icon-check"></i>
-                                    {{item.title}}
+                                    {{item.title}}-{{item.id}}
                                 </span>
                             </a>
                         </div>
@@ -48,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="showmore" ng-show="data.items.length == 20">
+                    <div class="showmore" ng-show="moreArticles">
                         <button class="btn btn-large btn-block" ng-click="getMoreItems(view)"><i class="icon-arrow-down icon-white"></i></button>
                         <!--<a href ng-click="getMoreItems(view)">
                             <span><i class="icon-arrow-down"></i></span>

@@ -20,8 +20,8 @@
  */
 
 angular.module('News').controller('LoginController',
-    ['$scope', '$location', '$route' , 'LoginService', 'UserService',
-        function ($scope, $location, $route, LoginService, UserService) {
+    ['$scope', '$location', '$route' , 'LoginService', 'UserService', 'ExceptionsService',
+        function ($scope, $location, $route, LoginService, UserService, ExceptionsService) {
 
             $scope.data = UserService;
 
@@ -68,7 +68,7 @@ angular.module('News').controller('LoginController',
                             }
                         })
                         .error(function (data, status) {
-                            alert("Status " + status + " [" + data.message + "]");
+                            ExceptionsService.makeNewException(data, status);
                         });
                 }
             };

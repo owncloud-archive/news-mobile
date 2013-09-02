@@ -34,9 +34,18 @@ angular.module('News').config(['$httpProvider', function($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
+angular.module('News').config(function($provide) {
+    $provide.decorator("$exceptionHandler", function($delegate) {
+        return function(exception, cause) {
+            $delegate(exception, cause);
+            alert(exception.message);
+        };
+    });
+});
+
 angular.module('News').controller('LoginController',
-    ['$scope', '$location', '$route' , 'LoginService', 'UserService',
-        function ($scope, $location, $route, LoginService, UserService) {
+    ['$scope', '$location', '$route' , 'LoginService', 'UserService', 'ExceptionsService',
+        function ($scope, $location, $route, LoginService, UserService, ExceptionsService) {
 
             $scope.data = UserService;
 
@@ -83,7 +92,7 @@ angular.module('News').controller('LoginController',
                             }
                         })
                         .error(function (data, status) {
-                            alert("Status " + status + " [" + data.message + "]");
+                            ExceptionsService.makeNewException(data, status);
                         });
                 }
             };
@@ -97,14 +106,18 @@ angular.module('News').controller('LoginController',
         }]);
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location' , 'LoginService' , 'ItemsService', 'FoldersService', 'FeedsService',
+    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService',
         function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
+
             $scope.view = ''; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
             $scope.folderId = '0';
             $scope.feedId = '0';
             $scope.currentFolderName = '';
             $scope.currentFeedTitle = '';
+
+            $scope.moreArticles = true;
+            var articlesGet = 0;
 
             $scope.actionTitles = function () {
                 switch ($scope.action) {
@@ -127,25 +140,23 @@ angular.module('News').controller('MainController',
 
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
+                $scope.moreArticles = true;
                 ItemsService.getStarredItems(offset)
-                    .success(function (data, status) {
-                        $scope.view = 'All'; // should not be confused with action
-                        $scope.data = data;
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                    .then(function (result) {
+                        $scope.view = 'All';
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
             $scope.getAll = function (offset) {
                 $scope.action = 'All';
+                $scope.moreArticles = true;
                 ItemsService.getAllItems(offset)
-                    .success(function (data, status) {
+                    .then(function (result) {
                         $scope.view = 'All';
-                        $scope.data = data;
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
@@ -177,14 +188,13 @@ angular.module('News').controller('MainController',
                 $scope.action = 'FolderItems';
                 $scope.folderId = folderId;
                 $scope.currentFolderName = folderName;
+                $scope.moreArticles = true;
 
                 FoldersService.getFolderItems(folderId, offset)
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'All';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
@@ -192,33 +202,57 @@ angular.module('News').controller('MainController',
                 $scope.action = 'FeedItems';
                 $scope.feedId = feedId;
                 $scope.currentFeedTitle = feedTitle;
+                $scope.moreArticles = true;
 
                 FeedsService.getFeedItems(feedId, offset)
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'All';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
             $scope.getMoreItems = function (type) {
                 var offset = $scope.data.items.slice(-1)[0].id - 1;
 
-                if (type === 'All' && $scope.action === 'All') {
-                    $scope.getAll(offset);
+                if (offset === 0 || articlesGet < 20) {
+                    $scope.moreArticles = false;
+                    return false;
                 }
-                else if (type === 'Starred' && $scope.action === 'Starred') {
-                    //console.log($scope.action + ", " + $scope.type + ", " + offset);
-                    $scope.getStarred(offset);
+
+                if ($scope.action === 'All') {
+                    ItemsService.getAllItems(offset)
+                        .then(function (result) {
+                            articlesGet = result.data.items.length;
+                            for (var i in result.data.items) {
+                                $scope.data.items.push(result.data.items[i]);
+                            }
+                        });
+                }
+                else if ($scope.action === 'Starred') {
+                    ItemsService.getStarredItems(offset)
+                        .then(function (result) {
+                            articlesGet = result.data.items.length;
+                            for (var i in result.data.items) {
+                                $scope.data.items.push(result.data.items[i]);
+                            }
+                        });
                 }
                 else if (type === 'All' && $scope.action === 'FolderItems') {
-                    //console.log(offset);
-                    $scope.getFolderItems($scope.folderId, offset);
+                    FoldersService.getFolderItems($scope.folderId, offset).then(function (result) {
+                        articlesGet = result.data.items.length;
+                        for (var i in result.data.items) {
+                            $scope.data.items.push(result.data.items[i]);
+                        }
+                    });
                 }
                 else if (type === 'All' && $scope.action === 'FeedItems') {
-                    $scope.getFeedItems($scope.feedId, offset);
+                    FeedsService.getFeedItems($scope.feedId, offset).then(function (result) {
+                        articlesGet = result.data.items.length;
+                        for (var i in result.data.items) {
+                            $scope.data.items.push(result.data.items[i]);
+                        }
+                    });
                 }
 
             };
@@ -231,10 +265,12 @@ angular.module('News').controller('MainController',
 
             if (LoginService.present) {
                 //console.log('This');
-                $scope.getAll();
+                $scope.getAll(0);
             }
 
         }]);
+
+
 
 angular.module('News').directive('checkPresence',
     ['$http', '$location', '$timeout', 'LoginService',
@@ -242,7 +278,7 @@ angular.module('News').directive('checkPresence',
             return {
                 restrict:"E",
                 link:function tick() {
-                    console.log("direktiva");
+                    //console.log("direktiva");
                     if (LoginService.timerRef) {
                         LoginService.killTimer();
                     }
@@ -269,7 +305,7 @@ angular.module('News').directive('checkPresence',
                             });
                     }
                     LoginService.timerRef = $timeout(tick, LoginService.timeout);
-                    console.log("ping");
+                    //console.log("ping");
                 }
             };
         }]);
@@ -307,17 +343,18 @@ angular.module('News').filter('translator', ['$locale', function ($locale) {
 
 }]);
 
-angular.module('News').factory('ExceptionHandler',
-    ['$exceptionHandler',
-        function ($exceptionHandler) {
-            return function (exception, cause) {
-                alert(exception.message);
-            };
-        }]);
+angular.module('News').factory('ExceptionsService',
+    [function () {
+        return {
+            makeNewException:function (data, status) {
+                throw {message:data.message};
+            }
+        };
+    }]);
 
 angular.module('News').factory('FeedsService',
-    ['$http', 'UserService',
-        function ($http, UserService) {
+    ['$http', 'UserService', 'ExceptionsService',
+        function ($http, UserService, ExceptionsService) {
             return {
                 getFeeds:function () {
                     return $http({ method:'GET', url:UserService.hostName +
@@ -336,15 +373,20 @@ angular.module('News').factory('FeedsService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items",
-                        params:params, cached:false, withCredentials:true});
+                        params:params, cached:false, withCredentials:true})
+                        .success(function (data, status) {
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
                 }
             };
 
         }]);
 
 angular.module('News').factory('FoldersService',
-    ['$http', 'UserService',
-        function ($http, UserService) {
+    ['$http', 'UserService', 'ExceptionsService',
+        function ($http, UserService, ExceptionsService) {
             return {
                 getFolders:function () {
                     return $http({ method:'GET', url:UserService.hostName +
@@ -363,15 +405,20 @@ angular.module('News').factory('FoldersService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items", params:params,
-                        cached:false, withCredentials:true });
+                        cached:false, withCredentials:true })
+                        .success(function (data, status) {
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
                 }
             };
 
         }]);
 
 angular.module('News').factory('ItemsService',
-    ['$http', 'UserService',
-        function ($http, UserService) {
+    ['$http', 'UserService', 'ExceptionsService',
+        function ($http, UserService, ExceptionsService) {
             return {
                 getStarredItems:function (offset) {
                     var params = {
@@ -384,7 +431,12 @@ angular.module('News').factory('ItemsService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items",
-                        params:params, cached:false, withCredentials:true});
+                        params:params, cached:false, withCredentials:true})
+                        .success(function (data, status) {
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
                 },
 
                 getAllItems:function (offset) {
@@ -397,10 +449,14 @@ angular.module('News').factory('ItemsService',
                     };
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items",
-                        params:params, cached:false, withCredentials:true});
+                        params:params, cached:false, withCredentials:true})
+                        .success(function (data, status) {
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
                 }
             };
-
         }]);
 
 angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $timeout) {
@@ -531,7 +587,8 @@ angular.module('News').factory('UserService', ['$http', function ($http) {
     return {
         userName:'ikacikac',
         password:'ikacikac',
-        hostName:'http://ilija.homenet/owncloud'
+        hostName:'http://localhost/owncloud'
     };
 }]);
+
 })(window.angular, jQuery);

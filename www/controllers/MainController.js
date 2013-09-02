@@ -20,14 +20,18 @@
  */
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location' , 'LoginService' , 'ItemsService', 'FoldersService', 'FeedsService',
+    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService',
         function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
+
             $scope.view = ''; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
             $scope.folderId = '0';
             $scope.feedId = '0';
             $scope.currentFolderName = '';
             $scope.currentFeedTitle = '';
+
+            $scope.moreArticles = true;
+            var articlesGet = 0;
 
             $scope.actionTitles = function () {
                 switch ($scope.action) {
@@ -50,25 +54,23 @@ angular.module('News').controller('MainController',
 
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
+                $scope.moreArticles = true;
                 ItemsService.getStarredItems(offset)
-                    .success(function (data, status) {
-                        $scope.view = 'All'; // should not be confused with action
-                        $scope.data = data;
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                    .then(function (result) {
+                        $scope.view = 'All';
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
             $scope.getAll = function (offset) {
                 $scope.action = 'All';
+                $scope.moreArticles = true;
                 ItemsService.getAllItems(offset)
-                    .success(function (data, status) {
+                    .then(function (result) {
                         $scope.view = 'All';
-                        $scope.data = data;
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
@@ -100,14 +102,13 @@ angular.module('News').controller('MainController',
                 $scope.action = 'FolderItems';
                 $scope.folderId = folderId;
                 $scope.currentFolderName = folderName;
+                $scope.moreArticles = true;
 
                 FoldersService.getFolderItems(folderId, offset)
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'All';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
@@ -115,33 +116,57 @@ angular.module('News').controller('MainController',
                 $scope.action = 'FeedItems';
                 $scope.feedId = feedId;
                 $scope.currentFeedTitle = feedTitle;
+                $scope.moreArticles = true;
 
                 FeedsService.getFeedItems(feedId, offset)
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'All';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
                     });
             };
 
             $scope.getMoreItems = function (type) {
                 var offset = $scope.data.items.slice(-1)[0].id - 1;
 
-                if (type === 'All' && $scope.action === 'All') {
-                    $scope.getAll(offset);
+                if (offset === 0 || articlesGet < 20) {
+                    $scope.moreArticles = false;
+                    return false;
                 }
-                else if (type === 'Starred' && $scope.action === 'Starred') {
-                    //console.log($scope.action + ", " + $scope.type + ", " + offset);
-                    $scope.getStarred(offset);
+
+                if ($scope.action === 'All') {
+                    ItemsService.getAllItems(offset)
+                        .then(function (result) {
+                            articlesGet = result.data.items.length;
+                            for (var i in result.data.items) {
+                                $scope.data.items.push(result.data.items[i]);
+                            }
+                        });
+                }
+                else if ($scope.action === 'Starred') {
+                    ItemsService.getStarredItems(offset)
+                        .then(function (result) {
+                            articlesGet = result.data.items.length;
+                            for (var i in result.data.items) {
+                                $scope.data.items.push(result.data.items[i]);
+                            }
+                        });
                 }
                 else if (type === 'All' && $scope.action === 'FolderItems') {
-                    //console.log(offset);
-                    $scope.getFolderItems($scope.folderId, offset);
+                    FoldersService.getFolderItems($scope.folderId, offset).then(function (result) {
+                        articlesGet = result.data.items.length;
+                        for (var i in result.data.items) {
+                            $scope.data.items.push(result.data.items[i]);
+                        }
+                    });
                 }
                 else if (type === 'All' && $scope.action === 'FeedItems') {
-                    $scope.getFeedItems($scope.feedId, offset);
+                    FeedsService.getFeedItems($scope.feedId, offset).then(function (result) {
+                        articlesGet = result.data.items.length;
+                        for (var i in result.data.items) {
+                            $scope.data.items.push(result.data.items[i]);
+                        }
+                    });
                 }
 
             };
@@ -154,7 +179,9 @@ angular.module('News').controller('MainController',
 
             if (LoginService.present) {
                 //console.log('This');
-                $scope.getAll();
+                $scope.getAll(0);
             }
 
         }]);
+
+

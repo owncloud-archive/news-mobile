@@ -2,8 +2,8 @@
  *
  * ownCloud - News
  *
- * @author Ilija Lazarevic
- * @copyright 2013 Ilija Lazarevic ikac.ikax@gmail.com
+ * @author Bernhard Posselt
+ * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -19,10 +19,11 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').factory('UserService', ['$http', function ($http) {
-    return {
-        userName:'ikacikac',
-        password:'ikacikac',
-        hostName:'http://localhost/owncloud'
-    };
-}]);
+angular.module('News').config(function($provide) {
+    $provide.decorator("$exceptionHandler", function($delegate) {
+        return function(exception, cause) {
+            $delegate(exception, cause);
+            alert(exception.message);
+        };
+    });
+});

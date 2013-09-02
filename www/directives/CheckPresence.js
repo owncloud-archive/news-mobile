@@ -25,7 +25,7 @@ angular.module('News').directive('checkPresence',
             return {
                 restrict:"E",
                 link:function tick() {
-                    console.log("direktiva");
+                    //console.log("direktiva");
                     if (LoginService.timerRef) {
                         LoginService.killTimer();
                     }
@@ -52,7 +52,7 @@ angular.module('News').directive('checkPresence',
                             });
                     }
                     LoginService.timerRef = $timeout(tick, LoginService.timeout);
-                    console.log("ping");
+                    //console.log("ping");
                 }
             };
         }]);
