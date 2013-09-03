@@ -16,7 +16,22 @@
                 </ul>
             </div>
 
-            <div id="caption" class="caption">{{actionTitles();}}</div>
+            <!--Handling the header caption-->
+            <div ng-switch="action" id="caption"
+                 class="caption">
+                <span ng-switch-when="All">{{ 'All feeds articles' |
+                    translator }}</span>
+                <span ng-switch-when="Starred">{{ 'All starred
+                    articles' | translator}}</span>
+                <span ng-switch-when="Folders">{{ 'All folders articles'
+                    | translator }}</span>
+                <span ng-switch-when="Feeds">{{ 'All feeds articles' |
+                    translator}}</span>
+                <span ng-switch-when="FolderItems">{{currentFolderName}}
+                    {{ 'articles' | translator}}</span>
+                <span ng-switch-when="FeedItems">{{currentFeedTitle}}
+                    {{ 'articles' | translator}}</span>
+            </div>
 
             <div ng-switch="view">
                 <div class="accordion" id="accordion2"
@@ -28,7 +43,7 @@
                                 <span>
                                     <i ng-show="item.unread" class="icon-file"></i>
                                     <i ng-hide="item.unread" class="icon-check"></i>
-                                    {{item.title}}-{{item.id}}
+                                    {{item.title}}
                                 </span>
                             </a>
                         </div>

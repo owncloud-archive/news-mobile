@@ -119,25 +119,6 @@ angular.module('News').controller('MainController',
             $scope.moreArticles = true;
             var articlesGet = 0;
 
-            $scope.actionTitles = function () {
-                switch ($scope.action) {
-                    case 'All':
-                        return 'All feeds articles';
-                    case 'Starred':
-                        return 'Favourite articles';
-                    case 'Folders':
-                        return 'Folders list';
-                    case 'Feeds':
-                        return 'Feeds list';
-                    case 'FolderItems':
-                        return $scope.currentFolderName + ' articles';
-                    case 'FeedItems':
-                        return $scope.currentFeedTitle + ' articles';
-                    default:
-                        return 'need $$$';
-                }
-            };
-
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
                 $scope.moreArticles = true;
