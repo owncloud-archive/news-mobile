@@ -19,8 +19,15 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').filter('translator', ['TranslationService', function (TranslationService) {
-	return function (text) {
-        return TranslationService.translateLabel([text]);
-	};
+
+angular.module('News').factory('TranslationService', [ function () {
+    return {
+        lang:null,
+        translateLabel : function(text){
+            return this.lang.labels[text];
+        },
+        translateException : function(text){
+            return this.lang.exceptions[text];
+        }
+    };
 }]);

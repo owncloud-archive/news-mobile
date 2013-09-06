@@ -174,8 +174,14 @@ body {
 
         li {
           //border-bottom:1px inset @fedblue-light;
-
           a {
+            color: @fedblue;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            white-space: nowrap;
+
+
             line-height: 20px;
             .padding-vside(8px);
             .radius(0px);
@@ -183,6 +189,8 @@ body {
             border-radius: none;
             margin-top: 0px;
             margin-bottom: 0px;
+
+
           }
 
           a:hover, a:focus {

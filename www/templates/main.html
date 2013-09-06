@@ -19,13 +19,13 @@
             <!--Handling the header caption-->
             <div ng-switch="action" id="caption"
                  class="caption">
-                <span ng-switch-when="All">{{ 'All feeds articles' |
+                <span ng-switch-when="All">{{ 'all.feeds.articles' |
                     translator }}</span>
-                <span ng-switch-when="Starred">{{ 'All starred
-                    articles' | translator}}</span>
-                <span ng-switch-when="Folders">{{ 'All folders articles'
+                <span ng-switch-when="Starred">{{ 'all.starred.articles' |
+                    translator}}</span>
+                <span ng-switch-when="Folders">{{ 'all.folders'
                     | translator }}</span>
-                <span ng-switch-when="Feeds">{{ 'All feeds articles' |
+                <span ng-switch-when="Feeds">{{ 'all.feeds' |
                     translator}}</span>
                 <span ng-switch-when="FolderItems">{{currentFolderName}}
                     {{ 'articles' | translator}}</span>
@@ -105,8 +105,9 @@
                             <img src="{{feed.faviconLink}}" width="32"
                                   height="32">
                             <span>{{feed.title}}</span>
-                            <span class="badge pull-right" ng-bind="feed.unreadCount"></span>
+                            <span class="badge" ng-bind="feed.unreadCount"></span>
                         </a>
+
                     </li>
                 </ul>
             </div>

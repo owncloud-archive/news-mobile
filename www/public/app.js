@@ -19,16 +19,22 @@ angular.module('News').config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/', {
         templateUrl:'main.html',
         controller:'MainController'
-
-    }).when('/login', {
+    })
+        .when('/login', {
             templateUrl:'login.html',
-            controller:'LoginController'
-
-        }).otherwise({
+            controller:'LoginController',
+            resolve: ['$http' , '$locale', 'TranslationService', function($http,$locale,TranslationService){
+                return $http.get('../languages/'+$locale.id+'.json').success(function(data, status){
+                    TranslationService.lang = data;
+                });
+            }]
+        })
+        .otherwise({
             redirectTo:'/'
         });
 
 }]);
+
 angular.module('News').config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -37,15 +43,15 @@ angular.module('News').config(['$httpProvider', function($httpProvider) {
 angular.module('News').config(function($provide) {
     $provide.decorator("$exceptionHandler", function($delegate) {
         return function(exception, cause) {
-            $delegate(exception, cause);
+            //$delegate(exception, cause);
             alert(exception.message);
         };
     });
 });
 
 angular.module('News').controller('LoginController',
-    ['$scope', '$location', '$route' , 'LoginService', 'UserService', 'ExceptionsService',
-        function ($scope, $location, $route, LoginService, UserService, ExceptionsService) {
+    ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
+        function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
             $scope.data = UserService;
 
@@ -61,19 +67,19 @@ angular.module('News').controller('LoginController',
                 $scope.hostNameError = '';
 
                 if (!userNameParseResult) {
-                    $scope.userNameError = "User name is not in correct format!";
+                    ExceptionsService.makeNewException({message:"user.name.is.not.in.correct.format"},-1);
                 }
 
                 var passwordParseResult = passwordRegExp.test(UserService.password);
 
                 if (!passwordParseResult) {
-                    $scope.passwordError = "Password is not in correct format!";
+                    ExceptionsService.makeNewException({message:"password.is.not.in.correct.format"},-1);
                 }
 
                 var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
 
                 if (!hostNameParseResult) {
-                    $scope.hostNameError = "Host name is not in correct format!";
+                    ExceptionsService.makeNewException({message:"host.name.is.not.in.correct.format"},-1);
                 }
 
                 if (hostNameParseResult && userNameParseResult && passwordParseResult) {
@@ -254,12 +260,11 @@ angular.module('News').controller('MainController',
 
 
 angular.module('News').directive('checkPresence',
-    ['$http', '$location', '$timeout', 'LoginService',
-        function ($http, $location, $timeout, LoginService) {
+    ['$http', '$location', '$timeout', 'LoginService', 'ExceptionsService',
+        function ($http, $location, $timeout, LoginService, ExceptionsService) {
             return {
                 restrict:"E",
                 link:function tick() {
-                    //console.log("direktiva");
                     if (LoginService.timerRef) {
                         LoginService.killTimer();
                     }
@@ -270,65 +275,43 @@ angular.module('News').directive('checkPresence',
                         LoginService.login()
                             .success(function (data, status) {
                                 if (status === 200) {
-                                    //alert("Status "+status+" ["+data.message+"]");
                                     $location.path('/');
                                 }
                                 else {
-                                    alert("Status " + status + " [" + data.message + "]");
                                     LoginService.killTimer();
                                     $location.path('/login');
+                                    ExceptionsService.makeNewException(data, status);
                                 }
                             })
                             .error(function (data, status) {
-                                alert("Status " + status + " [" + data.message + "]");
                                 LoginService.killTimer();
                                 $location.path('/login');
+                                ExceptionsService.makeNewException(data, status);
                             });
                     }
                     LoginService.timerRef = $timeout(tick, LoginService.timeout);
-                    //console.log("ping");
                 }
             };
         }]);
 
 
-angular.module('News').filter('translator', ['$locale', function ($locale) {
-
+angular.module('News').filter('translator', ['TranslationService', function (TranslationService) {
 	return function (text) {
-        if($locale.id === "sr-rs") {
-            switch (text) {
-                case "Username" :
-                    return "Korisnicko ime";
-                case "Password" :
-                    return "Lozinka";
-                case "Hostname" :
-                    return "Lokacija servera";
-                case "Sign in" :
-                    return "Prijavi se";
-                case "All":
-                    return "Sve";
-                case "Starred":
-                    return "Favoriti";
-                case "Folders":
-                    return "Folderi";
-                case "Show more":
-                    return 'Prikazi jos';
-                default:
-                    return text;
-            }
-
-        } else if($locale.id == "en-us") {
-            return text;
-        }
+        return TranslationService.translateLabel([text]);
 	};
-
 }]);
 
 angular.module('News').factory('ExceptionsService',
-    [function () {
+    ['TranslationService', function (TranslationService) {
         return {
             makeNewException:function (data, status) {
-                throw {message:data.message};
+                var messageString = '';
+                if (status > 0) {
+                    messageString = '['+status+'] ';
+                }
+                messageString = messageString + TranslationService.translateException([data.message]);
+
+                throw {message: messageString};
             }
         };
     }]);
@@ -535,7 +518,7 @@ angular.module('News').factory('LoginService',
             return {
                 present:false,
                 timerRef:null,
-                timeout:500000,
+                timeout:5000,
 
                 killTimer:function () {
                     $timeout.cancel(this.timerRef);
@@ -563,6 +546,18 @@ angular.module('News').factory('LoginService',
             };
 
         }]);
+
+angular.module('News').factory('TranslationService', [ function () {
+    return {
+        lang:null,
+        translateLabel : function(text){
+            return this.lang.labels[text];
+        },
+        translateException : function(text){
+            return this.lang.exceptions[text];
+        }
+    };
+}]);
 
 angular.module('News').factory('UserService', ['$http', function ($http) {
     return {

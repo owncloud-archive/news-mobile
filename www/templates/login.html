@@ -10,20 +10,23 @@
             <div>
                 <form name="LoginForm">
                     <fieldset>
-                        <label for="username">{{ 'Username' | translator}}</label>
+                        <label for="username">{{ 'username' |
+                            translator}}</label>
 
                         <input type="text" name="userName"
                                placeholder="Type your user name"
                                ng-model="data.userName">
                         <br/>
 
-                        <label for="password">{{ 'Password' | translator }}</label>
+                        <label for="password">{{ 'password' | translator
+                            }}</label>
                         <input type="password" name="password"
                                placeholder="Type password"
                                ng-model="data.password">
                         <br/>
 
-                        <label for="hostName">{{ 'Hostname' | translator }}</label>
+                        <label for="hostName">{{ 'hostname' | translator
+                            }}</label>
                         <input type="text" name="hostName"
                                placeholder="Type url to connect to"
                                ng-model="data.hostName">
@@ -31,7 +34,8 @@
                         <br/>
                         <div>
                             <button class="btn btn-large btn-block"
-                                    ng-click="logIn()">{{ 'Sign in' | translator}}
+                                    ng-click="logIn()">{{ 'sign.in' |
+                                translator}}
                             </button>
                         </div>
                     </fieldset>

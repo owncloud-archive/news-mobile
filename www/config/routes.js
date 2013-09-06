@@ -25,12 +25,17 @@ angular.module('News').config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/', {
         templateUrl:'main.html',
         controller:'MainController'
-
-    }).when('/login', {
+    })
+        .when('/login', {
             templateUrl:'login.html',
-            controller:'LoginController'
-
-        }).otherwise({
+            controller:'LoginController',
+            resolve: ['$http' , '$locale', 'TranslationService', function($http,$locale,TranslationService){
+                return $http.get('../languages/'+$locale.id+'.json').success(function(data, status){
+                    TranslationService.lang = data;
+                });
+            }]
+        })
+        .otherwise({
             redirectTo:'/'
         });
 

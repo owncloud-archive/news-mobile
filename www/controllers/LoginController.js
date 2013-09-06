@@ -20,8 +20,8 @@
  */
 
 angular.module('News').controller('LoginController',
-    ['$scope', '$location', '$route' , 'LoginService', 'UserService', 'ExceptionsService',
-        function ($scope, $location, $route, LoginService, UserService, ExceptionsService) {
+    ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
+        function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
             $scope.data = UserService;
 
@@ -37,19 +37,19 @@ angular.module('News').controller('LoginController',
                 $scope.hostNameError = '';
 
                 if (!userNameParseResult) {
-                    $scope.userNameError = "User name is not in correct format!";
+                    ExceptionsService.makeNewException({message:"user.name.is.not.in.correct.format"},-1);
                 }
 
                 var passwordParseResult = passwordRegExp.test(UserService.password);
 
                 if (!passwordParseResult) {
-                    $scope.passwordError = "Password is not in correct format!";
+                    ExceptionsService.makeNewException({message:"password.is.not.in.correct.format"},-1);
                 }
 
                 var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
 
                 if (!hostNameParseResult) {
-                    $scope.hostNameError = "Host name is not in correct format!";
+                    ExceptionsService.makeNewException({message:"host.name.is.not.in.correct.format"},-1);
                 }
 
                 if (hostNameParseResult && userNameParseResult && passwordParseResult) {

@@ -21,10 +21,16 @@
 
 
 angular.module('News').factory('ExceptionsService',
-    [function () {
+    ['TranslationService', function (TranslationService) {
         return {
             makeNewException:function (data, status) {
-                throw {message:data.message};
+                var messageString = '';
+                if (status > 0) {
+                    messageString = '['+status+'] ';
+                }
+                messageString = messageString + TranslationService.translateException([data.message]);
+
+                throw {message: messageString};
             }
         };
     }]);

@@ -20,12 +20,11 @@
  */
 
 angular.module('News').directive('checkPresence',
-    ['$http', '$location', '$timeout', 'LoginService',
-        function ($http, $location, $timeout, LoginService) {
+    ['$http', '$location', '$timeout', 'LoginService', 'ExceptionsService',
+        function ($http, $location, $timeout, LoginService, ExceptionsService) {
             return {
                 restrict:"E",
                 link:function tick() {
-                    //console.log("direktiva");
                     if (LoginService.timerRef) {
                         LoginService.killTimer();
                     }
@@ -36,23 +35,21 @@ angular.module('News').directive('checkPresence',
                         LoginService.login()
                             .success(function (data, status) {
                                 if (status === 200) {
-                                    //alert("Status "+status+" ["+data.message+"]");
                                     $location.path('/');
                                 }
                                 else {
-                                    alert("Status " + status + " [" + data.message + "]");
                                     LoginService.killTimer();
                                     $location.path('/login');
+                                    ExceptionsService.makeNewException(data, status);
                                 }
                             })
                             .error(function (data, status) {
-                                alert("Status " + status + " [" + data.message + "]");
                                 LoginService.killTimer();
                                 $location.path('/login');
+                                ExceptionsService.makeNewException(data, status);
                             });
                     }
                     LoginService.timerRef = $timeout(tick, LoginService.timeout);
-                    //console.log("ping");
                 }
             };
         }]);

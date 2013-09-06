@@ -127,6 +127,10 @@ body {
   background-color: white;
 }
 .container-fluid .row-fluid .span4 .nav.nav-pills.nav-stacked li a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  white-space: nowrap;
   line-height: 20px;
   padding-top: 8px;
   padding-bottom: 8px;

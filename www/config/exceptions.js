@@ -22,7 +22,7 @@
 angular.module('News').config(function($provide) {
     $provide.decorator("$exceptionHandler", function($delegate) {
         return function(exception, cause) {
-            $delegate(exception, cause);
+            //$delegate(exception, cause);
             alert(exception.message);
         };
     });

@@ -7,7 +7,7 @@
 	<meta name="author" content="Bernhard Posselt, Alessandro Cosentino, Ilija Lazarevic"/>
 	<meta name="keywords" content="ownCloud, rss, reader, news, atom"/>
 	<meta name="description" content="mobile client for the News app"/>
-	
+
 	<!-- styles -->
 	<link rel="stylesheet" href="../css/bootstrap.css" type="text/css" media="all"/>
     <link rel="stylesheet" href="../css/responsive.css" type="text/css" media="all"/>
@@ -16,6 +16,11 @@
 	<!-- scripts -->
 	<script type="text/javascript" src="../vendor/jquery/jquery.js"></script>
 	<script type="text/javascript" src="../vendor/angular/angular.js"></script>
+    <script type="text/javascript" src="../vendor/angular/angular-resource.js"></script>
+
+    <!--
+    <script type="text/javascript" src="../vendor/angular/angular-locale_sr-rs.js"></script>
+    <!-- -->
     <script type="text/javascript" src="../vendor/bootstrap/bootstrap-button.js"></script>
     <script type="text/javascript" src="../vendor/bootstrap/bootstrap-transition.js"></script>
     <script type="text/javascript" src="../vendor/bootstrap/bootstrap-collapse.js"></script>
@@ -25,6 +30,7 @@
 </head>
 
 <body>
+
 	<div id="main" ng-view></div>
 
 </body>
