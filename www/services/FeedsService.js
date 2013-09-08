@@ -28,7 +28,7 @@ angular.module('News').factory('FeedsService',
                         "/index.php/apps/news/api/v1-2/feeds",
                         cached:false, withCredentials:true})
                         .success(function (data, status) {
-                            TimeService.convertFeedsDates(data.items);
+                            TimeService.convertFeedsDates(data.feeds);
                             return data;
                         })
                         .error(function (data, status) {
