@@ -112,9 +112,10 @@ angular.module('News').controller('LoginController',
         }]);
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService',
-        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
+    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
+        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
 
+            console.log('Initialized main controller');
             $scope.view = ''; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
             $scope.folderId = '0';
@@ -301,6 +302,15 @@ angular.module('News').filter('translator', ['TranslationService', function (Tra
 	};
 }]);
 
+angular.module('News').filter('clearurl', function () {
+    var reg = /https?:\/\/[^#]*/;
+    var regexp = new RegExp(reg);
+
+	return function (text) {
+        return regexp.exec(text)[0];
+	};
+});
+
 angular.module('News').factory('ExceptionsService',
     ['TranslationService', function (TranslationService) {
         return {
@@ -317,8 +327,8 @@ angular.module('News').factory('ExceptionsService',
     }]);
 
 angular.module('News').factory('FeedsService',
-    ['$http', 'UserService', 'ExceptionsService',
-        function ($http, UserService, ExceptionsService) {
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
             return {
                 getFeeds:function () {
                     return $http({ method:'GET', url:UserService.hostName +
@@ -339,6 +349,7 @@ angular.module('News').factory('FeedsService',
                         "/index.php/apps/news/api/v1-2/items",
                         params:params, cached:false, withCredentials:true})
                         .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);
@@ -349,8 +360,8 @@ angular.module('News').factory('FeedsService',
         }]);
 
 angular.module('News').factory('FoldersService',
-    ['$http', 'UserService', 'ExceptionsService',
-        function ($http, UserService, ExceptionsService) {
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
             return {
                 getFolders:function () {
                     return $http({ method:'GET', url:UserService.hostName +
@@ -371,6 +382,7 @@ angular.module('News').factory('FoldersService',
                         "/index.php/apps/news/api/v1-2/items", params:params,
                         cached:false, withCredentials:true })
                         .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);
@@ -381,8 +393,8 @@ angular.module('News').factory('FoldersService',
         }]);
 
 angular.module('News').factory('ItemsService',
-    ['$http', 'UserService', 'ExceptionsService',
-        function ($http, UserService, ExceptionsService) {
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
             return {
                 getStarredItems:function (offset) {
                     var params = {
@@ -397,6 +409,7 @@ angular.module('News').factory('ItemsService',
                         "/index.php/apps/news/api/v1-2/items",
                         params:params, cached:false, withCredentials:true})
                         .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);
@@ -415,6 +428,7 @@ angular.module('News').factory('ItemsService',
                         "/index.php/apps/news/api/v1-2/items",
                         params:params, cached:false, withCredentials:true})
                         .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);
@@ -546,6 +560,45 @@ angular.module('News').factory('LoginService',
             };
 
         }]);
+
+angular.module('News').factory('TimeService', [ function () {
+    var day = 60 * 60 * 24 * 1000; //miliseconds in a day
+    var hour = 60 * 60 * 1000; //miliseconds in a hour
+    var dateNow = Date.now();
+
+    return {
+        getDateFromUTC:function (utc) {
+            var itemDate = new Date(utc * 1000);
+            var daysAgo = Math.floor((dateNow - itemDate) / day);
+            var hoursAgo = Math.floor((dateNow - itemDate) / hour);
+
+            if (daysAgo === 0) {
+                if (hoursAgo === 1) {
+                    return "1 hour ago";
+                }
+                else {
+                    return hoursAgo + " hours ago";
+                }
+            }
+            else if (daysAgo === 1) {
+                return "1 day ago";
+            }
+            else if (daysAgo <= 10) {
+                return daysAgo + " days ago";
+            }
+            else {
+                return itemDate.toDateString();
+            }
+        },
+
+        convertItemsDates:function (items) {
+            for (var i in items) {
+                items[i].pubDate = this.getDateFromUTC(items[i].pubDate);
+            }
+        }
+
+    };
+}]);
 
 angular.module('News').factory('TranslationService', [ function () {
     return {

@@ -20,9 +20,10 @@
  */
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService',
-        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
+    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
+        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
 
+            console.log('Initialized main controller');
             $scope.view = ''; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
             $scope.folderId = '0';

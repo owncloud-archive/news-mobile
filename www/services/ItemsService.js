@@ -20,8 +20,8 @@
  */
 
 angular.module('News').factory('ItemsService',
-    ['$http', 'UserService', 'ExceptionsService',
-        function ($http, UserService, ExceptionsService) {
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
             return {
                 getStarredItems:function (offset) {
                     var params = {
@@ -36,6 +36,7 @@ angular.module('News').factory('ItemsService',
                         "/index.php/apps/news/api/v1-2/items",
                         params:params, cached:false, withCredentials:true})
                         .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);
@@ -54,6 +55,7 @@ angular.module('News').factory('ItemsService',
                         "/index.php/apps/news/api/v1-2/items",
                         params:params, cached:false, withCredentials:true})
                         .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);

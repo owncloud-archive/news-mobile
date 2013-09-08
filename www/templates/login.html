@@ -1,65 +1,54 @@
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span4"></div>
-        <div class="span4">
+<div class="header">
+    <img src="../images/owncloud-logo-transparent-white.png">
+</div>
 
-            <div class="header">
-                <img src="../images/owncloud-logo-transparent-white.png"/>
-            </div>
+<div>
+    <form name="LoginForm">
+        <fieldset>
+            <label for="username">{{ 'username' |
+                translator}}</label>
 
-            <div>
-                <form name="LoginForm">
-                    <fieldset>
-                        <label for="username">{{ 'username' |
-                            translator}}</label>
+            <input type="text" name="userName"
+                   placeholder="Type your user name"
+                   ng-model="data.userName">
+            <br/>
 
-                        <input type="text" name="userName"
-                               placeholder="Type your user name"
-                               ng-model="data.userName">
-                        <br/>
+            <label for="password">{{ 'password' | translator
+                }}</label>
+            <input type="password" name="password"
+                   placeholder="Type password"
+                   ng-model="data.password">
+            <br/>
 
-                        <label for="password">{{ 'password' | translator
-                            }}</label>
-                        <input type="password" name="password"
-                               placeholder="Type password"
-                               ng-model="data.password">
-                        <br/>
-
-                        <label for="hostName">{{ 'hostname' | translator
-                            }}</label>
-                        <input type="text" name="hostName"
-                               placeholder="Type url to connect to"
-                               ng-model="data.hostName">
-                        <br/>
-                        <br/>
-                        <div>
-                            <button class="btn btn-large btn-block"
-                                    ng-click="logIn()">{{ 'sign.in' |
-                                translator}}
-                            </button>
-                        </div>
-                    </fieldset>
-                    <br/>
-                    <div class="alert alert-error"
-                         ng-show="userNameError || passwordError || hostNameError">
-                        <button type="button" class="close"
-                                data-dismiss="alert">&times;</button>
-                        <strong>
-                            <div>{{userNameError}}</div>
-                            <div>{{passwordError}}</div>
-                            <div>{{hostNameError}}</div>
-                        </strong>
-                    </div>
-                </form>
-            <div class="footer">
-                ownCloud News Web app
-            </div>
-            </div>
+            <label for="hostName">{{ 'hostname' | translator
+                }}</label>
+            <input type="text" name="hostName"
+                   placeholder="Type url to connect to"
+                   ng-model="data.hostName">
+            <button class="btn btn-large btn-block"
+                        ng-click="logIn()">{{ 'sign.in' |
+                    translator}}
+            </button>
+        </fieldset>
+        <!--
+        <span>
+            ownCloud is a free and open-source web application for data synchronization, file sharing, and cloud storage.
+            ownCloud is written in the PHP and JavaScript scripting languages. For change management, it employs SabreDAV,
+            an open-source WebDAV server. ownCloud is designed to work with several database management systems, including
+            SQLite, MariaDB, MySQL, Oracle Database, and PostgreSQL.
+        </span><!-- -->
+        <!--
+        <div class="alert alert-error"
+             ng-show="userNameError || passwordError || hostNameError">
+            <button type="button" class="close"
+                    data-dismiss="alert">&times;</button>
+            <strong>
+                <div>{{userNameError}}</div>
+                <div>{{passwordError}}</div>
+                <div>{{hostNameError}}</div>
+            </strong>
         </div>
-        <div class="span4"></div>
-    </div>
+        -->
+    </form>
 </div>
-<!--
-<div id="login" ng-hide="isLoggedIn()" ng-controller="LoginController">
-</div>
--->
+

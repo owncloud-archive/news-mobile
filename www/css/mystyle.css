@@ -50,19 +50,19 @@ body {
   color: #365e8a;
 }
 .btn {
-  background-image: linear-gradient(to bottom, #1d2d44, #1d2d44);
+  background-image: white;
   border-width: 0px;
 }
 .btn,
 .btn:hover,
 .btn:focus,
 .btn:active {
-  color: white;
+  color: #1d2d44;
 }
 .btn:hover,
 .btn:focus,
 .btn:active {
-  background-color: #1d2d44;
+  background-color: white;
   background-position: 0px 0px;
 }
 .showmore {
@@ -155,10 +155,15 @@ body {
 }
 .container-fluid .row-fluid .span4 .accordion .accordion-heading {
   font-family: Arial;
-}
-.container-fluid .row-fluid .span4 .accordion .accordion-heading .accordion-toggle {
   padding-top: 8px;
   padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-heading a.accordion-toggle {
+  padding: 0px;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-heading .accordion-toggle {
   color: #1d2d44;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -175,6 +180,10 @@ body {
 .container-fluid .row-fluid .span4 .accordion .accordion-heading .accordion-toggle a:hover {
   outline: none;
 }
+.container-fluid .row-fluid .span4 .accordion .accordion-heading span.itemadd {
+  font-size: smaller;
+  font-style: italic;
+}
 .container-fluid .row-fluid .span4 .accordion .accordion-group {
   border: 0px;
   -webkit-border-radius: 0px;
@@ -183,6 +192,12 @@ body {
 }
 .container-fluid .row-fluid .span4 .accordion .accordion-group .accordion-body {
   font-family: Arial;
+}
+.container-fluid .row-fluid .span4 .accordion .accordion-group .accordion-body span.itemaddurl {
+  font-size: smaller;
+  font-style: italic;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 .container-fluid .row-fluid .span4 .accordion .accordion-group .accordion-body .accordion-inner {
   border-top: 0px;

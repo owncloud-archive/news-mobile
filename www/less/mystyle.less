@@ -85,16 +85,16 @@ body {
 
 
 .btn {
-  background-image: linear-gradient(to bottom, @fedblue, @fedblue);
+  background-image: white;//linear-gradient(to bottom, @fedblue, @fedblue);
   border-width: 0px;
 }
 
 .btn, .btn:hover, .btn:focus, .btn:active {
-  color: white;
+  color: @fedblue;
 }
 
 .btn:hover , .btn:focus, .btn:active {
-  background-color: @fedblue;
+  background-color: white;
   background-position: 0px 0px;
 }
 
@@ -124,7 +124,6 @@ body {
           width: 98%;
           padding: 4px 1%;
           color: @fedblue-light;
-
         }
 
         .btn.btn-large {
@@ -209,9 +208,14 @@ body {
 
         .accordion-heading {
           .normal-font;
+          .padding-vside(8px);
+          .padding-hside(5px);
+
+          a.accordion-toggle{
+            padding: 0px;
+          }
 
           .accordion-toggle {
-            .padding-vside(8px);
             color: @fedblue;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -229,6 +233,11 @@ body {
               outline: none;
             }
           }
+
+          span.itemadd {
+            font-size: smaller;
+            font-style: italic;
+          }
         }
 
         .accordion-group {
@@ -238,6 +247,12 @@ body {
 
           .accordion-body {
             .normal-font;
+
+            span.itemaddurl {
+              font-size: smaller;
+              font-style: italic;
+              .padding-hside(8px);
+            }
 
             .accordion-inner {
               border-top:0px;

@@ -1,24 +1,22 @@
-<check-presence></check-presence>
+<check-presence xmlns="http://www.w3.org/1999/html"></check-presence>
 
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span4"></div>
-        <div class="span4">
-
-            <div class='header'>
-                <ul class="nav nav-pills menu">
-                    <li><a href ng-click="getAll(0)"><i
-                            class='icon-certificate icon-white'></i></a></li>
-                    <li><a href ng-click="getStarred(0)"><i class='icon-star icon-white'></i></a></li>
-                    <li><a href ng-click="getFolders()"><i class='icon-folder-open icon-white'></i></a></li>
-                    <li><a href ng-click="getFeeds()"><i class='icon-list icon-white'></i></a></li>
-                    <li class="pull-right"><a href ng-click="logOut()"><i class="icon-off icon-white"></i></a></li>
-                </ul>
-            </div>
-
-            <!--Handling the header caption-->
-            <div ng-switch="action" id="caption"
-                 class="caption">
+<div class='header'>
+    <ul class="nav nav-pills menu">
+        <li><a href ng-click="getAll(0)"><i
+                class='icon-certificate icon-white'></i></a></li>
+        <li><a href ng-click="getStarred(0)"><i
+                class='icon-star icon-white'></i></a></li>
+        <li><a href ng-click="getFolders()"><i
+                class='icon-folder-open icon-white'></i></a></li>
+        <li><a href ng-click="getFeeds()"><i
+                class='icon-list icon-white'></i></a></li>
+        <li class="pull-right"><a href ng-click="logOut()"><i
+                class="icon-off icon-white"></i></a></li>
+    </ul>
+</div>
+<!--Handling the header caption-->
+<div ng-switch="action" id="caption"
+     class="caption">
                 <span ng-switch-when="All">{{ 'all.feeds.articles' |
                     translator }}</span>
                 <span ng-switch-when="Starred">{{ 'all.starred.articles' |
@@ -31,96 +29,159 @@
                     {{ 'articles' | translator}}</span>
                 <span ng-switch-when="FeedItems">{{currentFeedTitle}}
                     {{ 'articles' | translator}}</span>
+</div>
+
+<!-- Showing feed articles list -->
+<div ng-switch="view">
+    <div class="accordion" id="accordion1"
+         class="nav nav-pills nav-stacked"
+         ng-switch-when="All">
+        <div class="accordion-group" ng-repeat="item in data.items">
+            <div class="accordion-heading">
+                <a class="accordion-toggle unread-{{item.unread}} starred-{{item.starred}} "
+                   data-toggle="collapse"
+                   data-parent="#accordion1" href="#collapse{{item.id}}">
+                    <span>
+                        {{item.title}}
+                    </span><br/>
+                    <span ng-show="item.autor" class="itemadd">
+                        author: <span>{{item.author}}</span>
+                    </span>
+                    <span ng-hide="item.autor" class="itemadd">
+                        author: <span>unknown</span>
+                    </span>
+                    <span ng-show="item.pubDate" class="itemadd">
+                        date published: <span>{{item.pubDate}}</span>
+                    </span>
+                    <span ng-hide="item.pubDate" class="itemadd">
+                        date published: <span>unknown</span>
+                    </span>
+                </a>
             </div>
-
-            <div ng-switch="view">
-                <div class="accordion" id="accordion2"
-                     class="nav nav-pills nav-stacked"
-                     ng-switch-when="All">
-                    <div class="accordion-group" ng-repeat="item in data.items">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{item.id}}">
-                                <span>
-                                    <i ng-show="item.unread" class="icon-file"></i>
-                                    <i ng-hide="item.unread" class="icon-check"></i>
-                                    {{item.title}}
-                                </span>
-                            </a>
+            <div id="collapse{{item.id}}" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div class="accordion-heading">
+                        <!--<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{item.id}}1"></a>-->
+                        <div class="bodybox" ng-bind-html-unsafe="item.body">
                         </div>
-                        <div id="collapse{{item.id}}" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="accordion-heading">
-                                    <!--<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{item.id}}1"></a>-->
-                                    <p class="bodybox" ng-bind-html-unsafe="item.body"></p>
-                                </div>
-                            </div>
-                            <div class="btn-group pull-right">
-
-                                <button ng-show="!item.unread" class="btn"><i class="icon-eye-close icon-white"></i>Unread</button>
-                                <button ng-show="item.unread" class="btn"><i class="icon-eye-open icon-white"></i>Read</button>
-                                <button ng-show="!item.starred" class="btn"><i class="icon-star icon-white"></i>Star</button>
-                                <button ng-show="item.starred" class="btn"><i class="icon-star icon-white"></i>Unstar</button>
-                                <button class="btn"><i class="icon-ban-circle icon-white"></i>Delete</button>
-                            </div>
+                        <div class="buttonsbox">
+                            <span class="itemaddurl">
+                                <a ng-href="{{item.url}}" target="_blank">
+                                   <i class="icon-file"></i></a>
+                            </span>
+                            <span class="itemaddurl">
+                                <a href onclick="alert('sasa')"
+                                   target="_blank">
+                                    <i class="icon-eye-open"></i></a>
+                            </span>
+                            <span class="itemaddurl">
+                                <a ng-click="alert('sasa');" target="_blank">
+                                    <i class="icon-star"></i></i></a>
+                            </span>
+                            <span class="itemaddurl">
+                                <a ng-click="alert('sasa');" target="_blank">
+                                    <i class="icon-ban-circle"></i></a>
+                            </span>
                         </div>
-                    </div>
-                    <div class="showmore" ng-show="moreArticles">
-                        <button class="btn btn-large btn-block" ng-click="getMoreItems(view)"><i class="icon-arrow-down icon-white"></i></button>
-                        <!--<a href ng-click="getMoreItems(view)">
-                            <span><i class="icon-arrow-down"></i></span>
-                        </a>-->
                     </div>
                 </div>
-
                 <!--
-                                    <ul class="nav nav-pills nav-stacked" ng-show="view == 'Starred' || view == 'All'">
+                <div class="btn-group pull-right">
+                    <button ng-show="!item.unread" class="btn"><i class="icon-eye-close"></i></button>
+                    <button ng-show="item.unread" class="btn"><i class="icon-eye-open"></i></button>
+                    <button ng-show="!item.starred" class="btn"><i class="icon-star"></i></button>
+                    <button ng-show="item.starred" class="btn"><i class="icon-star"></i></button>
+                    <button class="btn"><i class="icon-ban-circle"></i></button>
+                </div> <!-- -->
+            </div>
+        </div>
+        <div class="showmore" ng-show="moreArticles">
+            <button class="btn btn-large btn-block"
+                    ng-click="getMoreItems(view)"><i
+                    class="icon-arrow-down"></i></button>
+        </div>
+    </div>
 
+    <!-- Showing folders list -->
+    <!--
+    <ul class="nav nav-pills nav-stacked" ng-switch-when="Folders">
+        <li ng-repeat="folder in data.folders">
+            <a href
+               ng-click="getFolderItems(folder.id,0,folder.name)">
+                            <span>
+                                {{folder.name}}
+                            </span>
+            </a>
+        </li>
+    </ul><!-- -->
 
-                                                    <li ng-repeat="item in data.items">
-                                                        <strong>{{item.title | short}}</strong><br/>
-                                                        <!--<p ng-bind-html-unsafe="item.body"></p><!---->
-                <!--                </li>
-                                    <li ng-show="data.items.length == 20">
-
-                                        <a href ng-click="getMoreItems(view)">
-                                            <span>{{ 'Show more' | trans }}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                -->
-
-                <ul class="nav nav-pills nav-stacked" ng-switch-when="Folders">
-                    <li ng-repeat="folder in data.folders" >
-                        <a href
-                           ng-click="getFolderItems(folder.id,0,folder.name)">
-                            <span><i class='icon-folder-open'></i>{{folder.name}}</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <ul class="nav nav-pills nav-stacked" ng-switch-when="Feeds">
-                    <li ng-repeat="feed in data.feeds">
-
-                        <a href ng-click="getFeedItems(feed.id,0,feed.title)">
-                            <img src="{{feed.faviconLink}}" width="32"
-                                  height="32">
-                            <span>{{feed.title}}</span>
-                            <span class="badge" ng-bind="feed.unreadCount"></span>
-                        </a>
-
-                    </li>
-                </ul>
+    <div class="accordion" id="accordion2" class="nav nav-pills nav-stacked"
+         ng-switch-when="Folders">
+        <div class="accordion-group" ng-repeat="folder in data.folders">
+            <div class="accordion-heading">
+                <a class="accordion-toggle"
+                   data-toggle="collapse"
+                   data-parent="#accordion2" href
+                   ng-click="getFolderItems(folder.id,0,folder.name)">
+                    <i class="icon-file"></i>
+                        <span class="title">
+                            {{folder.name}}
+                        </span><br/>
+                </a>
             </div>
 
-            <div class="footer">
-                ownCloud News Web app
-            </div>
+        </div>
+        <div class="showmore" ng-show="moreArticles">
+            <button class="btn btn-large btn-block"
+                    ng-click="getMoreItems(view)"><i
+                    class="icon-arrow-down"></i></button>
+        </div>
+    </div>
 
-            <div class="span4">
-            </div>
+    <!-- Showing feeds list-->
+    <!--
+    <ul class="nav nav-pills nav-stacked" ng-switch-when="Feeds">
+        <li ng-repeat="feed in data.feeds">
+
+            <a href ng-click="getFeedItems(feed.id,0,feed.title)">
+                <img src="{{feed.faviconLink}}" width="32"
+                     height="32">
+                <span>{{feed.title}}</span>
+                <span class="badge" ng-bind="feed.unreadCount"></span>
+            </a>
+
+        </li>
+    </ul>-->
+    <div class="accordion" id="accordion3" class="nav nav-pills nav-stacked"
+         ng-switch-when="Feeds">
+        <div class="accordion-group" ng-repeat="feed in data.feeds">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle"
+                       data-toggle="collapse"
+                       data-parent="#accordion3" href
+                       ng-click="getFeedItems(feed.id,0,feed.title)">
+                        <img src="{{feed.faviconLink}}" width="32" height="32">
+                        <span class="title">
+                            {{feed.title}}
+                        </span><br/>
+                        <span ng-show="feed.added" class="itemadd">
+                            date added: <span>{{feed.added}}</span>
+                        </span>
+                        <span ng-show="feed.added" class="itemadd">
+                            web site: <span>{{feed.link | clearurl}}</span>
+                        </span>
+                    </a>
+                </div>
+
+        </div>
+        <div class="showmore" ng-show="moreArticles">
+            <button class="btn btn-large btn-block"
+                    ng-click="getMoreItems(view)"><i
+                    class="icon-arrow-down"></i></button>
         </div>
     </div>
 </div>
+
 
 
 

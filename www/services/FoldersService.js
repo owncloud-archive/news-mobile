@@ -20,8 +20,8 @@
  */
 
 angular.module('News').factory('FoldersService',
-    ['$http', 'UserService', 'ExceptionsService',
-        function ($http, UserService, ExceptionsService) {
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
             return {
                 getFolders:function () {
                     return $http({ method:'GET', url:UserService.hostName +
@@ -42,6 +42,7 @@ angular.module('News').factory('FoldersService',
                         "/index.php/apps/news/api/v1-2/items", params:params,
                         cached:false, withCredentials:true })
                         .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);

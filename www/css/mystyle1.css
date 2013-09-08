@@ -1,0 +1,143 @@
+body {
+  font-size: 100%;
+  font-family: Arial;
+  line-height: 30px;
+  color: #354b5e;
+}
+.header {
+  min-height: 50px;
+  line-height: 50px;
+  background-color: #d74b4b;
+  color: #dcddd8;
+  text-align: center;
+}
+.header img {
+  width: 50%;
+  opacity: 0.9;
+}
+.header ul.nav {
+  margin-bottom: 0px;
+}
+.header ul.nav li {
+  padding: 1%;
+}
+.header ul.nav li a:hover,
+.header ul.nav li a:focus,
+.header ul.nav li a:active {
+  background-color: #d74b4b;
+}
+.footer {
+  min-height: 60px;
+  text-align: center;
+  font-size: 80%;
+  background-color: #d74b4b;
+  color: #dcddd8;
+}
+.btn {
+  color: #ffffff;
+  background-color: #d74b4b;
+  background-image: none;
+  border: 0px;
+  text-shadow: none;
+}
+a:active a:focus a:hover a:checked {
+  outline: none;
+}
+.btn:hover {
+  background-color: #d74b4b;
+  color: #ffffff;
+}
+form {
+  color: #d74b4b;
+  padding-top: 20px;
+}
+form fieldset label {
+  font-size: 20px;
+}
+form fieldset input {
+  width: 97%;
+}
+form fieldset button {
+  margin-top: 10px;
+}
+.caption {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0px;
+  background-color: #dcddd8;
+  padding-left: 5%;
+  font-size: 30px;
+}
+.accordion {
+  color: #475f77;
+}
+.accordion .accordion-group {
+  margin-bottom: -1px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  color: #475f77;
+  line-height: 20px;
+}
+.accordion .accordion-group .accordion-heading a.starred-true {
+  background-color: #faf9e4;
+}
+.accordion .accordion-group .accordion-heading a.unread-true {
+  background-color: #dff4d7;
+}
+.accordion .accordion-group .accordion-heading a.accordion-toggle {
+  text-decoration: none;
+}
+.accordion .accordion-group .accordion-heading .accordion-toggle {
+  color: #475f77;
+}
+.accordion .accordion-group .accordion-heading .accordion-toggle span.title {
+  text-transform: capitalize;
+  padding-left: 10px;
+}
+.accordion .accordion-group .accordion-heading .accordion-toggle span.itemadd {
+  font-style: italic;
+  white-space: nowrap;
+  font-size: 10px;
+  display: inline-block;
+}
+.accordion .accordion-group .accordion-heading .accordion-toggle span.itemadd span:first-child {
+  color: #354b5e;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-weight: bold;
+}
+.accordion .accordion-group .accordion-body .accordion-inner {
+  border-top: 0px;
+}
+.accordion .accordion-group .accordion-body .accordion-inner .accordion-heading .bodybox {
+  color: #475f77;
+  font-size: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.accordion .accordion-group .accordion-body .accordion-inner .accordion-heading .bodybox a {
+  color: #475f77;
+}
+.accordion .accordion-group .accordion-body .accordion-inner .accordion-heading .buttonsbox {
+  text-align: right;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.accordion .accordion-group .accordion-body .accordion-inner .accordion-heading .buttonsbox span {
+  margin-left: -1px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+}
+.accordion .accordion-group .accordion-body .accordion-inner .accordion-heading .buttonsbox span a {
+  padding: 10px;
+  color: white;
+}
+.accordion .btn {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  background-color: #dcddd8;
+  color: #354b5e;
+}
