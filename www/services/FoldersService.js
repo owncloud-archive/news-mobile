@@ -26,7 +26,14 @@ angular.module('News').factory('FoldersService',
                 getFolders:function () {
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/folders", cached:false,
-                        withCredentials:true });
+                        withCredentials:true })
+                        .success(function (data, status) {
+                            console.log(data);
+                            return data;
+                        })
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
                 },
 
                 getFolderItems:function (folderId, offset) {
@@ -45,7 +52,7 @@ angular.module('News').factory('FoldersService',
                             TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
-                            ExceptionsService.makeNewException(data,status);
+                            ExceptionsService.makeNewException(data, status);
                         });
                 }
             };

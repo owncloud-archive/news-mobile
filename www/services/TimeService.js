@@ -54,7 +54,14 @@ angular.module('News').factory('TimeService', [ function () {
             for (var i in items) {
                 items[i].pubDate = this.getDateFromUTC(items[i].pubDate);
             }
+        },
+
+        convertFeedsDates:function (items) {
+            for (var i in items) {
+                items[i].added = this.getDateFromUTC(items[i].added);
+            }
         }
+
 
     };
 }]);

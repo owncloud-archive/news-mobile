@@ -59,25 +59,22 @@ angular.module('News').controller('MainController',
             $scope.getFolders = function () {
                 $scope.action = 'Folders';
                 FoldersService.getFolders()
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'Folders';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.folders.length;
                     });
             };
 
             $scope.getFeeds = function () {
                 $scope.action = 'Feeds';
                 FeedsService.getFeeds()
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'Feeds';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.feeds.length;
                     });
+
             };
 
             $scope.getFolderItems = function (folderId, offset, folderName) {

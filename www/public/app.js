@@ -151,25 +151,22 @@ angular.module('News').controller('MainController',
             $scope.getFolders = function () {
                 $scope.action = 'Folders';
                 FoldersService.getFolders()
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'Folders';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.folders.length;
                     });
             };
 
             $scope.getFeeds = function () {
                 $scope.action = 'Feeds';
                 FeedsService.getFeeds()
-                    .success(function (data, status) {
-                        $scope.data = data;
+                    .then(function (result) {
                         $scope.view = 'Feeds';
-                    })
-                    .error(function (data, status) {
-                        alert("Status " + status + " [" + data.message + "]");
+                        $scope.data = result.data;
+                        articlesGet = result.data.feeds.length;
                     });
+
             };
 
             $scope.getFolderItems = function (folderId, offset, folderName) {
@@ -333,7 +330,14 @@ angular.module('News').factory('FeedsService',
                 getFeeds:function () {
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/feeds",
-                        cached:false, withCredentials:true});
+                        cached:false, withCredentials:true})
+                        .success(function (data, status) {
+                            TimeService.convertFeedsDates(data.items);
+                            return data;
+                        })
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
                 },
 
                 getFeedItems:function (feedId, offset) {
@@ -352,7 +356,7 @@ angular.module('News').factory('FeedsService',
                             TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
-                            ExceptionsService.makeNewException(data,status);
+                            ExceptionsService.makeNewException(data, status);
                         });
                 }
             };
@@ -366,7 +370,14 @@ angular.module('News').factory('FoldersService',
                 getFolders:function () {
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/folders", cached:false,
-                        withCredentials:true });
+                        withCredentials:true })
+                        .success(function (data, status) {
+                            console.log(data);
+                            return data;
+                        })
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
                 },
 
                 getFolderItems:function (folderId, offset) {
@@ -385,7 +396,7 @@ angular.module('News').factory('FoldersService',
                             TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
-                            ExceptionsService.makeNewException(data,status);
+                            ExceptionsService.makeNewException(data, status);
                         });
                 }
             };
@@ -437,102 +448,13 @@ angular.module('News').factory('ItemsService',
             };
         }]);
 
-angular.module('News').factory('Login', ['$http', '$timeout', function ($http, $timeout) {
-    return {
-        userName:'ikacikac',
-        password:'ikacikac',
-        present:true,
-        timerRef:null,
-        timeout:500000,
-        hostname:'http://owncloud.homenet',
-        //this.userName+":"+this.password+"@"+this.url+"/version"
-        killTimer:function () {
-            $timeout.cancel(this.timerRef);
-        },
-
-        isPresent:function () {
-            return this.present;
-        },
-
-        login:function () {
-            var auth = "Basic " + btoa(this.userName + ":" + this.password);
-            $http.defaults.headers.common.Authorization = auth;
-            //console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
-            //return $http({ method: 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/index.php/apps/news/api/v1-2/version", withCredentials : true });
-            return $http({ method:'GET', url:this.hostname + "/index.php/apps/news/api/v1-2/version" });
-        },
-
-        getFolders:function () {
-            return $http({ method:'GET', url:"http://" + this.userName + ":" + this.password + "@" + this.hostname + "/index.php/apps/news/api/v1-2/folders", cached:false, withCredentials:true });
-        },
-
-        getFeeds:function () {
-            return $http({ method:'GET', url:"http://" + this.userName + ":" + this.password + "@" + this.hostname + "/index.php/apps/news/api/v1-2/feeds", cached:false, withCredentials:true });
-        },
-
-        getStarredItems:function (offset) {
-            var params = {
-                "batchSize":20, //  the number of items that should be returned, defaults to 20
-                "offset":offset, // only return older (lower than equal that id) items than the one with id 30
-                "type":2, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
-                "id":0, // the id of the folder or feed, Use 0 for Starred and All
-                "getRead":true // if true it returns all items, false returns only unread items
-            };
-
-            return $http({ method:'GET', url:"http://" + this.userName + ":" + this.password + "@" + this.hostname + "/index.php/apps/news/api/v1-2/items", params:params, cached:false, withCredentials:true });
-        },
-
-        getAllItems:function (offset) {
-            var auth = "Basic " + btoa(this.userName + ":" + this.password);
-            $http.defaults.headers.common.Authorization = auth;
-            var params = {
-                "batchSize":20, //  the number of items that should be returned, defaults to 20
-                "offset":offset, // only return older (lower than equal that id) items than the one with id 30
-                "type":3, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
-                "id":0, // the id of the folder or feed, Use 0 for Starred and All
-                "getRead":true // if true it returns all items, false returns only unread items
-            };
-            //return $http({ method : 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+"/items", params : params, cached : false,  withCredentials : true });
-            //return $http({ method : 'GET', url : "http://"+this.hostname+"/index.php/apps/news/api/v1-2/items", params : params, cached : false, withCredentials : true});
-            return $http({ method:'GET', url:this.hostname + "/index.php/apps/news/api/v1-2/items", params:params, cached:false});
-        },
-
-        getFolderItems:function (folderId, offset) {
-            var params = {
-                "batchSize":20, //  the number of items that should be returned, defaults to 20
-                "offset":offset, // only return older (lower than equal that id) items than the one with id 30
-                "type":1, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
-                "id":folderId, // the id of the folder or feed, Use 0 for Starred and All
-                "getRead":true // if true it returns all items, false returns only unread items
-            };
-
-            return $http({ method:'GET', url:"http://" + this.userName + ":" + this.password + "@" + this.hostname + "/index.php/apps/news/api/v1-2/items", params:params, cached:false, withCredentials:true });
-        },
-
-        getFeedItems:function (feedId, offset) {
-            var params = {
-                "batchSize":20, //  the number of items that should be returned, defaults to 20
-                "offset":offset, // only return older (lower than equal that id) items than the one with id 30
-                "type":0, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
-                "id":feedId, // the id of the folder or feed, Use 0 for Starred and All
-                "getRead":true // if true it returns all items, false returns only unread items
-            };
-
-            return $http({ method:'GET', url:"http://" + this.userName + ":" + this.password + "@" + this.hostname + "/index.php/apps/news/api/v1-2/items", params:params, cached:false, withCredentials:true });
-        }
-
-
-    };
-
-}]);
-
 angular.module('News').factory('LoginService',
     ['$http', '$timeout', 'UserService',
         function ($http, $timeout, UserService) {
             return {
                 present:false,
                 timerRef:null,
-                timeout:5000,
+                timeout:50000,
 
                 killTimer:function () {
                     $timeout.cancel(this.timerRef);
@@ -595,7 +517,14 @@ angular.module('News').factory('TimeService', [ function () {
             for (var i in items) {
                 items[i].pubDate = this.getDateFromUTC(items[i].pubDate);
             }
+        },
+
+        convertFeedsDates:function (items) {
+            for (var i in items) {
+                items[i].added = this.getDateFromUTC(items[i].added);
+            }
         }
+
 
     };
 }]);

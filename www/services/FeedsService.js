@@ -26,7 +26,14 @@ angular.module('News').factory('FeedsService',
                 getFeeds:function () {
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/feeds",
-                        cached:false, withCredentials:true});
+                        cached:false, withCredentials:true})
+                        .success(function (data, status) {
+                            TimeService.convertFeedsDates(data.items);
+                            return data;
+                        })
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
                 },
 
                 getFeedItems:function (feedId, offset) {
@@ -45,7 +52,7 @@ angular.module('News').factory('FeedsService',
                             TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
-                            ExceptionsService.makeNewException(data,status);
+                            ExceptionsService.makeNewException(data, status);
                         });
                 }
             };
