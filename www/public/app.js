@@ -57,8 +57,8 @@ angular.module('News').controller('LoginController',
 
             $scope.testFormFields = function () {
                 var hostNameRegExp = new RegExp(/^https?:\/\/.*$/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
-                var userNameRegExp = new RegExp(/^[a-z0-9_-]{3,10}$/); // /^[a-z0-9_-]{3,16}$/
-                var passwordRegExp = new RegExp(/^[a-z0-9_-]{3,10}$/); // /^[a-z0-9_-]{6,18}$/
+                var userNameRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{3,16}$/
+                var passwordRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{6,18}$/
 
                 var userNameParseResult = userNameRegExp.test(UserService.userName);
 
@@ -242,6 +242,43 @@ angular.module('News').controller('MainController',
 
             };
 
+            $scope.starItem = function(feedId, guidHash) {
+                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
+                ItemsService.starItem(feedId, guidHash).then(function(data){
+                    //console.log("successfully starred item");
+                });
+            };
+
+            $scope.unstarItem = function(feedId, guidHash) {
+                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
+                ItemsService.unstarItem(feedId, guidHash).then(function(data){
+                    //console.log("successfully unstarred item");
+                });
+            };
+
+            $scope.markItemRead = function(itemId) {
+                /* This is for reading when opening article
+                 * not very optimized for long articles list
+                 *
+                for (var i in $scope.data.items) {
+                    if ($scope.data.items[i].id === itemId) {
+                        if ($scope.data.items[i].unread === false) {
+                            console.log("Ova je procitana");
+                            return false;
+                        }
+                    }
+                }*/
+                ItemsService.markItemRead(itemId).then(function(data){
+                   //console.log("successfully read item");
+                });
+            };
+
+            $scope.markItemUnread = function(itemId) {
+                ItemsService.markItemUnread(itemId).then(function(data){
+                    //console.log("successfully read item");
+                });
+            };
+
             $scope.logOut = function () {
                 LoginService.present = false;
                 LoginService.killTimer();
@@ -330,7 +367,7 @@ angular.module('News').factory('FeedsService',
                 getFeeds:function () {
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/feeds",
-                        cached:false, withCredentials:true})
+                        cached:false, withCredentials:UserService.withCredentials})
                         .success(function (data, status) {
                             TimeService.convertFeedsDates(data.feeds);
                             return data;
@@ -351,7 +388,7 @@ angular.module('News').factory('FeedsService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items",
-                        params:params, cached:false, withCredentials:true})
+                        params:params, cached:false, withCredentials:UserService.withCredentials})
                         .success(function (data, status) {
                             TimeService.convertItemsDates(data.items);
                             return data;
@@ -370,9 +407,8 @@ angular.module('News').factory('FoldersService',
                 getFolders:function () {
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/folders", cached:false,
-                        withCredentials:true })
+                        withCredentials:UserService.withCredentials })
                         .success(function (data, status) {
-                            console.log(data);
                             return data;
                         })
                         .error(function (data, status) {
@@ -391,7 +427,7 @@ angular.module('News').factory('FoldersService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items", params:params,
-                        cached:false, withCredentials:true })
+                        cached:false, withCredentials:UserService.withCredentials })
                         .success(function (data, status) {
                             TimeService.convertItemsDates(data.items);
                             return data;
@@ -418,7 +454,7 @@ angular.module('News').factory('ItemsService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items",
-                        params:params, cached:false, withCredentials:true})
+                        params:params, cached:false, withCredentials:UserService.withCredentials})
                         .success(function (data, status) {
                             TimeService.convertItemsDates(data.items);
                             return data;
@@ -437,14 +473,52 @@ angular.module('News').factory('ItemsService',
                     };
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items",
-                        params:params, cached:false, withCredentials:true})
+                        params:params, cached:false, withCredentials:UserService.withCredentials})
                         .success(function (data, status) {
                             TimeService.convertItemsDates(data.items);
                             return data;
                         }).error(function (data, status) {
                             ExceptionsService.makeNewException(data,status);
                         });
+                },
+
+                starItem:function (feedId,guidHash) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/star",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                unstarItem:function (feedId,guidHash) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/unstar",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                markItemRead:function (itemId) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+itemId+"/read",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                markItemUnread:function (itemId) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+itemId+"/unread",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
                 }
+            ///items/{itemId}/read
+
             };
         }]);
 
@@ -495,7 +569,10 @@ angular.module('News').factory('TimeService', [ function () {
             var hoursAgo = Math.floor((dateNow - itemDate) / hour);
 
             if (daysAgo === 0) {
-                if (hoursAgo === 1) {
+                if (hoursAgo === 0) {
+                    return "Moment ago";
+                }
+                else if (hoursAgo === 1) {
                     return "1 hour ago";
                 }
                 else {
@@ -545,7 +622,8 @@ angular.module('News').factory('UserService', ['$http', function ($http) {
     return {
         userName:'ikacikac',
         password:'ikacikac',
-        hostName:'http://localhost/owncloud'
+        hostName:'http://localhost/owncloud',
+        withCredentials:false
     };
 }]);
 

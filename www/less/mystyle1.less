@@ -1,10 +1,10 @@
-@reddish : #D74B4B;
+@reddish: #D74B4B;
 @grey: #DCDDD8;
 @light-navy: #475F77;
 @dark-navy: #354B5E;
 
-@starred: #faf9e4;
-@unread: #dff4d7;
+@starred-color: #f8fabb;
+@unread-color: #dff4d7;
 
 @header-color: @reddish;
 @header-text-color: @grey;
@@ -13,23 +13,23 @@
 @button-color: @reddish;
 @button-text-color: white;
 
-@caption-color:@grey;
-@bolded-text-color:@dark-navy;
+@caption-color: @grey;
+@bolded-text-color: @dark-navy;
 @show-more-button-color: @grey;
 @show-more-button-text-color: @dark-navy;
 
-.radius(@radius:0px) {
+.radius(@radius: 0px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
   border-radius: @radius;
 }
 
-.padding-hside (@padding){
+.padding-hside(@padding) {
   padding-left: @padding;
   padding-right: @padding;
 }
 
-.padding-vside (@padding){
+.padding-vside(@padding) {
   padding-top: @padding;
   padding-bottom: @padding;
 }
@@ -59,50 +59,49 @@ body {
     li {
       padding: 1%;
 
-        a:hover, a:focus, a:active {
-          background-color: @header-color;
-        }
+      a:hover, a:focus, a:active {
+        background-color: @header-color;
       }
+    }
   }
 }
 
 .footer {
   min-height: 60px;
-  text-align : center;
+  text-align: center;
   font-size: 80%;
   background-color: @header-color;
   color: @header-text-color;
 }
 
 .btn {
-  color:@button-text-color;
+  color: @button-text-color;
   background-color: @button-color;
   background-image: none;
-  border: 0px;
-  //.radius(0px);
+  border: 0px; //.radius(0px);
   text-shadow: none;
 }
 
-a:active a:focus a:hover a:checked{
+a:active a:focus a:hover a:checked {
   outline: none;
 }
 
 .btn:hover {
-  background-color:@button-color;
+  background-color: @button-color;
   color: @button-text-color;
 }
 
 // This is for the login form
 form {
   color: @form-font-color;
-  padding-top:20px;
+  padding-top: 20px;
 
   fieldset {
     label {
       font-size: 20px;
     }
     input {
-        width: 97%;
+      width: 97%;
     }
     button {
       margin-top: 10px;
@@ -120,7 +119,7 @@ form {
 }
 
 .accordion {
-  color:@list-font-color;
+  color: @list-font-color;
 
   .accordion-group {
     margin-bottom: -1px;
@@ -131,10 +130,15 @@ form {
     .accordion-heading {
 
       a.starred-true {
-        background-color: @starred;
+        background-color: @starred-color;
       }
-      a.unread-true {
-        background-color: @unread;
+      a.read-true { //background-color: @unread;
+        color: @bolded-text-color;
+      }
+
+      a.read-false { //background-color: @unread;
+        font-style: italic;
+        opacity: 0.5;
       }
 
       a.accordion-toggle {
@@ -142,7 +146,7 @@ form {
       }
 
       .accordion-toggle {
-        color:@list-font-color;
+        color: @list-font-color;
 
         span.title {
           text-transform: capitalize;
@@ -155,9 +159,8 @@ form {
           font-size: 10px;
           display: inline-block;
 
-          span:first-child {
-            //background-color: @reddish;
-            color:@bolded-text-color;
+          span:first-child { //background-color: @reddish;
+            color: @bolded-text-color;
             .padding-hside(3px);
             font-weight: bold;
           }
@@ -170,35 +173,35 @@ form {
 
       .accordion-inner {
         border-top: 0px;
-       .accordion-heading {
+        .accordion-heading {
 
-         .bodybox{
-           color:@list-font-color;
-           font-size: 15px;
-           .padding-vside(10px);
-           a {
-             color:@list-font-color;
-           }
-         }
+          .bodybox {
+            color: @list-font-color;
+            font-size: 15px;
+            .padding-vside(10px);
+            a {
+              color: @list-font-color;
+            }
+          }
 
-         .buttonsbox {
+          .buttonsbox {
             text-align: right;
-           .padding-vside(10px);
+            .padding-vside(10px);
 
-           span {
-             margin-left: -1px;
-             .radius(1px);
-             a {
-               padding: 10px;
-               color:white;
-             }
-           }
+            span {
+              margin-left: -1px;
+              .radius(1px);
+              a {
+                padding: 10px;
+                color: white;
+              }
+            }
           }
         }
       }
     }
   }
-  //button for show more in listings
+//button for show more in listings
   .btn {
     .radius(0px);
     background-color: @show-more-button-color;

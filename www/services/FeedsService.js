@@ -26,7 +26,7 @@ angular.module('News').factory('FeedsService',
                 getFeeds:function () {
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/feeds",
-                        cached:false, withCredentials:true})
+                        cached:false, withCredentials:UserService.withCredentials})
                         .success(function (data, status) {
                             TimeService.convertFeedsDates(data.feeds);
                             return data;
@@ -47,7 +47,7 @@ angular.module('News').factory('FeedsService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items",
-                        params:params, cached:false, withCredentials:true})
+                        params:params, cached:false, withCredentials:UserService.withCredentials})
                         .success(function (data, status) {
                             TimeService.convertItemsDates(data.items);
                             return data;

@@ -150,6 +150,43 @@ angular.module('News').controller('MainController',
 
             };
 
+            $scope.starItem = function(feedId, guidHash) {
+                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
+                ItemsService.starItem(feedId, guidHash).then(function(data){
+                    //console.log("successfully starred item");
+                });
+            };
+
+            $scope.unstarItem = function(feedId, guidHash) {
+                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
+                ItemsService.unstarItem(feedId, guidHash).then(function(data){
+                    //console.log("successfully unstarred item");
+                });
+            };
+
+            $scope.markItemRead = function(itemId) {
+                /* This is for reading when opening article
+                 * not very optimized for long articles list
+                 *
+                for (var i in $scope.data.items) {
+                    if ($scope.data.items[i].id === itemId) {
+                        if ($scope.data.items[i].unread === false) {
+                            console.log("Ova je procitana");
+                            return false;
+                        }
+                    }
+                }*/
+                ItemsService.markItemRead(itemId).then(function(data){
+                   //console.log("successfully read item");
+                });
+            };
+
+            $scope.markItemUnread = function(itemId) {
+                ItemsService.markItemUnread(itemId).then(function(data){
+                    //console.log("successfully read item");
+                });
+            };
+
             $scope.logOut = function () {
                 LoginService.present = false;
                 LoginService.killTimer();

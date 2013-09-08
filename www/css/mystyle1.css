@@ -80,10 +80,14 @@ form fieldset button {
   line-height: 20px;
 }
 .accordion .accordion-group .accordion-heading a.starred-true {
-  background-color: #faf9e4;
+  background-color: #f8fabb;
 }
-.accordion .accordion-group .accordion-heading a.unread-true {
-  background-color: #dff4d7;
+.accordion .accordion-group .accordion-heading a.read-true {
+  color: #354b5e;
+}
+.accordion .accordion-group .accordion-heading a.read-false {
+  font-style: italic;
+  opacity: 0.5;
 }
 .accordion .accordion-group .accordion-heading a.accordion-toggle {
   text-decoration: none;

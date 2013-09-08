@@ -32,7 +32,10 @@ angular.module('News').factory('TimeService', [ function () {
             var hoursAgo = Math.floor((dateNow - itemDate) / hour);
 
             if (daysAgo === 0) {
-                if (hoursAgo === 1) {
+                if (hoursAgo === 0) {
+                    return "Moment ago";
+                }
+                else if (hoursAgo === 1) {
                     return "1 hour ago";
                 }
                 else {

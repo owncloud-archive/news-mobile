@@ -38,7 +38,7 @@
          ng-switch-when="All">
         <div class="accordion-group" ng-repeat="item in data.items">
             <div class="accordion-heading">
-                <a class="accordion-toggle unread-{{item.unread}} starred-{{item.starred}} "
+                <a class="accordion-toggle read-{{item.unread}} starred-{{item.starred}} "
                    data-toggle="collapse"
                    data-parent="#accordion1" href="#collapse{{item.id}}">
                     <span>
@@ -70,13 +70,21 @@
                                    <i class="icon-file"></i></a>
                             </span>
                             <span class="itemaddurl">
-                                <a href onclick="alert('sasa')"
-                                   target="_blank">
-                                    <i class="icon-eye-open"></i></a>
+                                <a ng-show="item.unread" href ng-click="markItemRead(item.id)" target="_blank">
+                                    <i class="icon-eye-open"></i>
+                                </a>
+                                <a ng-hide="item.unread" href ng-click="markItemUnread(item.id)" target="_blank">
+                                    <i class="icon-eye-close"></i>
+                                </a>
                             </span>
                             <span class="itemaddurl">
-                                <a ng-click="alert('sasa');" target="_blank">
-                                    <i class="icon-star"></i></i></a>
+                                <a ng-hide="item.starred" href ng-click="starItem(item.feedId,item.guidHash)" target="_blank">
+                                    <i class="icon-star-empty"></i>
+                                </a>
+                                <a ng-show="item.starred" href ng-click="unstarItem(item.feedId,item.guidHash)" target="_blank">
+                                    <i class="icon-star"></i>
+                                </a>
+
                             </span>
                             <span class="itemaddurl">
                                 <a ng-click="alert('sasa');" target="_blank">
