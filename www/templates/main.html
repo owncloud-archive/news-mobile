@@ -36,15 +36,22 @@
     <div class="accordion" id="accordion1"
          class="nav nav-pills nav-stacked"
          ng-switch-when="All">
+
         <items-listing ng-repeat="item in data.items"
                        setfav="setFavorite(feedId,guidHash)"
                        unsetfav="unsetFavorite(feedId,guidHash)"
                        setread="setRead(id)"
                        unsetread="unsetRead(id)"
                        data="item">
-
         </items-listing>
 
+        <div ng-hide="data.items" class="accordion-group">
+            <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1">
+                <i class="icon-remove-circle"></i><span class="title">There is no items in here yet.</span><br/>
+                </a>
+            </div>
+        </div>
         <!--
         <div class="accordion-group" ng-repeat="item in data.items">
             <div class="accordion-heading">
@@ -105,7 +112,7 @@
             </div>
         </div> <!-- -->
 
-        <div class="showmore">
+        <div class="showmore" ng-show="data.items">
             <button class="btn btn-large" ng-disabled="!moreArticles"
                     ng-click="getMoreItems(view)"><i class="icon-arrow-down"></i>
             </button>
@@ -134,6 +141,14 @@
                          data="folder"
                          getfolderitems="getFolderItems(folder.id,0,folder.name)">
         </folders-listing>
+
+        <div ng-hide="data.folders" class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2">
+                    <i class="icon-remove-circle"></i><span class="title">There is no folders in here yet.</span><br/>
+                </a>
+            </div>
+        </div>
 
         <!--
         <div class="accordion-group" ng-repeat="folder in data.folders">
@@ -181,6 +196,13 @@
                        data="feed">
         </feeds-listing>
 
+        <div ng-hide="data.feeds" class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3">
+                    <i class="icon-remove-circle"></i><span class="title">There is no feeds in here yet.</span><br/>
+                </a>
+            </div>
+        </div>
         <!--
         <div class="accordion-group" ng-repeat="feed in data.feeds">
                 <div class="accordion-heading">

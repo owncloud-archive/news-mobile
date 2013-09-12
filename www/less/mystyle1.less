@@ -149,7 +149,9 @@ form {
         color: @list-font-color;
 
         span.title {
-          text-transform: capitalize;
+          :first-letter {
+            text-transform: uppercase;
+          };
           padding-left: 10px;
         }
 

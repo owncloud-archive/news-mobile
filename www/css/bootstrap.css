@@ -5359,8 +5359,10 @@ form fieldset button {
   color: #475f77;
 }
 .accordion .accordion-group .accordion-heading .accordion-toggle span.title {
-  text-transform: capitalize;
   padding-left: 10px;
+}
+.accordion .accordion-group .accordion-heading .accordion-toggle span.title :first-letter {
+  text-transform: uppercase;
 }
 .accordion .accordion-group .accordion-heading .accordion-toggle span.itemadd {
   font-style: italic;

@@ -18,6 +18,7 @@
         "Current user is not logged in":"Current user is not logged in.",
         "user.name.is.not.in.correct.format":"Incorrect user name value",
         "password.is.not.in.correct.format":"Incorrect password value",
-        "host.name.is.not.in.correct.format":"Incorrect host address value"
+        "host.name.is.not.in.correct.format":"Incorrect host address value",
+        "connection.problem":"There are connection problems."
     }
 }

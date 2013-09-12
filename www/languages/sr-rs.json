@@ -18,6 +18,7 @@
         "Current user is not logged in":"Problemi u konekciji. Pokusajte ponovo.",
         "user.name.is.not.in.correct.format":"Neispravna vrednost korisnickog imena",
         "password.is.not.in.correct.format":"Neispravna vrednost lozinke",
-        "host.name.is.not.in.correct.format":"Neispravna vrednost adrese servera"
+        "host.name.is.not.in.correct.format":"Neispravna vrednost adrese servera",
+        "connection.problem":"Greska u komunikaciji sa serverom."
     }
 }

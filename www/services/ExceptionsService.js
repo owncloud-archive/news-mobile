@@ -28,7 +28,12 @@ angular.module('News').factory('ExceptionsService',
                 if (status > 0) {
                     messageString = '['+status+'] ';
                 }
-                messageString = messageString + TranslationService.translateException([data.message]);
+                messageString = messageString + TranslationService.translateException(data.message);
+
+                if (status === 0) {
+                    messageString = TranslationService.translateException('connection.problem');
+                    throw {message: messageString};
+                }
 
                 throw {message: messageString};
             }

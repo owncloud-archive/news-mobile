@@ -20,15 +20,15 @@
  */
 
 angular.module('News').directive('itemsListing',
-    [function () {
+    ['ItemsService',function (ItemsService) {
             return {
                 restrict:'E',
                 scope:{
-                    item:'=data',
-                    setFavorite:'&setfav',
-                    unsetFavorite:'&unsetfav',
-                    setRead:'&setread',
-                    unsetRead:'&unsetread'
+                    item:'=data'
+                    //setFavorite:'&setfav',
+                    //unsetFavorite:'&unsetfav',
+                    //setRead:'&setread',
+                    //unsetRead:'&unsetread'
                 },
                 replace:true,
                 template:'<div class="accordion-group {{item.id}}"></div>',
@@ -67,31 +67,44 @@ angular.module('News').directive('itemsListing',
                     scope.readToggle = function (id) {
 
                         if(scope.item.unread === true) {
-                            scope.setRead({id:id});
-                            scope.item.unread = false;
-                            $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
-                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                            //This method uses main controller's setRead exposed
+                            //through scope and directive's isolate scope
+                            //scope.setRead({id:id});
+
+                            //This method uses service to mark item read
+                            //which has option for checking if marking was successful
+                            ItemsService.setRead(id).success(function(result, status){
+                                scope.item.unread = false;
+                                $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                            });
                         }
                         else if (scope.item.unread === false) {
-                            scope.unsetRead({id:id});
-                            scope.item.unread = true;
-                            $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
-                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                            //scope.unsetRead({id:id});
+                            ItemsService.unsetRead(id).success(function(result, status){
+                                scope.item.unread = true;
+                                $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                            });
                         }
                     };
 
                     scope.starToggle = function (feedId, guidHash) {
                         if(scope.item.starred === false) {
-                            scope.setFavorite({feedId:feedId, guidHash: guidHash});
-                            scope.item.starred = true;
-                            $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
-                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                            //scope.setFavorite({feedId:feedId, guidHash: guidHash});
+                            ItemsService.setFavorite(feedId, guidHash).success(function(result, status){
+                                scope.item.starred = true;
+                                $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                            });
                         }
                         else if (scope.item.starred === true) {
-                            scope.unsetFavorite({feedId:feedId, guidHash: guidHash});
-                            scope.item.starred = false;
-                            $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
-                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                            //scope.unsetFavorite({feedId:feedId, guidHash: guidHash});
+                            ItemsService.unsetFavorite(feedId, guidHash).success(function(result, status){
+                                scope.item.starred = false;
+                                $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                            });
                         }
                     };
 
