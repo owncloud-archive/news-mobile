@@ -132,11 +132,11 @@ form {
       a.starred-true {
         background-color: @starred-color;
       }
-      a.read-true { //background-color: @unread;
+      a.read-false { //background-color: @unread;
         color: @bolded-text-color;
       }
 
-      a.read-false { //background-color: @unread;
+      a.read-true { //background-color: @unread;
         font-style: italic;
         opacity: 0.5;
       }
@@ -206,6 +206,16 @@ form {
     .radius(0px);
     background-color: @show-more-button-color;
     color: @show-more-button-text-color;
+  }
+
+  .showmore {
+    background-color: @caption-color;
+    .btn {
+      background-color: @caption-color;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      width: 49%;
+    }
   }
 }
 

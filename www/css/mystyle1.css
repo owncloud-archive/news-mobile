@@ -82,10 +82,10 @@ form fieldset button {
 .accordion .accordion-group .accordion-heading a.starred-true {
   background-color: #f8fabb;
 }
-.accordion .accordion-group .accordion-heading a.read-true {
+.accordion .accordion-group .accordion-heading a.read-false {
   color: #354b5e;
 }
-.accordion .accordion-group .accordion-heading a.read-false {
+.accordion .accordion-group .accordion-heading a.read-true {
   font-style: italic;
   opacity: 0.5;
 }
@@ -144,4 +144,13 @@ form fieldset button {
   border-radius: 0px;
   background-color: #dcddd8;
   color: #354b5e;
+}
+.accordion .showmore {
+  background-color: #dcddd8;
+}
+.accordion .showmore .btn {
+  background-color: #dcddd8;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  width: 49%;
 }

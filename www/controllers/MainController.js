@@ -20,8 +20,8 @@
  */
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
-        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
+    ['$scope', '$location', '$anchorScroll', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
+        function ($scope, $location, $anchorScroll, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
 
             console.log('Initialized main controller');
             $scope.view = ''; // view is way the results are presented, all and starred is equal
@@ -150,41 +150,29 @@ angular.module('News').controller('MainController',
 
             };
 
-            $scope.starItem = function(feedId, guidHash) {
-                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
-                ItemsService.starItem(feedId, guidHash).then(function(data){
-                    //console.log("successfully starred item");
+            $scope.setFavorite = function(feedId, guidHash) {
+                ItemsService.setFavorite(feedId, guidHash).then(function(data){
                 });
             };
 
-            $scope.unstarItem = function(feedId, guidHash) {
-                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
-                ItemsService.unstarItem(feedId, guidHash).then(function(data){
-                    //console.log("successfully unstarred item");
+            $scope.unsetFavorite = function(feedId, guidHash) {
+                ItemsService.unsetFavorite(feedId, guidHash).then(function(data){
                 });
             };
 
-            $scope.markItemRead = function(itemId) {
-                /* This is for reading when opening article
-                 * not very optimized for long articles list
-                 *
-                for (var i in $scope.data.items) {
-                    if ($scope.data.items[i].id === itemId) {
-                        if ($scope.data.items[i].unread === false) {
-                            console.log("Ova je procitana");
-                            return false;
-                        }
-                    }
-                }*/
-                ItemsService.markItemRead(itemId).then(function(data){
-                   //console.log("successfully read item");
-                });
+            $scope.setRead = function(itemId) {
+                 ItemsService.setRead(itemId).then(function(data){
+                 });
             };
 
-            $scope.markItemUnread = function(itemId) {
-                ItemsService.markItemUnread(itemId).then(function(data){
-                    //console.log("successfully read item");
-                });
+            $scope.unsetRead = function(itemId) {
+                ItemsService.unsetRead(itemId).then(function(data){
+                  });
+            };
+
+            $scope.goToPageTop = function(){
+                $location.hash('header');
+                $anchorScroll();
             };
 
             $scope.logOut = function () {

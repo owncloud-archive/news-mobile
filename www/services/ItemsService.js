@@ -62,7 +62,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                starItem:function (feedId,guidHash) {
+                setFavorite:function (feedId,guidHash) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/star",
                         withCredentials:UserService.withCredentials})
@@ -71,7 +71,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                unstarItem:function (feedId,guidHash) {
+                unsetFavorite:function (feedId,guidHash) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/unstar",
                         withCredentials:UserService.withCredentials})
@@ -80,7 +80,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                markItemRead:function (itemId) {
+                setRead:function (itemId) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+itemId+"/read",
                         withCredentials:UserService.withCredentials})
@@ -89,7 +89,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                markItemUnread:function (itemId) {
+                unsetRead:function (itemId) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+itemId+"/unread",
                         withCredentials:UserService.withCredentials})
@@ -97,7 +97,6 @@ angular.module('News').factory('ItemsService',
                             ExceptionsService.makeNewException(data,status);
                         });
                 }
-            ///items/{itemId}/read
 
             };
         }]);

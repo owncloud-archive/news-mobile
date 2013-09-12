@@ -112,8 +112,8 @@ angular.module('News').controller('LoginController',
         }]);
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
-        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
+    ['$scope', '$location', '$anchorScroll', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
+        function ($scope, $location, $anchorScroll, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
 
             console.log('Initialized main controller');
             $scope.view = ''; // view is way the results are presented, all and starred is equal
@@ -242,41 +242,29 @@ angular.module('News').controller('MainController',
 
             };
 
-            $scope.starItem = function(feedId, guidHash) {
-                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
-                ItemsService.starItem(feedId, guidHash).then(function(data){
-                    //console.log("successfully starred item");
+            $scope.setFavorite = function(feedId, guidHash) {
+                ItemsService.setFavorite(feedId, guidHash).then(function(data){
                 });
             };
 
-            $scope.unstarItem = function(feedId, guidHash) {
-                //console.log('Feed id = '+feedId+" guidHash = "+guidHash);
-                ItemsService.unstarItem(feedId, guidHash).then(function(data){
-                    //console.log("successfully unstarred item");
+            $scope.unsetFavorite = function(feedId, guidHash) {
+                ItemsService.unsetFavorite(feedId, guidHash).then(function(data){
                 });
             };
 
-            $scope.markItemRead = function(itemId) {
-                /* This is for reading when opening article
-                 * not very optimized for long articles list
-                 *
-                for (var i in $scope.data.items) {
-                    if ($scope.data.items[i].id === itemId) {
-                        if ($scope.data.items[i].unread === false) {
-                            console.log("Ova je procitana");
-                            return false;
-                        }
-                    }
-                }*/
-                ItemsService.markItemRead(itemId).then(function(data){
-                   //console.log("successfully read item");
-                });
+            $scope.setRead = function(itemId) {
+                 ItemsService.setRead(itemId).then(function(data){
+                 });
             };
 
-            $scope.markItemUnread = function(itemId) {
-                ItemsService.markItemUnread(itemId).then(function(data){
-                    //console.log("successfully read item");
-                });
+            $scope.unsetRead = function(itemId) {
+                ItemsService.unsetRead(itemId).then(function(data){
+                  });
+            };
+
+            $scope.goToPageTop = function(){
+                $location.hash('header');
+                $anchorScroll();
             };
 
             $scope.logOut = function () {
@@ -329,6 +317,154 @@ angular.module('News').directive('checkPresence',
             };
         }]);
 
+
+angular.module('News').directive('feedsListing',
+    [function () {
+            return {
+                restrict:'E',
+                scope:{
+                    feed:'=data',
+                    getFeedItems:'&getfeeditems'
+                },
+                replace:true,
+                template:'<div class="accordion-group {{feed.id}}"></div>',
+                compile:function (element, attrs) {
+                    var html = '' +
+                        '<div class="accordion-heading">' +
+                            '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
+                                '<img src="{{feed.faviconLink}}" width="32" height="32" alt="pic">' +
+                                '<span class="title">{{feed.title}}</span>' +
+                                '<br/>' +
+                                '<span ng-show="feed.added" class="itemadd">date added: <span>{{feed.added}}</span></span>' +
+                                '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
+                            '</a>' +
+                        '</div>' ;
+
+                    element.append($(html));
+
+                    return this.link;
+                },
+                link:function (scope, element, attrs) {
+                    $(element).hide();
+                    $(element).fadeIn();
+                }
+            };
+
+
+        }]);
+
+angular.module('News').directive('foldersListing',
+    [function () {
+            return {
+                restrict:'E',
+                scope:{
+                    folder:'=data',
+                    getFolderItems:'&getfolderitems'
+                },
+                replace:true,
+                template:'<div class="accordion-group {{folder.id}}"></div>',
+                compile:function (element, attrs) {
+                    var html = '' +
+                        '<div class="accordion-heading">' +
+                        '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
+                        '<i class="icon-folder-open"></i><span class="title">{{folder.name}}</span><br/>' +
+                        '</a>' +
+                        '</div>';
+
+                    element.append($(html));
+
+                    return this.link;
+                },
+                link:function (scope, element, attrs) {
+                     $(element).hide();
+                    $(element).fadeIn();
+                }
+            };
+        }]);
+
+angular.module('News').directive('itemsListing',
+    [function () {
+            return {
+                restrict:'E',
+                scope:{
+                    item:'=data',
+                    setFavorite:'&setfav',
+                    unsetFavorite:'&unsetfav',
+                    setRead:'&setread',
+                    unsetRead:'&unsetread'
+                },
+                replace:true,
+                template:'<div class="accordion-group {{item.id}}"></div>',
+                compile:function (element, attrs) {
+                    var html = '' +
+                        '<div class="accordion-heading">' +
+                            '<a class="accordion-toggle read-{{!item.unread}} starred-{{item.starred}}" data-toggle="collapse" data-parent="#accordion1" href="#collapse{{item.id}}">' +
+                                '<span>{{item.title}}</span>' +
+                                '<br/>' +
+                                '<span ng-show="item.autor" class="itemadd">author: <span>{{item.author}}</span></span>' +
+                                '<span ng-hide="item.autor" class="itemadd">author: <span>unknown</span></span>' +
+                                '<span ng-show="item.pubDate" class="itemadd">date published: <span>{{item.pubDate}}</span></span>' +
+                                '<span ng-hide="item.pubDate" class="itemadd">date published: <span>unknown</span></span>' +
+                            '</a>' +
+                        '</div>' +
+                        '<div id="collapse{{item.id}}" class="accordion-body collapse">' +
+                        '<div class="accordion-inner">' +
+                        '<div class="accordion-heading">' +
+                        '<div class="bodybox" ng-bind-html-unsafe="item.body"></div>' +
+                        '<div class="buttonsbox">' +
+                            '<span class="itemaddurl"><a ng-href="{{item.url}}" target="_blank"><i class="icon-file"></i></a></span>' +
+                            '<span class="itemaddurl">' +
+                                '<a class="read" href ng-click="readToggle(item.id)"><i ng-class="{\'icon-eye-open\':item.unread,\'icon-eye-close\':!item.unread}"></i></a>' +
+                            '</span>' +
+                            '<span class="itemaddurl">' +
+                                '<a class="star" href ng-click="starToggle(item.feedId,item.guidHash)"><i ng-class="{\'icon-star\':item.starred,\'icon-star-empty\':!item.starred}"></i></a>' +
+                            '</span>' +
+                        //'<span class="itemaddurl"><a ng-click="alert(\'sasa\');" target="_blank"><i class="icon-ban-circle"></i></a></span>' +
+                    '</div></div></div></div>';
+
+                    element.append($(html));
+
+                    return this.link;
+                },
+                link:function (scope, element, attrs) {
+                    scope.readToggle = function (id) {
+
+                        if(scope.item.unread === true) {
+                            scope.setRead({id:id});
+                            scope.item.unread = false;
+                            $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
+                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                        }
+                        else if (scope.item.unread === false) {
+                            scope.unsetRead({id:id});
+                            scope.item.unread = true;
+                            $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
+                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                        }
+                    };
+
+                    scope.starToggle = function (feedId, guidHash) {
+                        if(scope.item.starred === false) {
+                            scope.setFavorite({feedId:feedId, guidHash: guidHash});
+                            scope.item.starred = true;
+                            $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
+                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                        }
+                        else if (scope.item.starred === true) {
+                            scope.unsetFavorite({feedId:feedId, guidHash: guidHash});
+                            scope.item.starred = false;
+                            $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
+                            $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                        }
+                    };
+
+                    $(element).hide();
+                    $(element).fadeIn();
+                }
+            };
+
+
+        }]);
 
 angular.module('News').filter('translator', ['TranslationService', function (TranslationService) {
 	return function (text) {
@@ -482,7 +618,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                starItem:function (feedId,guidHash) {
+                setFavorite:function (feedId,guidHash) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/star",
                         withCredentials:UserService.withCredentials})
@@ -491,7 +627,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                unstarItem:function (feedId,guidHash) {
+                unsetFavorite:function (feedId,guidHash) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/unstar",
                         withCredentials:UserService.withCredentials})
@@ -500,7 +636,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                markItemRead:function (itemId) {
+                setRead:function (itemId) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+itemId+"/read",
                         withCredentials:UserService.withCredentials})
@@ -509,7 +645,7 @@ angular.module('News').factory('ItemsService',
                         });
                 },
 
-                markItemUnread:function (itemId) {
+                unsetRead:function (itemId) {
                     return $http({ method:'PUT', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/items/"+itemId+"/unread",
                         withCredentials:UserService.withCredentials})
@@ -517,7 +653,6 @@ angular.module('News').factory('ItemsService',
                             ExceptionsService.makeNewException(data,status);
                         });
                 }
-            ///items/{itemId}/read
 
             };
         }]);

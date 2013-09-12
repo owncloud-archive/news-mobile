@@ -1,6 +1,6 @@
 <check-presence xmlns="http://www.w3.org/1999/html"></check-presence>
 
-<div class='header'>
+<div id="header" class='header'>
     <ul class="nav nav-pills menu">
         <li><a href ng-click="getAll(0)"><i
                 class='icon-certificate icon-white'></i></a></li>
@@ -36,6 +36,16 @@
     <div class="accordion" id="accordion1"
          class="nav nav-pills nav-stacked"
          ng-switch-when="All">
+        <items-listing ng-repeat="item in data.items"
+                       setfav="setFavorite(feedId,guidHash)"
+                       unsetfav="unsetFavorite(feedId,guidHash)"
+                       setread="setRead(id)"
+                       unsetread="unsetRead(id)"
+                       data="item">
+
+        </items-listing>
+
+        <!--
         <div class="accordion-group" ng-repeat="item in data.items">
             <div class="accordion-heading">
                 <a class="accordion-toggle read-{{item.unread}} starred-{{item.starred}} "
@@ -61,7 +71,6 @@
             <div id="collapse{{item.id}}" class="accordion-body collapse">
                 <div class="accordion-inner">
                     <div class="accordion-heading">
-                        <!--<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{item.id}}1"></a>-->
                         <div class="bodybox" ng-bind-html-unsafe="item.body">
                         </div>
                         <div class="buttonsbox">
@@ -93,20 +102,16 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                <div class="btn-group pull-right">
-                    <button ng-show="!item.unread" class="btn"><i class="icon-eye-close"></i></button>
-                    <button ng-show="item.unread" class="btn"><i class="icon-eye-open"></i></button>
-                    <button ng-show="!item.starred" class="btn"><i class="icon-star"></i></button>
-                    <button ng-show="item.starred" class="btn"><i class="icon-star"></i></button>
-                    <button class="btn"><i class="icon-ban-circle"></i></button>
-                </div> <!-- -->
             </div>
-        </div>
-        <div class="showmore" ng-show="moreArticles">
-            <button class="btn btn-large btn-block"
-                    ng-click="getMoreItems(view)"><i
-                    class="icon-arrow-down"></i></button>
+        </div> <!-- -->
+
+        <div class="showmore">
+            <button class="btn btn-large" ng-disabled="!moreArticles"
+                    ng-click="getMoreItems(view)"><i class="icon-arrow-down"></i>
+            </button>
+            <button class="btn btn-large" ng-click="goToPageTop()">
+                <i class="icon-arrow-up"></i>
+            </button>
         </div>
     </div>
 
@@ -125,6 +130,12 @@
 
     <div class="accordion" id="accordion2" class="nav nav-pills nav-stacked"
          ng-switch-when="Folders">
+        <folders-listing ng-repeat="folder in data.folders"
+                         data="folder"
+                         getfolderitems="getFolderItems(folder.id,0,folder.name)">
+        </folders-listing>
+
+        <!--
         <div class="accordion-group" ng-repeat="folder in data.folders">
             <div class="accordion-heading">
                 <a class="accordion-toggle"
@@ -139,6 +150,7 @@
             </div>
 
         </div>
+        -->
         <!--
         <div class="showmore" ng-show="moreArticles">
             <button class="btn btn-large btn-block"
@@ -164,6 +176,12 @@
     </ul>-->
     <div class="accordion" id="accordion3" class="nav nav-pills nav-stacked"
          ng-switch-when="Feeds">
+        <feeds-listing ng-repeat="feed in data.feeds"
+                       getfeeditems="getFeedItems(feed.id,0,feed.title)"
+                       data="feed">
+        </feeds-listing>
+
+        <!--
         <div class="accordion-group" ng-repeat="feed in data.feeds">
                 <div class="accordion-heading">
                     <a class="accordion-toggle"
@@ -184,6 +202,7 @@
                 </div>
 
         </div>
+        -->
         <!--
         <div class="showmore" ng-show="moreArticles">
             <button class="btn btn-large btn-block"
