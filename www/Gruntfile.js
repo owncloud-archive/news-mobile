@@ -58,6 +58,7 @@ module.exports = function(grunt) {
 					'config/routes.js',
                     'config/cors.js',
                     'config/exceptions.js',
+                    'config/location.js',
 					'controllers/**/*.js',
 					'directives/**/*.js',
 					'filters/**/*.js',

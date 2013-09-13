@@ -34,6 +34,8 @@ angular.module('News').controller('MainController',
             $scope.moreArticles = true;
             var articlesGet = 0;
 
+            console.log($location);
+
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
                 $scope.moreArticles = true;
@@ -147,7 +149,6 @@ angular.module('News').controller('MainController',
                         }
                     });
                 }
-
             };
 
             $scope.setFavorite = function(feedId, guidHash) {

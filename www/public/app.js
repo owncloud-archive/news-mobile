@@ -49,6 +49,11 @@ angular.module('News').config(function($provide) {
     });
 });
 
+// define your routes in here
+angular.module('News').config(['$locationProvider', function ($locationProvider) {
+    //$locationProvider.html5Mode(false).hashPrefix('');
+}]);
+
 angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
@@ -125,6 +130,8 @@ angular.module('News').controller('MainController',
 
             $scope.moreArticles = true;
             var articlesGet = 0;
+
+            console.log($location);
 
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
@@ -267,6 +274,14 @@ angular.module('News').controller('MainController',
                 $anchorScroll();
             };
 
+            /*$scope.scrollTo = function(id) {
+                var old = $location.hash();
+                $location.hash(id);
+                console.log($location.hash());
+                $anchorScroll();
+                //$location.hash(old);
+            };//*/
+
             $scope.logOut = function () {
                 LoginService.present = false;
                 LoginService.killTimer();
@@ -394,7 +409,7 @@ angular.module('News').directive('itemsListing',
                     //unsetRead:'&unsetread'
                 },
                 replace:true,
-                template:'<div class="accordion-group {{item.id}}"></div>',
+                template:'<div class="accordion-group {{item.id}}" id="item{{item.id}}"></div>',
                 compile:function (element, attrs) {
                     var html = '' +
                         '<div class="accordion-heading">' +
@@ -478,6 +493,25 @@ angular.module('News').directive('itemsListing',
 
 
         }]);
+
+angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', function ($location, $anchorScroll) {
+    return {
+        restrict:'A',
+        link: function (scope, element, attrs) {
+            element.bind('click', function (event) {
+                event.stopPropagation();
+                scope.$on('$locationChangeStart', function (ev) {
+                    ev.preventDefault();
+                });
+                var location = attrs.scrollto;
+                //$location.hash(location);
+                //$anchorScroll();
+                //console.log($('#header').offset());
+                $('html,body').animate({ scrollTop: $('#'+location).offset().top }, { duration: 'slow', easing: 'swing'});
+            });
+        }
+    };
+}]);
 
 angular.module('News').filter('translator', ['TranslationService', function (TranslationService) {
 	return function (text) {

@@ -31,7 +31,7 @@ angular.module('News').directive('itemsListing',
                     //unsetRead:'&unsetread'
                 },
                 replace:true,
-                template:'<div class="accordion-group {{item.id}}"></div>',
+                template:'<div class="accordion-group {{item.id}}" id="item{{item.id}}"></div>',
                 compile:function (element, attrs) {
                     var html = '' +
                         '<div class="accordion-heading">' +
