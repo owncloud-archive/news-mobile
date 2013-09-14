@@ -1,13 +1,22 @@
 {
-	"name": "ownCloud News",
+    "version": "0.1",
+    "name": "ownCloud News",
 	"description": "Mobile client for the ownCloud news app",
-	"launch_path": "newsmobile/templates/index.html",
-	"icons": {
+	"launch_path": "/templates/index.html",
+    "icons": {
 		"128": "newsmobile/img/icon-128.png"
-	},
-	"developer": {
-		"name": "Ilija Lazarevic, Bernhard Posselt, Alessandro Cosentino",
+    },
+    "developer": {
+        "name": "Ilija Lazarevic, Bernhard Posselt, Alessandro Cosentino",
 		"url": "https://github.com/owncloud/news-mobile"
-	},
-	"default_locale": "en"
+    },
+    "locales": {
+        "rs": {
+            "description": "Mobilna klijentska aplikacija za ownCloud News aplikaciju",
+            "developer": {
+                "url": "https://github.com/owncloud/news-mobile"
+            }
+        }
+    },
+    "default_locale": "en",
 }
