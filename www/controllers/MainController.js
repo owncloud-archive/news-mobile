@@ -171,11 +171,6 @@ angular.module('News').controller('MainController',
                   });
             };
 
-            $scope.goToPageTop = function(){
-                $location.hash('header');
-                $anchorScroll();
-            };
-
             $scope.logOut = function () {
                 LoginService.present = false;
                 LoginService.killTimer();

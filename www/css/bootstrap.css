@@ -5270,12 +5270,12 @@ body {
 .header {
   min-height: 50px;
   line-height: 50px;
-  background-color: #d74b4b;
+  background-color: #365e8a;
   color: #dcddd8;
   text-align: center;
 }
 .header img {
-  width: 50%;
+  width: 70%;
   opacity: 0.9;
 }
 .header ul.nav {
@@ -5287,18 +5287,18 @@ body {
 .header ul.nav li a:hover,
 .header ul.nav li a:focus,
 .header ul.nav li a:active {
-  background-color: #d74b4b;
+  background-color: #365e8a;
 }
 .footer {
   min-height: 60px;
   text-align: center;
   font-size: 80%;
-  background-color: #d74b4b;
+  background-color: #365e8a;
   color: #dcddd8;
 }
 .btn {
   color: #ffffff;
-  background-color: #d74b4b;
+  background-color: #365e8a;
   background-image: none;
   border: 0px;
   text-shadow: none;
@@ -5307,18 +5307,18 @@ a:active a:focus a:hover a:checked {
   outline: none;
 }
 .btn:hover {
-  background-color: #d74b4b;
+  background-color: #365e8a;
   color: #ffffff;
 }
 form {
-  color: #d74b4b;
+  color: #365e8a;
   padding-top: 20px;
 }
 form fieldset label {
   font-size: 20px;
 }
 form fieldset input {
-  width: 97%;
+  width: 95%;
 }
 form fieldset button {
   margin-top: 10px;

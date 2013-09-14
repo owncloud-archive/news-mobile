@@ -246,7 +246,6 @@ angular.module('News').controller('MainController',
                         }
                     });
                 }
-
             };
 
             $scope.setFavorite = function(feedId, guidHash) {
@@ -268,19 +267,6 @@ angular.module('News').controller('MainController',
                 ItemsService.unsetRead(itemId).then(function(data){
                   });
             };
-
-            $scope.goToPageTop = function(){
-                $location.hash('header');
-                $anchorScroll();
-            };
-
-            /*$scope.scrollTo = function(id) {
-                var old = $location.hash();
-                $location.hash(id);
-                console.log($location.hash());
-                $anchorScroll();
-                //$location.hash(old);
-            };//*/
 
             $scope.logOut = function () {
                 LoginService.present = false;
@@ -335,38 +321,36 @@ angular.module('News').directive('checkPresence',
 
 angular.module('News').directive('feedsListing',
     [function () {
-            return {
-                restrict:'E',
-                scope:{
-                    feed:'=data',
-                    getFeedItems:'&getfeeditems'
-                },
-                replace:true,
-                template:'<div class="accordion-group {{feed.id}}"></div>',
-                compile:function (element, attrs) {
-                    var html = '' +
-                        '<div class="accordion-heading">' +
-                            '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
-                                '<img src="{{feed.faviconLink}}" width="32" height="32" alt="pic">' +
-                                '<span class="title">{{feed.title}}</span>' +
-                                '<br/>' +
-                                '<span ng-show="feed.added" class="itemadd">date added: <span>{{feed.added}}</span></span>' +
-                                '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
-                            '</a>' +
-                        '</div>' ;
+        return {
+            restrict:'E',
+            scope:{
+                feed:'=data',
+                getFeedItems:'&getfeeditems'
+            },
+            replace:true,
+            template:'<div class="accordion-group {{feed.id}}"></div>',
+            compile:function (element, attrs) {
+                var html = '' +
+                    '<div class="accordion-heading">' +
+                    '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
+                    '<img src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
+                    '<span class="title">{{feed.title}}</span>' +
+                    '<br/>' +
+                    '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
+                    '<span ng-show="feed.added" class="itemadd">date added: <span>{{feed.added}}</span></span>' +
+                    '</a>' +
+                    '</div>';
 
-                    element.append($(html));
+                element.append($(html));
 
-                    return this.link;
-                },
-                link:function (scope, element, attrs) {
-                    $(element).hide();
-                    $(element).fadeIn();
-                }
-            };
-
-
-        }]);
+                return this.link;
+            },
+            link:function (scope, element, attrs) {
+                $(element).hide();
+                $(element).fadeIn();
+            }
+        };
+    }]);
 
 angular.module('News').directive('foldersListing',
     [function () {
@@ -500,13 +484,13 @@ angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', fun
         link: function (scope, element, attrs) {
             element.bind('click', function (event) {
                 event.stopPropagation();
-                scope.$on('$locationChangeStart', function (ev) {
-                    ev.preventDefault();
-                });
+                //scope.$on('$locationChangeStart', function (ev) {
+                //    ev.preventDefault();
+                //});
                 var location = attrs.scrollto;
+
                 //$location.hash(location);
-                //$anchorScroll();
-                //console.log($('#header').offset());
+                //$anchorScroll(); //For scrolling without animation
                 $('html,body').animate({ scrollTop: $('#'+location).offset().top }, { duration: 'slow', easing: 'swing'});
             });
         }
@@ -520,7 +504,7 @@ angular.module('News').filter('translator', ['TranslationService', function (Tra
 }]);
 
 angular.module('News').filter('clearurl', function () {
-    var reg = /https?:\/\/[^#]*/;
+    var reg = /https?:\/\/[^\/]*/;
     var regexp = new RegExp(reg);
 
 	return function (text) {

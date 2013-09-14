@@ -25,9 +25,9 @@ angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', fun
         link: function (scope, element, attrs) {
             element.bind('click', function (event) {
                 event.stopPropagation();
-                scope.$on('$locationChangeStart', function (ev) {
-                    ev.preventDefault();
-                });
+                //scope.$on('$locationChangeStart', function (ev) {
+                //    ev.preventDefault();
+                //});
                 var location = attrs.scrollto;
 
                 //$location.hash(location);

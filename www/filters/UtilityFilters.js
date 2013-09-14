@@ -20,7 +20,7 @@
  */
 
 angular.module('News').filter('clearurl', function () {
-    var reg = /https?:\/\/[^#]*/;
+    var reg = /https?:\/\/[^\/]*/;
     var regexp = new RegExp(reg);
 
 	return function (text) {
