@@ -431,6 +431,10 @@
   .uneditable-input.span1 {
     width: 28px;
   }
+  .row-fluid [class*="span"] {
+    margin-left: 0px;
+    width: 100%;
+  }
 }
 @media (max-width: 767px) {
   body {

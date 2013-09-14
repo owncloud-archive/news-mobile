@@ -55,9 +55,12 @@
 
         <div class="showmore" ng-show="data.items">
             <button class="btn btn-large" ng-disabled="!moreArticles"
-                    ng-click="getMoreItems(view)"><i class="icon-arrow-down"></i>
+                    ng-click="getMoreItems(view)">
+                <span class="hidden-phone">Show more</span>
+                <i class="icon-arrow-down"></i>
             </button>
             <button class="btn btn-large" scroll-to scrollto="header">
+                <span class="hidden-phone">Page top</span>
                 <i class="icon-arrow-up"></i>
             </button>
         </div>

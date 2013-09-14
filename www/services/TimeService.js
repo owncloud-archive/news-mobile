@@ -23,6 +23,7 @@
 angular.module('News').factory('TimeService', [ function () {
     var day = 60 * 60 * 24 * 1000; //miliseconds in a day
     var hour = 60 * 60 * 1000; //miliseconds in a hour
+    var minute = 60 * 1000; //miliseconds in a minute
     var dateNow = Date.now();
 
     return {
@@ -30,15 +31,25 @@ angular.module('News').factory('TimeService', [ function () {
             var itemDate = new Date(utc * 1000);
             var daysAgo = Math.floor((dateNow - itemDate) / day);
             var hoursAgo = Math.floor((dateNow - itemDate) / hour);
+            var minutesAgo = Math.floor((dateNow - itemDate) / minute);
 
-            if (daysAgo === 0) {
-                if (hoursAgo === 0) {
-                    return "Moment ago";
+            if (daysAgo <= 0) {
+                if (hoursAgo <= 0) {
+                    if (minutesAgo <= 1 ) {
+                        return "Moment ago";
+                    }
+                    else if (minutesAgo < 10) {
+                        return "Couple of minutes ago";
+                    }
+                    else {
+                        return "Half hour ago";
+                    }
                 }
-                else if (hoursAgo === 1) {
+                else if(hoursAgo === 1)
+                {
                     return "1 hour ago";
                 }
-                else {
+                else if (hoursAgo > 1) {
                     return hoursAgo + " hours ago";
                 }
             }

@@ -5332,6 +5332,7 @@ form fieldset button {
   font-size: 30px;
 }
 .accordion {
+  margin-bottom: 0px;
   color: #475f77;
 }
 .accordion .accordion-group {
