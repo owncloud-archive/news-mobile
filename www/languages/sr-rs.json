@@ -1,0 +1,24 @@
+{
+    "id":"sr-rs",
+    "country":"Srbija",
+    "language":"Srpski",
+    "labels":{
+        "username":"Korisnicko ime",
+        "password":"Lozinka",
+        "hostname":"URL servera",
+        "sign.in":"Prijavi se",
+        "all.feeds.articles":"Novosti svih kanala",
+        "all.starred.articles":"Sve omiljene novosti",
+        "all.folders":"Grupe kanala",
+        "all.feeds":"Svi kanali",
+        "articles":"novosti",
+        "article":"novost"
+    },
+    "exceptions":{
+        "Current user is not logged in":"Problemi u konekciji. Pokusajte ponovo.",
+        "user.name.is.not.in.correct.format":"Neispravna vrednost korisnickog imena",
+        "password.is.not.in.correct.format":"Neispravna vrednost lozinke",
+        "host.name.is.not.in.correct.format":"Neispravna vrednost adrese servera",
+        "connection.problem":"Greska u komunikaciji sa serverom."
+    }
+}

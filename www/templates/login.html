@@ -1,1 +1,31 @@
-hi {{ val }}
+<div class="header">
+    <img src="../images/owncloud-logo-transparent-white.png">
+</div>
+
+<div>
+    <form name="LoginForm">
+        <fieldset>
+            <label for="username">{{ 'username' | translator}}</label>
+
+            <input type="text" name="userName"
+                   placeholder="Type your user name"
+                   ng-model="data.userName">
+            <br/>
+
+            <label for="password">{{ 'password' | translator }}</label>
+            <input type="password" name="password"
+                   placeholder="Type password"
+                   ng-model="data.password">
+            <br/>
+
+            <label for="hostName">{{ 'hostname' | translator }}</label>
+            <input type="text" name="hostName"
+                   placeholder="Path to your host"
+                   ng-model="data.hostName">
+            <button class="btn btn-large btn-block"
+                    ng-click="logIn()">{{ 'sign.in' | translator}}
+            </button>
+        </fieldset>
+    </form>
+</div>
+

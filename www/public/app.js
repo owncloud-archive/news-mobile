@@ -5,6 +5,7 @@
 /**
  * Copyright (c) 2013, Bernhard Posselt <nukeawhale@gmail.com> 
  * Copyright (c) 2013, Alessandro Cosentino <cosenal@gmail.com> 
+ * Copyright (c) 2013, Ilija Lazarevic <ikac.ikax@gmail.com> 
  * This file is licensed under the Affero General Public License version 3 or later. 
  * See the COPYING file.
  */
@@ -15,29 +16,781 @@ angular.module('News', []);
 // define your routes in here
 angular.module('News').config(['$routeProvider', function ($routeProvider) {
 
-	$routeProvider.when('/', {
-		templateUrl: 'main.html',
-
-	}).when('/login', {
-		templateUrl: 'login.html',
-		controller: 'LoginController'
-
-	}).otherwise({
-		redirectTo: '/'
-	});
+    $routeProvider.when('/', {
+        templateUrl:'main.html',
+        controller:'MainController'
+    })
+        .when('/login', {
+            templateUrl:'login.html',
+            controller:'LoginController',
+            resolve: ['$http' , '$locale', 'TranslationService', function($http,$locale,TranslationService){
+                return $http.get('../languages/'+$locale.id+'.json').success(function(data, status){
+                    TranslationService.lang = data;
+                });
+            }]
+        })
+        .otherwise({
+            redirectTo:'/'
+        });
 
 }]);
-angular.module('News').controller('LoginController', ['$scope', function ($scope) {
 
-	$scope.val = 'test';
-
+angular.module('News').config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
-angular.module('News').factory('Login', ['$http', function ($http) {
 
-	return {
-		userName: '',
-		password: ''
+angular.module('News').config(function($provide) {
+    $provide.decorator("$exceptionHandler", function($delegate) {
+        return function(exception, cause) {
+            //$delegate(exception, cause);
+            alert(exception.message);
+        };
+    });
+});
+
+angular.module('News').controller('LoginController',
+    ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
+        function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
+
+            $scope.data = UserService;
+
+            $scope.testFormFields = function () {
+                var hostNameRegExp = new RegExp(/^https?:\/\/.*$/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+                var userNameRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{3,16}$/
+                var passwordRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{6,18}$/
+
+                var userNameParseResult = userNameRegExp.test(UserService.userName);
+
+                $scope.userNameError = '';
+                $scope.passwordError = '';
+                $scope.hostNameError = '';
+
+                if (!userNameParseResult) {
+                    ExceptionsService.makeNewException({message:"user.name.is.not.in.correct.format"},-1);
+                }
+
+                var passwordParseResult = passwordRegExp.test(UserService.password);
+
+                if (!passwordParseResult) {
+                    ExceptionsService.makeNewException({message:"password.is.not.in.correct.format"},-1);
+                }
+
+                var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
+
+                if (!hostNameParseResult) {
+                    ExceptionsService.makeNewException({message:"host.name.is.not.in.correct.format"},-1);
+                }
+
+                if (hostNameParseResult && userNameParseResult && passwordParseResult) {
+                    return true;
+                }
+                return false;
+            };
+
+            $scope.logIn = function () {
+                if ($scope.testFormFields()) {
+                    LoginService.login()
+                        .success(function (data, status) {
+                            if (status === 200) {
+                                LoginService.present = true;
+                                $location.path("/");
+                            }
+                        })
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
+                }
+            };
+
+            $scope.isLoggedIn = function () {
+                if (LoginService.present) {
+                    $location.path("/");
+                }
+            };
+
+        }]);
+
+angular.module('News').controller('MainController',
+    ['$scope', '$location', '$anchorScroll', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
+        function ($scope, $location, $anchorScroll, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
+
+            console.log('Initialized main controller');
+            $scope.view = ''; // view is way the results are presented, all and starred is equal
+            $scope.action = ''; // action is button pressed to get the populated list
+            $scope.folderId = '0';
+            $scope.feedId = '0';
+            $scope.currentFolderName = '';
+            $scope.currentFeedTitle = '';
+
+            $scope.moreArticles = true;
+            var articlesGet = 0;
+
+            console.log($location);
+
+            $scope.getStarred = function (offset) {
+                $scope.action = 'Starred';
+                $scope.moreArticles = true;
+                ItemsService.getStarredItems(offset)
+                    .then(function (result) {
+                        $scope.view = 'All';
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
+                    });
+            };
+
+            $scope.getAll = function (offset) {
+                $scope.action = 'All';
+                $scope.moreArticles = true;
+                ItemsService.getAllItems(offset)
+                    .then(function (result) {
+                        $scope.view = 'All';
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
+                    });
+            };
+
+            $scope.getFolders = function () {
+                $scope.action = 'Folders';
+                FoldersService.getFolders()
+                    .then(function (result) {
+                        $scope.view = 'Folders';
+                        $scope.data = result.data;
+                        articlesGet = result.data.folders.length;
+                    });
+            };
+
+            $scope.getFeeds = function () {
+                $scope.action = 'Feeds';
+                FeedsService.getFeeds()
+                    .then(function (result) {
+                        $scope.view = 'Feeds';
+                        $scope.data = result.data;
+                        articlesGet = result.data.feeds.length;
+                    });
+
+            };
+
+            $scope.getFolderItems = function (folderId, offset, folderName) {
+                $scope.action = 'FolderItems';
+                $scope.folderId = folderId;
+                $scope.currentFolderName = folderName;
+                $scope.moreArticles = true;
+
+                FoldersService.getFolderItems(folderId, offset)
+                    .then(function (result) {
+                        $scope.view = 'All';
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
+                    });
+            };
+
+            $scope.getFeedItems = function (feedId, offset, feedTitle) {
+                $scope.action = 'FeedItems';
+                $scope.feedId = feedId;
+                $scope.currentFeedTitle = feedTitle;
+                $scope.moreArticles = true;
+
+                FeedsService.getFeedItems(feedId, offset)
+                    .then(function (result) {
+                        $scope.view = 'All';
+                        $scope.data = result.data;
+                        articlesGet = result.data.items.length;
+                    });
+            };
+
+            $scope.getMoreItems = function (type) {
+                var offset = $scope.data.items.slice(-1)[0].id - 1;
+
+                if (offset === 0 || articlesGet < 20) {
+                    $scope.moreArticles = false;
+                    return false;
+                }
+
+                if ($scope.action === 'All') {
+                    ItemsService.getAllItems(offset)
+                        .then(function (result) {
+                            articlesGet = result.data.items.length;
+                            for (var i in result.data.items) {
+                                $scope.data.items.push(result.data.items[i]);
+                            }
+                        });
+                }
+                else if ($scope.action === 'Starred') {
+                    ItemsService.getStarredItems(offset)
+                        .then(function (result) {
+                            articlesGet = result.data.items.length;
+                            for (var i in result.data.items) {
+                                $scope.data.items.push(result.data.items[i]);
+                            }
+                        });
+                }
+                else if (type === 'All' && $scope.action === 'FolderItems') {
+                    FoldersService.getFolderItems($scope.folderId, offset).then(function (result) {
+                        articlesGet = result.data.items.length;
+                        for (var i in result.data.items) {
+                            $scope.data.items.push(result.data.items[i]);
+                        }
+                    });
+                }
+                else if (type === 'All' && $scope.action === 'FeedItems') {
+                    FeedsService.getFeedItems($scope.feedId, offset).then(function (result) {
+                        articlesGet = result.data.items.length;
+                        for (var i in result.data.items) {
+                            $scope.data.items.push(result.data.items[i]);
+                        }
+                    });
+                }
+            };
+
+            $scope.setFavorite = function(feedId, guidHash) {
+                ItemsService.setFavorite(feedId, guidHash).then(function(data){
+                });
+            };
+
+            $scope.unsetFavorite = function(feedId, guidHash) {
+                ItemsService.unsetFavorite(feedId, guidHash).then(function(data){
+                });
+            };
+
+            $scope.setRead = function(itemId) {
+                 ItemsService.setRead(itemId).then(function(data){
+                 });
+            };
+
+            $scope.unsetRead = function(itemId) {
+                ItemsService.unsetRead(itemId).then(function(data){
+                  });
+            };
+
+            $scope.logOut = function () {
+                LoginService.present = false;
+                LoginService.killTimer();
+                $location.path('/login');
+            };
+
+            if (LoginService.present) {
+                //console.log('This');
+                $scope.getAll(0);
+            }
+
+        }]);
+
+
+
+angular.module('News').directive('checkPresence',
+    ['$http', '$location', '$timeout', 'LoginService', 'ExceptionsService',
+        function ($http, $location, $timeout, LoginService, ExceptionsService) {
+            return {
+                restrict:"E",
+                link:function tick() {
+                    if (LoginService.timerRef) {
+                        LoginService.killTimer();
+                    }
+                    if (!LoginService.present) {
+                        $location.path('/login');
+                    }
+                    else {
+                        LoginService.login()
+                            .success(function (data, status) {
+                                if (status === 200) {
+                                    $location.path('/');
+                                }
+                                else {
+                                    LoginService.killTimer();
+                                    $location.path('/login');
+                                    ExceptionsService.makeNewException(data, status);
+                                }
+                            })
+                            .error(function (data, status) {
+                                LoginService.killTimer();
+                                $location.path('/login');
+                                ExceptionsService.makeNewException(data, status);
+                            });
+                    }
+                    LoginService.timerRef = $timeout(tick, LoginService.timeout);
+                }
+            };
+        }]);
+
+
+angular.module('News').directive('feedsListing',
+    [function () {
+        return {
+            restrict:'E',
+            scope:{
+                feed:'=data',
+                getFeedItems:'&getfeeditems'
+            },
+            replace:true,
+            template:'<div class="accordion-group {{feed.id}}"></div>',
+            compile:function (element, attrs) {
+                var html = '' +
+                    '<div class="accordion-heading">' +
+                    '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
+                    '<img src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
+                    '<span class="title">{{feed.title}}</span>' +
+                    '<br/>' +
+                    '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
+                    '<span ng-show="feed.added" class="itemadd">date added: <span>{{feed.added}}</span></span>' +
+                    '</a>' +
+                    '</div>';
+
+                element.append($(html));
+
+                return this.link;
+            },
+            link:function (scope, element, attrs) {
+                $(element).hide();
+                $(element).fadeIn();
+            }
+        };
+    }]);
+
+angular.module('News').directive('foldersListing',
+    [function () {
+            return {
+                restrict:'E',
+                scope:{
+                    folder:'=data',
+                    getFolderItems:'&getfolderitems'
+                },
+                replace:true,
+                template:'<div class="accordion-group {{folder.id}}"></div>',
+                compile:function (element, attrs) {
+                    var html = '' +
+                        '<div class="accordion-heading">' +
+                        '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
+                        '<i class="icon-folder-open"></i><span class="title">{{folder.name}}</span><br/>' +
+                        '</a>' +
+                        '</div>';
+
+                    element.append($(html));
+
+                    return this.link;
+                },
+                link:function (scope, element, attrs) {
+                     $(element).hide();
+                    $(element).fadeIn();
+                }
+            };
+        }]);
+
+angular.module('News').directive('itemsListing',
+    ['ItemsService',function (ItemsService) {
+            return {
+                restrict:'E',
+                scope:{
+                    item:'=data'
+                },
+                replace:true,
+                template:'<div class="accordion-group {{item.id}}" id="item{{item.id}}"></div>',
+                compile:function (element, attrs) {
+                    var html = '' +
+                        '<div class="accordion-heading">' +
+                            '<a class="accordion-toggle read-{{!item.unread}} starred-{{item.starred}}" data-toggle="collapse" data-parent="#accordion1" href="#collapse{{item.id}}">' +
+                                '<span>{{item.title}}</span>' +
+                                '<br/>' +
+                                '<span ng-show="item.autor" class="itemadd">author: <span>{{item.author}}</span></span>' +
+                                '<span ng-hide="item.autor" class="itemadd">author: <span>unknown</span></span>' +
+                                '<span ng-show="item.pubDate" class="itemadd">date published: <span>{{item.pubDate}}</span></span>' +
+                                '<span ng-hide="item.pubDate" class="itemadd">date published: <span>unknown</span></span>' +
+                            '</a>' +
+                        '</div>' +
+                        '<div id="collapse{{item.id}}" class="accordion-body collapse">' +
+                        '<div class="accordion-inner">' +
+                        '<div class="accordion-heading">' +
+                        '<div class="bodybox" ng-bind-html-unsafe="item.body"></div>' +
+                        '<div class="buttonsbox">' +
+                            '<span class="itemaddurl"><a ng-href="{{item.url}}" target="_blank"><i class="icon-file"></i></a></span>' +
+                            '<span class="itemaddurl">' +
+                                '<a class="read" href ng-click="readToggle(item.id)"><i ng-class="{\'icon-eye-open\':item.unread,\'icon-eye-close\':!item.unread}"></i></a>' +
+                            '</span>' +
+                            '<span class="itemaddurl">' +
+                                '<a class="star" href ng-click="starToggle(item.feedId,item.guidHash)"><i ng-class="{\'icon-star\':item.starred,\'icon-star-empty\':!item.starred}"></i></a>' +
+                            '</span>' +
+                        //'<span class="itemaddurl"><a ng-click="alert(\'sasa\');" target="_blank"><i class="icon-ban-circle"></i></a></span>' +
+                    '</div></div></div></div>';
+
+                    element.append($(html));
+
+                    return this.link;
+                },
+                link:function (scope, element, attrs) {
+                    scope.readToggle = function (id) {
+
+                        if(scope.item.unread === true) {
+                            //This method uses main controller's setRead exposed
+                            //through scope and directive's isolate scope
+                            //scope.setRead({id:id});
+
+                            //This method uses service to mark item read
+                            //which has option for checking if marking was successful
+                            ItemsService.setRead(id).success(function(result, status){
+                                scope.item.unread = false;
+                                $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                            });
+                        }
+                        else if (scope.item.unread === false) {
+                            //scope.unsetRead({id:id});
+                            ItemsService.unsetRead(id).success(function(result, status){
+                                scope.item.unread = true;
+                                $('.' + scope.item.id + ' a.read i').toggleClass('icon-eye-open icon-eye-close');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('read-true read-false');
+                            });
+                        }
+                    };
+
+                    scope.starToggle = function (feedId, guidHash) {
+                        if(scope.item.starred === false) {
+                            //scope.setFavorite({feedId:feedId, guidHash: guidHash});
+                            ItemsService.setFavorite(feedId, guidHash).success(function(result, status){
+                                scope.item.starred = true;
+                                $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                            });
+                        }
+                        else if (scope.item.starred === true) {
+                            //scope.unsetFavorite({feedId:feedId, guidHash: guidHash});
+                            ItemsService.unsetFavorite(feedId, guidHash).success(function(result, status){
+                                scope.item.starred = false;
+                                $('.' + scope.item.id + ' a.star i').toggleClass('icon-star icon-star-empty');
+                                $('.' + scope.item.id +' .accordion-toggle').toggleClass('starred-true starred-false');
+                            });
+                        }
+                    };
+
+                    $(element).hide();
+                    $(element).fadeIn();
+                }
+            };
+
+
+        }]);
+
+angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', function ($location, $anchorScroll) {
+    return {
+        restrict:'A',
+        link: function (scope, element, attrs) {
+            element.bind('click', function (event) {
+                event.stopPropagation();
+                //scope.$on('$locationChangeStart', function (ev) {
+                //    ev.preventDefault();
+                //});
+                var location = attrs.scrollto;
+
+                //$location.hash(location);
+                //$anchorScroll(); //For scrolling without animation
+                $('html,body').animate({ scrollTop: $('#'+location).offset().top }, { duration: 'slow', easing: 'swing'});
+            });
+        }
+    };
+}]);
+
+angular.module('News').filter('translator', ['TranslationService', function (TranslationService) {
+	return function (text) {
+        return TranslationService.translateLabel([text]);
 	};
-
 }]);
+
+angular.module('News').filter('clearurl', function () {
+    var reg = /https?:\/\/[^\/]*/;
+    var regexp = new RegExp(reg);
+
+	return function (text) {
+        return regexp.exec(text)[0];
+	};
+});
+
+angular.module('News').factory('ExceptionsService',
+    ['TranslationService', function (TranslationService) {
+        return {
+            makeNewException:function (data, status) {
+                var messageString = '';
+                if (status > 0) {
+                    messageString = '['+status+'] ';
+                }
+                messageString = messageString + TranslationService.translateException(data.message);
+
+                if (status === 0) {
+                    messageString = TranslationService.translateException('connection.problem');
+                    throw {message: messageString};
+                }
+
+                throw {message: messageString};
+            }
+        };
+    }]);
+
+angular.module('News').factory('FeedsService',
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
+            return {
+                getFeeds:function () {
+                    return $http({ method:'GET', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/feeds",
+                        cached:false, withCredentials:UserService.withCredentials})
+                        .success(function (data, status) {
+                            TimeService.convertFeedsDates(data.feeds);
+                            return data;
+                        })
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
+                },
+
+                getFeedItems:function (feedId, offset) {
+                    var params = {
+                        "batchSize":20, //  the number of items that should be returned, defaults to 20
+                        "offset":offset, // only return older (lower than equal that id) items than the one with id 30
+                        "type":0, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                        "id":feedId, // the id of the folder or feed, Use 0 for Starred and All
+                        "getRead":true // if true it returns all items, false returns only unread items
+                    };
+
+                    return $http({ method:'GET', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items",
+                        params:params, cached:false, withCredentials:UserService.withCredentials})
+                        .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
+                }
+            };
+
+        }]);
+
+angular.module('News').factory('FoldersService',
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
+            return {
+                getFolders:function () {
+                    return $http({ method:'GET', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/folders", cached:false,
+                        withCredentials:UserService.withCredentials })
+                        .success(function (data, status) {
+                            return data;
+                        })
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
+                },
+
+                getFolderItems:function (folderId, offset) {
+                    var params = {
+                        "batchSize":20, //  the number of items that should be returned, defaults to 20
+                        "offset":offset, // only return older (lower than equal that id) items than the one with id 30
+                        "type":1, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                        "id":folderId, // the id of the folder or feed, Use 0 for Starred and All
+                        "getRead":true // if true it returns all items, false returns only unread items
+                    };
+
+                    return $http({ method:'GET', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items", params:params,
+                        cached:false, withCredentials:UserService.withCredentials })
+                        .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data, status);
+                        });
+                }
+            };
+
+        }]);
+
+angular.module('News').factory('ItemsService',
+    ['$http', 'UserService', 'ExceptionsService', 'TimeService',
+        function ($http, UserService, ExceptionsService, TimeService) {
+            return {
+                getStarredItems:function (offset) {
+                    var params = {
+                        "batchSize":20, //  the number of items that should be returned, defaults to 20
+                        "offset":offset, // only return older (lower than equal that id) items than the one with id 30
+                        "type":2, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                        "id":0, // the id of the folder or feed, Use 0 for Starred and All
+                        "getRead":true // if true it returns all items, false returns only unread items
+                    };
+
+                    return $http({ method:'GET', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items",
+                        params:params, cached:false, withCredentials:UserService.withCredentials})
+                        .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                getAllItems:function (offset) {
+                    var params = {
+                        "batchSize":20, //  the number of items that should be returned, defaults to 20
+                        "offset":offset, // only return older (lower than equal that id) items than the one with id 30
+                        "type":3, // the type of the query (Feed: 0, Folder: 1, Starred: 2, All: 3)
+                        "id":0, // the id of the folder or feed, Use 0 for Starred and All
+                        "getRead":true // if true it returns all items, false returns only unread items
+                    };
+                    return $http({ method:'GET', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items",
+                        params:params, cached:false, withCredentials:UserService.withCredentials})
+                        .success(function (data, status) {
+                            TimeService.convertItemsDates(data.items);
+                            return data;
+                        }).error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                setFavorite:function (feedId,guidHash) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/star",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                unsetFavorite:function (feedId,guidHash) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+feedId+"/"+guidHash+"/unstar",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                setRead:function (itemId) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+itemId+"/read",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                },
+
+                unsetRead:function (itemId) {
+                    return $http({ method:'PUT', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/items/"+itemId+"/unread",
+                        withCredentials:UserService.withCredentials})
+                        .error(function (data, status) {
+                            ExceptionsService.makeNewException(data,status);
+                        });
+                }
+
+            };
+        }]);
+
+angular.module('News').factory('LoginService',
+    ['$http', '$timeout', 'UserService',
+        function ($http, $timeout, UserService) {
+            return {
+                present:false,
+                timerRef:null,
+                timeout:50000,
+
+                killTimer:function () {
+                    $timeout.cancel(this.timerRef);
+                },
+
+                isPresent:function () {
+                    return this.present;
+                },
+
+                login:function () {
+                    var auth = "Basic " + btoa(UserService.userName + ":" +
+                        UserService.password);
+
+                    $http.defaults.headers.common.Authorization = auth;
+
+                    return $http({ method:'GET', url:UserService.hostName +
+                        "/index.php/apps/news/api/v1-2/version" });
+                }
+            };
+        }]);
+
+angular.module('News').factory('TimeService', [ function () {
+    var day = 60 * 60 * 24 * 1000; //miliseconds in a day
+    var hour = 60 * 60 * 1000; //miliseconds in a hour
+    var minute = 60 * 1000; //miliseconds in a minute
+    var dateNow = Date.now();
+
+    return {
+        getDateFromUTC:function (utc) {
+            var itemDate = new Date(utc * 1000);
+            var daysAgo = Math.floor((dateNow - itemDate) / day);
+            var hoursAgo = Math.floor((dateNow - itemDate) / hour);
+            var minutesAgo = Math.floor((dateNow - itemDate) / minute);
+
+            if (daysAgo <= 0) {
+                if (hoursAgo <= 0) {
+                    if (minutesAgo <= 1 ) {
+                        return "Moment ago";
+                    }
+                    else if (minutesAgo < 10) {
+                        return "Couple of minutes ago";
+                    }
+                    else {
+                        return "Half hour ago";
+                    }
+                }
+                else if(hoursAgo === 1)
+                {
+                    return "1 hour ago";
+                }
+                else if (hoursAgo > 1) {
+                    return hoursAgo + " hours ago";
+                }
+            }
+            else if (daysAgo === 1) {
+                return "1 day ago";
+            }
+            else if (daysAgo <= 10) {
+                return daysAgo + " days ago";
+            }
+            else {
+                return itemDate.toDateString();
+            }
+        },
+
+        convertItemsDates:function (items) {
+            for (var i in items) {
+                items[i].pubDate = this.getDateFromUTC(items[i].pubDate);
+            }
+        },
+
+        convertFeedsDates:function (items) {
+            for (var i in items) {
+                items[i].added = this.getDateFromUTC(items[i].added);
+            }
+        }
+
+
+    };
+}]);
+
+angular.module('News').factory('TranslationService', [ function () {
+    return {
+        lang:null,
+        translateLabel : function(text){
+            return this.lang.labels[text];
+        },
+        translateException : function(text){
+            return this.lang.exceptions[text];
+        }
+    };
+}]);
+
+angular.module('News').factory('UserService', ['$http', function ($http) {
+    return {
+        userName:'',
+        password:'',
+        hostName:'',
+        withCredentials:false
+    };
+}]);
+
 })(window.angular, jQuery);

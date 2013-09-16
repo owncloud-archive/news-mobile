@@ -1,20 +1,20 @@
 /**
- * 
+ *
  * ownCloud - News
- * 
+ *
  * @author Bernhard Posselt
  * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -46,6 +46,8 @@ module.exports = function(grunt) {
 				'<nukeawhale@gmail.com> \n' +
 				' * Copyright (c) 2013, Alessandro Cosentino ' +
 				'<cosenal@gmail.com> \n' +
+				' * Copyright (c) 2013, Ilija Lazarevic ' +
+				'<ikac.ikax@gmail.com> \n' +
 				' * This file is licensed under the Affero ' +
 				'General Public License version 3 or later. \n' +
 				' * See the COPYING file.\n */\n\n'
@@ -54,6 +56,8 @@ module.exports = function(grunt) {
 				src: [
 					'config/app.js',
 					'config/routes.js',
+					'config/cors.js',
+					'config/exceptions.js',
 					'controllers/**/*.js',
 					'directives/**/*.js',
 					'filters/**/*.js',
@@ -76,12 +80,12 @@ module.exports = function(grunt) {
 
 		jshint: {
 			files: [
-				'Gruntfile.js', 
+				'Gruntfile.js',
 				'controllers/**/*.js',
 				'directives/**/*.js',
 				'filters/**/*.js',
 				'services/**/*.js',
-				'tests/**/*.js', 
+				'tests/**/*.js',
 				'config/*.js'],
 			options: {
 				// options here to override JSHint defaults
@@ -92,7 +96,7 @@ module.exports = function(grunt) {
 		},
 
 		watch: {
-			// this watches for changes in the app directory and runs the concat 
+			// this watches for changes in the app directory and runs the concat
 			// and wrap tasks if something changed
 			concat: {
 				files: [
