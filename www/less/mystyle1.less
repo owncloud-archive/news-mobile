@@ -1,0 +1,224 @@
+@reddish: #365e8a;
+@grey: #DCDDD8;
+@light-navy: #475F77;
+@dark-navy: #354B5E;
+
+@starred-color: #f8fabb;
+@unread-color: #dff4d7;
+
+@header-color: @reddish;
+@header-text-color: @grey;
+@form-font-color: @reddish;
+@list-font-color: @light-navy;
+@button-color: @reddish;
+@button-text-color: white;
+
+@caption-color: @grey;
+@bolded-text-color: @dark-navy;
+@show-more-button-color: @grey;
+@show-more-button-text-color: @dark-navy;
+
+.radius(@radius: 0px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.padding-hside(@padding) {
+  padding-left: @padding;
+  padding-right: @padding;
+}
+
+.padding-vside(@padding) {
+  padding-top: @padding;
+  padding-bottom: @padding;
+}
+
+body {
+  font-size: 100%;
+  font-family: Arial;
+  line-height: 30px;
+  color: @dark-navy;
+}
+
+.header {
+  min-height: 50px;
+  line-height: 50px;
+  background-color: @header-color;
+  color: @header-text-color;
+  text-align: center;
+
+  img {
+    width: 70%;
+    opacity: 0.9;
+  }
+
+  ul.nav {
+    margin-bottom: 0px;
+
+    li {
+      padding: 1%;
+
+      a:hover, a:focus, a:active {
+        background-color: @header-color;
+      }
+    }
+  }
+}
+
+.footer {
+  min-height: 60px;
+  text-align: center;
+  font-size: 80%;
+  background-color: @header-color;
+  color: @header-text-color;
+}
+
+.btn {
+  color: @button-text-color;
+  background-color: @button-color;
+  background-image: none;
+  border: 0px; //.radius(0px);
+  text-shadow: none;
+}
+
+a:active a:focus a:hover a:checked {
+  outline: none;
+}
+
+.btn:hover {
+  background-color: @button-color;
+  color: @button-text-color;
+}
+
+// This is for the login form
+form {
+  color: @form-font-color;
+  padding-top: 20px;
+
+  fieldset {
+    label {
+      font-size: 20px;
+    }
+    input {
+      width: 95%;
+    }
+    button {
+      margin-top: 10px;
+    }
+  }
+}
+
+//This is for main page with listings and menu
+.caption {
+  .padding-vside(10px);
+  margin: 0px;
+  background-color: @caption-color;
+  padding-left: 5%;
+  font-size: 30px;
+}
+
+.accordion {
+  margin-bottom: 0px;
+  color: @list-font-color;
+
+  .accordion-group {
+    margin-bottom: -1px;
+    .radius(0px);
+    color: @list-font-color;
+    line-height: 20px;
+
+    .accordion-heading {
+
+      a.starred-true {
+        background-color: @starred-color;
+      }
+      a.read-false { //background-color: @unread;
+        color: @bolded-text-color;
+      }
+
+      a.read-true { //background-color: @unread;
+        font-style: italic;
+        opacity: 0.5;
+      }
+
+      a.accordion-toggle {
+        text-decoration: none;
+      }
+
+      .accordion-toggle {
+        color: @list-font-color;
+
+        span.title {
+          :first-letter {
+            text-transform: uppercase;
+          };
+          padding-left: 10px;
+        }
+
+        span.itemadd {
+          font-style: italic;
+          white-space: nowrap;
+          font-size: 10px;
+          display: inline-block;
+
+          span:first-child { //background-color: @reddish;
+            color: @bolded-text-color;
+            .padding-hside(3px);
+            font-weight: bold;
+          }
+
+        }
+      }
+    }
+
+    .accordion-body {
+
+      .accordion-inner {
+        border-top: 0px;
+        .accordion-heading {
+
+          .bodybox {
+            color: @list-font-color;
+            font-size: 15px;
+            .padding-vside(10px);
+            a {
+              color: @list-font-color;
+            }
+          }
+
+          .buttonsbox {
+            text-align: right;
+            .padding-vside(10px);
+
+            span {
+              margin-left: -1px;
+              .radius(1px);
+              a {
+                padding: 10px;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+//button for show more in listings
+  .btn {
+    .radius(0px);
+    background-color: @show-more-button-color;
+    color: @show-more-button-text-color;
+  }
+
+  .showmore {
+    background-color: @caption-color;
+    .btn {
+      background-color: @caption-color;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      width: 49%;
+    }
+  }
+}
+
