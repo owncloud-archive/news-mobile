@@ -25,10 +25,6 @@ angular.module('News').directive('itemsListing',
                 restrict:'E',
                 scope:{
                     item:'=data'
-                    //setFavorite:'&setfav',
-                    //unsetFavorite:'&unsetfav',
-                    //setRead:'&setread',
-                    //unsetRead:'&unsetread'
                 },
                 replace:true,
                 template:'<div class="accordion-group {{item.id}}" id="item{{item.id}}"></div>',

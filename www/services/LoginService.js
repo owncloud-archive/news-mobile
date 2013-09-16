@@ -43,13 +43,6 @@ angular.module('News').factory('LoginService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/version" });
-
-
-                    //console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
-                    //return $http({ method: 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+
-                    // "/index.php/apps/news/api/v1-2/version", withCredentials : true });
                 }
-
             };
-
         }]);

@@ -49,11 +49,6 @@ angular.module('News').config(function($provide) {
     });
 });
 
-// define your routes in here
-angular.module('News').config(['$locationProvider', function ($locationProvider) {
-    //$locationProvider.html5Mode(false).hashPrefix('');
-}]);
-
 angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
@@ -387,10 +382,6 @@ angular.module('News').directive('itemsListing',
                 restrict:'E',
                 scope:{
                     item:'=data'
-                    //setFavorite:'&setfav',
-                    //unsetFavorite:'&unsetfav',
-                    //setRead:'&setread',
-                    //unsetRead:'&unsetread'
                 },
                 replace:true,
                 template:'<div class="accordion-group {{item.id}}" id="item{{item.id}}"></div>',
@@ -717,15 +708,8 @@ angular.module('News').factory('LoginService',
 
                     return $http({ method:'GET', url:UserService.hostName +
                         "/index.php/apps/news/api/v1-2/version" });
-
-
-                    //console.log("http://"+this.userName+":"+this.password+"@"+this.hostname+"/version");
-                    //return $http({ method: 'GET', url : "http://"+this.userName+":"+this.password+"@"+this.hostname+
-                    // "/index.php/apps/news/api/v1-2/version", withCredentials : true });
                 }
-
             };
-
         }]);
 
 angular.module('News').factory('TimeService', [ function () {
@@ -802,9 +786,9 @@ angular.module('News').factory('TranslationService', [ function () {
 
 angular.module('News').factory('UserService', ['$http', function ($http) {
     return {
-        userName:'ikacikac',
-        password:'ikacikac',
-        hostName:'http://localhost/owncloud',
+        userName:'',
+        password:'',
+        hostName:'',
         withCredentials:false
     };
 }]);

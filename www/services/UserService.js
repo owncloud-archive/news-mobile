@@ -21,9 +21,9 @@
 
 angular.module('News').factory('UserService', ['$http', function ($http) {
     return {
-        userName:'ikacikac',
-        password:'ikacikac',
-        hostName:'http://localhost/owncloud',
+        userName:'',
+        password:'',
+        hostName:'',
         withCredentials:false
     };
 }]);
