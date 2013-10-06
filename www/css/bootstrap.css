@@ -5285,12 +5285,17 @@ body {
   margin-bottom: 0px;
 }
 .header ul.nav li {
-  padding: 1%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
+.header ul.nav li a,
 .header ul.nav li a:hover,
 .header ul.nav li a:focus,
 .header ul.nav li a:active {
   background-color: #365e8a;
+  color: white;
 }
 .footer {
   -webkit-border-top-right-radius: 5px;
@@ -5333,8 +5338,8 @@ form fieldset button {
   padding-top: 10px;
   padding-bottom: 10px;
   background-color: #dcddd8;
-  padding-left: 5%;
-  font-size: 30px;
+  padding-left: 3%;
+  font-size: larger;
 }
 .accordion {
   margin-bottom: 0px;

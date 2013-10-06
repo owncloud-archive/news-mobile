@@ -27,20 +27,19 @@ angular.module('News').factory('UserService', [ 'CookiesService', function (Cook
         withCredentials:false,
         retrieveFromCookies:function () {
             if(CookiesService.checkIfExist()){
-                this.userName = CookiesService.retreiveCookie('userName');
-                this.password = CookiesService.retreiveCookie('password');
-                this.hostName = CookiesService.retreiveCookie('hostName');
+                this.userName = CookiesService.retrieveCookie('userName');
+                this.password = CookiesService.retrieveCookie('password');
+                this.hostName = CookiesService.retrieveCookie('hostName');
             }
         },
         storeToCookies:function () {
-             if(!CookiesService.checkIfExist()){
+            if(!CookiesService.checkIfExist()){
                 CookiesService.createCookieObject();
             }
             CookiesService.clearCookieObject();
             CookiesService.storeCookie('userName',this.userName);
             CookiesService.storeCookie('password',this.password);
             CookiesService.storeCookie('hostName',this.hostName);
-
         }
     };
 }]);

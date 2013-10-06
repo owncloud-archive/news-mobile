@@ -3,25 +3,28 @@
     "country":"Srbija",
     "language":"Srpski",
     "labels":{
-        "username":"Korisnicko ime",
+        "username":"Korisničko ime",
         "password":"Lozinka",
         "hostname":"URL servera",
         "sign.in":"Prijavi se",
-        "all.feeds.articles":"Novosti svih kanala",
-        "all.starred.articles":"Sve omiljene novosti",
+        "sign.out": "Odjavi se",
+        "all.feeds.articles":"Sve novosti",
+        "all.starred.articles":"Omiljene novosti",
         "all.folders":"Grupe kanala",
         "all.feeds":"Svi kanali",
         "articles":"novosti",
         "article":"novost",
         "owncloud.news.app.desc.long": "ownCloud News aplikacija za Firefox OS",
-        "owncloud.news.app.desc.short": "ownCloud News"
-
+        "owncloud.news.app.desc.short": "ownCloud News",
+        "fetching.content": "Dopremanje podataka. Molimo sačekajte.",
+        "show.more": "Pokaži više",
+        "page.top": "Početak stranice"
     },
     "exceptions":{
-        "Current user is not logged in":"Problemi u konekciji. Pokusajte ponovo.",
-        "user.name.is.not.in.correct.format":"Neispravna vrednost korisnickog imena",
+        "Current user is not logged in":"Problemi u konekciji. Pokušajte ponovo.",
+        "user.name.is.not.in.correct.format":"Neispravna vrednost korisničkog imena",
         "password.is.not.in.correct.format":"Neispravna vrednost lozinke",
         "host.name.is.not.in.correct.format":"Neispravna vrednost adrese servera",
-        "connection.problem":"Greska u komunikaciji sa serverom."
+        "connection.problem":"Greška u komunikaciji sa serverom."
     }
 }

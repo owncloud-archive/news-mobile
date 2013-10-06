@@ -23,7 +23,7 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
-            UserService.retreiveFromCookies();
+            UserService.retrieveFromCookies();
             $scope.data = UserService;
 
             $scope.testFormFields = function () {

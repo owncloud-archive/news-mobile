@@ -21,29 +21,29 @@
 
 angular.module('News').directive('foldersListing',
     [function () {
-            return {
-                restrict:'E',
-                scope:{
-                    folder:'=data',
-                    getFolderItems:'&getfolderitems'
-                },
-                replace:true,
-                template:'<div class="accordion-group {{folder.id}}"></div>',
-                compile:function (element, attrs) {
-                    var html = '' +
-                        '<div class="accordion-heading">' +
-                        '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
-                        '<i class="icon-folder-open"></i><span class="title">{{folder.name}}</span><br/>' +
-                        '</a>' +
-                        '</div>';
+        return {
+            restrict:'E',
+            scope:{
+                folder:'=data',
+                getFolderItems:'&getfolderitems'
+            },
+            replace:true,
+            template:'<div class="accordion-group {{folder.id}}"></div>',
+            compile:function (element, attrs) {
+                var html = '' +
+                    '<div class="accordion-heading">' +
+                    '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
+                    '<i class="icon-folder-open"></i><span class="title">{{folder.name}}</span><br/>' +
+                    '</a>' +
+                    '</div>';
 
-                    element.append($(html));
+                element.append($(html));
 
-                    return this.link;
-                },
-                link:function (scope, element, attrs) {
-                     $(element).hide();
-                    $(element).fadeIn();
-                }
-            };
-        }]);
+                return this.link;
+            },
+            link:function (scope, element, attrs) {
+                $(element).hide();
+                $(element).fadeIn();
+            }
+        };
+    }]);

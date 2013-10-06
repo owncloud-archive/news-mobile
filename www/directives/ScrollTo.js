@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', function ($location, $anchorScroll) {
+angular.module('News').directive('scrollTo',  function () {
     return {
         restrict:'A',
         link: function (scope, element, attrs) {
@@ -36,4 +36,4 @@ angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', fun
             });
         }
     };
-}]);
+});

@@ -6,19 +6,19 @@
         <fieldset>
             <label for="username">{{ 'username' | translator}}</label>
 
-            <input type="text" name="userName" class="input-block-level"
+            <input id="username" type="text" name="userName" class="input-block-level"
                    placeholder="Type your user name"
                    ng-model="data.userName">
             <br/>
 
             <label for="password">{{ 'password' | translator }}</label>
-            <input type="password" name="password" class="input-block-level"
+            <input id="password" type="password" name="password" class="input-block-level"
                    placeholder="Type password"
                    ng-model="data.password">
             <br/>
 
             <label for="hostName">{{ 'hostname' | translator }}</label>
-            <input type="text" name="hostName" class="input-block-level"
+            <input id="hostName" type="text" name="hostName" class="input-block-level"
                    placeholder="Type host URL"
                    ng-model="data.hostName">
             <button class="btn btn-block btn-large"

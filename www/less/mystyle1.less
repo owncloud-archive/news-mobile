@@ -71,10 +71,12 @@ body {
     margin-bottom: 0px;
 
     li {
-      padding: 1%;
+      .padding-vside(1%);
+      .padding-hside(5px);
 
-      a:hover, a:focus, a:active {
+      a, a:hover, a:focus, a:active {
         background-color: @header-color;
+        color: white;
       }
     }
   }
@@ -128,8 +130,9 @@ form {
   .padding-vside(10px);
 
   background-color: @caption-color;
-  padding-left: 5%;
-  font-size: 30px;
+  padding-left: 3%;
+  //font-size: 30px;
+  font-size: larger;
 }
 
 .accordion {

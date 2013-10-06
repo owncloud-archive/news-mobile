@@ -20,8 +20,8 @@
  */
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location', '$anchorScroll', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
-        function ($scope, $location, $anchorScroll, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
+    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService',
+        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
 
             $scope.view = 'Loading'; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
@@ -173,7 +173,7 @@ angular.module('News').controller('MainController',
 
             $scope.unsetRead = function(itemId) {
                 ItemsService.unsetRead(itemId).then(function(data){
-                  });
+                });
             };
 
             $scope.logOut = function () {

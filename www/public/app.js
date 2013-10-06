@@ -54,7 +54,7 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
-            UserService.retreiveFromCookies();
+            UserService.retrieveFromCookies();
             $scope.data = UserService;
 
             $scope.testFormFields = function () {
@@ -120,8 +120,8 @@ angular.module('News').controller('LoginController',
         }]);
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location', '$anchorScroll', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
-        function ($scope, $location, $anchorScroll, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
+    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService',
+        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
 
             $scope.view = 'Loading'; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
@@ -273,7 +273,7 @@ angular.module('News').controller('MainController',
 
             $scope.unsetRead = function(itemId) {
                 ItemsService.unsetRead(itemId).then(function(data){
-                  });
+                });
             };
 
             $scope.logOut = function () {
@@ -291,8 +291,8 @@ angular.module('News').controller('MainController',
 
 
 angular.module('News').directive('checkPresence',
-    ['$http', '$location', '$timeout', 'LoginService', 'ExceptionsService',
-        function ($http, $location, $timeout, LoginService, ExceptionsService) {
+    ['$location', '$timeout', 'LoginService', 'ExceptionsService',
+        function ($location, $timeout, LoginService, ExceptionsService) {
             return {
                 restrict:"E",
                 link:function tick() {
@@ -361,32 +361,32 @@ angular.module('News').directive('feedsListing',
 
 angular.module('News').directive('foldersListing',
     [function () {
-            return {
-                restrict:'E',
-                scope:{
-                    folder:'=data',
-                    getFolderItems:'&getfolderitems'
-                },
-                replace:true,
-                template:'<div class="accordion-group {{folder.id}}"></div>',
-                compile:function (element, attrs) {
-                    var html = '' +
-                        '<div class="accordion-heading">' +
-                        '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
-                        '<i class="icon-folder-open"></i><span class="title">{{folder.name}}</span><br/>' +
-                        '</a>' +
-                        '</div>';
+        return {
+            restrict:'E',
+            scope:{
+                folder:'=data',
+                getFolderItems:'&getfolderitems'
+            },
+            replace:true,
+            template:'<div class="accordion-group {{folder.id}}"></div>',
+            compile:function (element, attrs) {
+                var html = '' +
+                    '<div class="accordion-heading">' +
+                    '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
+                    '<i class="icon-folder-open"></i><span class="title">{{folder.name}}</span><br/>' +
+                    '</a>' +
+                    '</div>';
 
-                    element.append($(html));
+                element.append($(html));
 
-                    return this.link;
-                },
-                link:function (scope, element, attrs) {
-                     $(element).hide();
-                    $(element).fadeIn();
-                }
-            };
-        }]);
+                return this.link;
+            },
+            link:function (scope, element, attrs) {
+                $(element).hide();
+                $(element).fadeIn();
+            }
+        };
+    }]);
 
 angular.module('News').directive('itemsListing',
     ['ItemsService',function (ItemsService) {
@@ -481,7 +481,7 @@ angular.module('News').directive('itemsListing',
 
         }]);
 
-angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', function ($location, $anchorScroll) {
+angular.module('News').directive('scrollTo',  function () {
     return {
         restrict:'A',
         link: function (scope, element, attrs) {
@@ -498,7 +498,7 @@ angular.module('News').directive('scrollTo', [ '$location', '$anchorScroll', fun
             });
         }
     };
-}]);
+});
 
 angular.module('News').filter('translator', ['TranslationService', function (TranslationService) {
 	return function (text) {
@@ -529,7 +529,7 @@ angular.module('News').factory('CookiesService', ['$cookies', function ($cookies
             obj[key] = btoa(value);
             $cookies.ownCloudNewsApp = JSON.stringify(obj);
         },
-        retreiveCookie:function (key) {
+        retrieveCookie:function (key) {
             if ($cookies.ownCloudNewsApp) {
                 var obj = JSON.parse($cookies.ownCloudNewsApp);
                 return atob(obj[key]);
@@ -736,7 +736,7 @@ angular.module('News').factory('LoginService',
             return {
                 present:false,
                 timerRef:null,
-                timeout:50000,
+                timeout:20000,
 
                 killTimer:function () {
                     $timeout.cancel(this.timerRef);
@@ -836,22 +836,21 @@ angular.module('News').factory('UserService', [ 'CookiesService', function (Cook
         password:'',
         hostName:'',
         withCredentials:false,
-        retreiveFromCookies:function () {
+        retrieveFromCookies:function () {
             if(CookiesService.checkIfExist()){
-                this.userName = CookiesService.retreiveCookie('userName');
-                this.password = CookiesService.retreiveCookie('password');
-                this.hostName = CookiesService.retreiveCookie('hostName');
+                this.userName = CookiesService.retrieveCookie('userName');
+                this.password = CookiesService.retrieveCookie('password');
+                this.hostName = CookiesService.retrieveCookie('hostName');
             }
         },
         storeToCookies:function () {
-             if(!CookiesService.checkIfExist()){
+            if(!CookiesService.checkIfExist()){
                 CookiesService.createCookieObject();
             }
             CookiesService.clearCookieObject();
             CookiesService.storeCookie('userName',this.userName);
             CookiesService.storeCookie('password',this.password);
             CookiesService.storeCookie('hostName',this.hostName);
-
         }
     };
 }]);
