@@ -320,7 +320,7 @@ angular.module('News').directive('checkPresence',
                                 ExceptionsService.makeNewException(data, status);
                             });
                     }
-                    LoginService.timerRef = $timeout(tick, LoginService.timeout);
+                    LoginService.startTimer(tick);
                 }
             };
         }]);
@@ -736,7 +736,11 @@ angular.module('News').factory('LoginService',
             return {
                 present:false,
                 timerRef:null,
-                timeout:20000,
+                timeout:2000,
+
+                startTimer:function (tick) {
+                    this.timerRef = $timeout(tick, this.timeout);
+                },
 
                 killTimer:function () {
                     $timeout.cancel(this.timerRef);

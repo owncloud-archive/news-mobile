@@ -49,7 +49,7 @@ angular.module('News').directive('checkPresence',
                                 ExceptionsService.makeNewException(data, status);
                             });
                     }
-                    LoginService.timerRef = $timeout(tick, LoginService.timeout);
+                    LoginService.startTimer(tick);
                 }
             };
         }]);
