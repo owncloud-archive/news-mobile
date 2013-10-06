@@ -5267,6 +5267,9 @@ body {
   line-height: 30px;
   color: #354b5e;
 }
+.baner {
+  text-align: center;
+}
 .header {
   min-height: 50px;
   line-height: 50px;
