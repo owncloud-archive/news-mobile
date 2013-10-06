@@ -18,6 +18,16 @@
 @show-more-button-color: @grey;
 @show-more-button-text-color: @dark-navy;
 
+
+.radius-top(@radius: 0px) {
+  -webkit-border-top-right-radius: @radius;
+  -webkit-border-top-left-radius: @radius;
+  -moz-border-radius-topleft: @radius;
+  -moz-border-radius-topright: @radius;
+  border-top-right-radius: @radius;
+  border-top-left-radius: @radius;
+}
+
 .radius(@radius: 0px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
@@ -66,30 +76,32 @@ body {
   }
 }
 
+
 .footer {
-  min-height: 60px;
+  .radius-top(5px);
+  //background-color: @header-color;
+  color: @header-color;
+  font-size: small;
   text-align: center;
-  font-size: 80%;
-  background-color: @header-color;
-  color: @header-text-color;
+  padding-top: 1%;
 }
 
 .btn {
-  color: @button-text-color;
-  background-color: @button-color;
+  color: @header-color;
+  /*background-color: @button-color;
   background-image: none;
   border: 0px; //.radius(0px);
-  text-shadow: none;
+  text-shadow: none;*/
 }
 
 a:active a:focus a:hover a:checked {
   outline: none;
 }
 
-.btn:hover {
+/*.btn:hover {
   background-color: @button-color;
   color: @button-text-color;
-}
+}*/
 
 // This is for the login form
 form {
@@ -100,9 +112,7 @@ form {
     label {
       font-size: 20px;
     }
-    input {
-      width: 95%;
-    }
+
     button {
       margin-top: 10px;
     }
@@ -112,7 +122,7 @@ form {
 //This is for main page with listings and menu
 .caption {
   .padding-vside(10px);
-  margin: 0px;
+
   background-color: @caption-color;
   padding-left: 5%;
   font-size: 30px;
@@ -212,12 +222,20 @@ form {
   }
 
   .showmore {
-    background-color: @caption-color;
+    margin-top: 1px;
+    //background-color: @caption-color;
     .btn {
+      border: 0px;
       background-color: @caption-color;
       -moz-box-shadow: none;
       box-shadow: none;
-      width: 49%;
+      width: 50%;
+    }
+    .btn:last-child {
+      margin-left: -4px;
+    }
+    .btn:hover, .btn:active, .btn:visited {
+      background-position: 0px;
     }
   }
 }

@@ -12,7 +12,10 @@
         "all.folders":"Grupe kanala",
         "all.feeds":"Svi kanali",
         "articles":"novosti",
-        "article":"novost"
+        "article":"novost",
+        "owncloud.news.app.desc.long": "ownCloud News aplikacija za Firefox OS",
+        "owncloud.news.app.desc.short": "ownCloud News"
+
     },
     "exceptions":{
         "Current user is not logged in":"Problemi u konekciji. Pokusajte ponovo.",

@@ -19,11 +19,28 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').factory('UserService', ['$http', function ($http) {
+angular.module('News').factory('UserService', [ 'CookiesService', function (CookiesService) {
     return {
         userName:'',
         password:'',
         hostName:'',
-        withCredentials:false
+        withCredentials:false,
+        retrieveFromCookies:function () {
+            if(CookiesService.checkIfExist()){
+                this.userName = CookiesService.retreiveCookie('userName');
+                this.password = CookiesService.retreiveCookie('password');
+                this.hostName = CookiesService.retreiveCookie('hostName');
+            }
+        },
+        storeToCookies:function () {
+             if(!CookiesService.checkIfExist()){
+                CookiesService.createCookieObject();
+            }
+            CookiesService.clearCookieObject();
+            CookiesService.storeCookie('userName',this.userName);
+            CookiesService.storeCookie('password',this.password);
+            CookiesService.storeCookie('hostName',this.hostName);
+
+        }
     };
 }]);

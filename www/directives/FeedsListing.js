@@ -33,7 +33,7 @@ angular.module('News').directive('feedsListing',
                 var html = '' +
                     '<div class="accordion-heading">' +
                     '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
-                    '<img src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
+                    '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
                     '<span class="title">{{feed.title}}</span>' +
                     '<br/>' +
                     '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +

@@ -12,7 +12,8 @@
 
 // this file is just for defining the main container to easily swap this in
 // tests
-angular.module('News', []);
+angular.module('News', ['ngCookies']);
+
 // define your routes in here
 angular.module('News').config(['$routeProvider', function ($routeProvider) {
 
@@ -53,10 +54,11 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
+            UserService.retreiveFromCookies();
             $scope.data = UserService;
 
             $scope.testFormFields = function () {
-                var hostNameRegExp = new RegExp(/^https?:\/\/.*$/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+                var hostNameRegExp = new RegExp(/^https?/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
                 var userNameRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{3,16}$/
                 var passwordRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{6,18}$/
 
@@ -76,13 +78,19 @@ angular.module('News').controller('LoginController',
                     ExceptionsService.makeNewException({message:"password.is.not.in.correct.format"},-1);
                 }
 
+                if (UserService.hostName.slice(-1) === '/') {
+                    UserService.hostName = UserService.hostName.substring(0,UserService.hostName.length-1);
+                }
+
                 var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
 
                 if (!hostNameParseResult) {
-                    ExceptionsService.makeNewException({message:"host.name.is.not.in.correct.format"},-1);
+                    UserService.hostName = 'http://' + UserService.hostName;
+                    hostNameParseResult = true;
                 }
 
                 if (hostNameParseResult && userNameParseResult && passwordParseResult) {
+                    UserService.storeToCookies();
                     return true;
                 }
                 return false;
@@ -115,8 +123,7 @@ angular.module('News').controller('MainController',
     ['$scope', '$location', '$anchorScroll', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
         function ($scope, $location, $anchorScroll, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
 
-            console.log('Initialized main controller');
-            $scope.view = ''; // view is way the results are presented, all and starred is equal
+            $scope.view = 'Loading'; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
             $scope.folderId = '0';
             $scope.feedId = '0';
@@ -126,11 +133,12 @@ angular.module('News').controller('MainController',
             $scope.moreArticles = true;
             var articlesGet = 0;
 
-            console.log($location);
+            //console.log($location);
 
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
                 ItemsService.getStarredItems(offset)
                     .then(function (result) {
                         $scope.view = 'All';
@@ -142,6 +150,7 @@ angular.module('News').controller('MainController',
             $scope.getAll = function (offset) {
                 $scope.action = 'All';
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
                 ItemsService.getAllItems(offset)
                     .then(function (result) {
                         $scope.view = 'All';
@@ -152,6 +161,7 @@ angular.module('News').controller('MainController',
 
             $scope.getFolders = function () {
                 $scope.action = 'Folders';
+                $scope.view = 'Loading';
                 FoldersService.getFolders()
                     .then(function (result) {
                         $scope.view = 'Folders';
@@ -162,6 +172,7 @@ angular.module('News').controller('MainController',
 
             $scope.getFeeds = function () {
                 $scope.action = 'Feeds';
+                $scope.view = 'Loading';
                 FeedsService.getFeeds()
                     .then(function (result) {
                         $scope.view = 'Feeds';
@@ -176,6 +187,7 @@ angular.module('News').controller('MainController',
                 $scope.folderId = folderId;
                 $scope.currentFolderName = folderName;
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
 
                 FoldersService.getFolderItems(folderId, offset)
                     .then(function (result) {
@@ -190,6 +202,7 @@ angular.module('News').controller('MainController',
                 $scope.feedId = feedId;
                 $scope.currentFeedTitle = feedTitle;
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
 
                 FeedsService.getFeedItems(feedId, offset)
                     .then(function (result) {
@@ -270,7 +283,6 @@ angular.module('News').controller('MainController',
             };
 
             if (LoginService.present) {
-                //console.log('This');
                 $scope.getAll(0);
             }
 
@@ -328,7 +340,7 @@ angular.module('News').directive('feedsListing',
                 var html = '' +
                     '<div class="accordion-heading">' +
                     '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
-                    '<img src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
+                    '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
                     '<span class="title">{{feed.title}}</span>' +
                     '<br/>' +
                     '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
@@ -502,6 +514,40 @@ angular.module('News').filter('clearurl', function () {
         return regexp.exec(text)[0];
 	};
 });
+
+angular.module('News').factory('CookiesService', ['$cookies', function ($cookies) {
+    return {
+        checkIfExist:function () {
+            if ($cookies.ownCloudNewsApp) return true;
+            else return false;
+        },
+        createCookieObject:function () {
+            $cookies.ownCloudNewsApp = '{}';
+        },
+        storeCookie:function (key, value) {
+            var obj = JSON.parse($cookies.ownCloudNewsApp);
+            obj[key] = btoa(value);
+            $cookies.ownCloudNewsApp = JSON.stringify(obj);
+        },
+        retreiveCookie:function (key) {
+            if ($cookies.ownCloudNewsApp) {
+                var obj = JSON.parse($cookies.ownCloudNewsApp);
+                return atob(obj[key]);
+            }
+            else return '';
+        },
+        deleteCookie:function (key) {
+            if ($cookies.ownCloudNewsApp) {
+                var obj = JSON.parse($cookies.ownCloudNewsApp);
+                delete obj[key];
+                $cookies.ownCloudNewsApp = JSON.stringify(obj);
+            }
+        },
+        clearCookieObject:function () {
+            $cookies.ownCloudNewsApp = '{}';
+        }
+    };
+}]);
 
 angular.module('News').factory('ExceptionsService',
     ['TranslationService', function (TranslationService) {
@@ -784,12 +830,29 @@ angular.module('News').factory('TranslationService', [ function () {
     };
 }]);
 
-angular.module('News').factory('UserService', ['$http', function ($http) {
+angular.module('News').factory('UserService', [ 'CookiesService', function (CookiesService) {
     return {
         userName:'',
         password:'',
         hostName:'',
-        withCredentials:false
+        withCredentials:false,
+        retreiveFromCookies:function () {
+            if(CookiesService.checkIfExist()){
+                this.userName = CookiesService.retreiveCookie('userName');
+                this.password = CookiesService.retreiveCookie('password');
+                this.hostName = CookiesService.retreiveCookie('hostName');
+            }
+        },
+        storeToCookies:function () {
+             if(!CookiesService.checkIfExist()){
+                CookiesService.createCookieObject();
+            }
+            CookiesService.clearCookieObject();
+            CookiesService.storeCookie('userName',this.userName);
+            CookiesService.storeCookie('password',this.password);
+            CookiesService.storeCookie('hostName',this.hostName);
+
+        }
     };
 }]);
 

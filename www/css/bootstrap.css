@@ -5290,26 +5290,32 @@ body {
   background-color: #365e8a;
 }
 .footer {
-  min-height: 60px;
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  color: #365e8a;
+  font-size: small;
   text-align: center;
-  font-size: 80%;
-  background-color: #365e8a;
-  color: #dcddd8;
+  padding-top: 1%;
 }
 .btn {
-  color: #ffffff;
-  background-color: #365e8a;
+  color: #365e8a;
+  /*background-color: @button-color;
   background-image: none;
-  border: 0px;
-  text-shadow: none;
+  border: 0px; //.radius(0px);
+  text-shadow: none;*/
+
 }
 a:active a:focus a:hover a:checked {
   outline: none;
 }
-.btn:hover {
-  background-color: #365e8a;
-  color: #ffffff;
-}
+/*.btn:hover {
+  background-color: @button-color;
+  color: @button-text-color;
+}*/
 form {
   color: #365e8a;
   padding-top: 20px;
@@ -5317,16 +5323,12 @@ form {
 form fieldset label {
   font-size: 20px;
 }
-form fieldset input {
-  width: 95%;
-}
 form fieldset button {
   margin-top: 10px;
 }
 .caption {
   padding-top: 10px;
   padding-bottom: 10px;
-  margin: 0px;
   background-color: #dcddd8;
   padding-left: 5%;
   font-size: 30px;
@@ -5412,11 +5414,20 @@ form fieldset button {
   color: #354b5e;
 }
 .accordion .showmore {
-  background-color: #dcddd8;
+  margin-top: 1px;
 }
 .accordion .showmore .btn {
+  border: 0px;
   background-color: #dcddd8;
   -moz-box-shadow: none;
   box-shadow: none;
-  width: 49%;
+  width: 50%;
+}
+.accordion .showmore .btn:last-child {
+  margin-left: -4px;
+}
+.accordion .showmore .btn:hover,
+.accordion .showmore .btn:active,
+.accordion .showmore .btn:visited {
+  background-position: 0px;
 }

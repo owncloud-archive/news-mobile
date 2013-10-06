@@ -1,31 +1,34 @@
-<div class="header">
-    <img src="../images/owncloud-logo-transparent-white.png">
-</div>
+<img src="../images/owncloudnews-logo-transparent-navy.png">
 
 <div>
     <form name="LoginForm">
         <fieldset>
             <label for="username">{{ 'username' | translator}}</label>
 
-            <input type="text" name="userName"
+            <input type="text" name="userName" class="input-block-level"
                    placeholder="Type your user name"
                    ng-model="data.userName">
             <br/>
 
             <label for="password">{{ 'password' | translator }}</label>
-            <input type="password" name="password"
+            <input type="password" name="password" class="input-block-level"
                    placeholder="Type password"
                    ng-model="data.password">
             <br/>
 
             <label for="hostName">{{ 'hostname' | translator }}</label>
-            <input type="text" name="hostName"
-                   placeholder="Path to your host"
+            <input type="text" name="hostName" class="input-block-level"
+                   placeholder="Type host URL"
                    ng-model="data.hostName">
-            <button class="btn btn-large btn-block"
-                    ng-click="logIn()">{{ 'sign.in' | translator}}
+            <button class="btn btn-block btn-large"
+                   ng-click="logIn()">{{ 'sign.in' | translator}}
             </button>
         </fieldset>
     </form>
+</div>
+
+<div class="footer">
+    <span class="hidden-phone">{{ 'owncloud.news.app.desc.long' | translator }}</span>
+    <span class="visible-phone">{{ 'owncloud.news.app.desc.short' | translator }}</span>
 </div>
 
