@@ -7,12 +7,18 @@
         "password":"Password",
         "hostname":"Host URL",
         "sign.in":"Sign in",
+        "sign.out": "Sign out",
         "all.feeds.articles":"All feed articles",
         "all.starred.articles":"Favorite articles",
         "all.folders":"All folders",
         "all.feeds":"All feeds",
         "articles":"articles",
-        "article":"article"
+        "article":"article",
+        "owncloud.news.app.desc.long": "ownCloud News application for Firefox OS",
+        "owncloud.news.app.desc.short": "ownCloud News",
+        "fetching.content": "Content is being fetched. Please wait.",
+        "show.more": "Show more",
+        "page.top": "Page top"
     },
     "exceptions":{
         "Current user is not logged in":"Current user is not logged in.",

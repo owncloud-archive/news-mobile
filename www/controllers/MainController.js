@@ -20,11 +20,10 @@
  */
 
 angular.module('News').controller('MainController',
-    ['$scope', '$location', '$anchorScroll', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService', 'TimeService',
-        function ($scope, $location, $anchorScroll, LoginService, ItemsService, FoldersService, FeedsService, TimeService) {
+    ['$scope', '$location', 'LoginService', 'ItemsService', 'FoldersService', 'FeedsService',
+        function ($scope, $location, LoginService, ItemsService, FoldersService, FeedsService) {
 
-            console.log('Initialized main controller');
-            $scope.view = ''; // view is way the results are presented, all and starred is equal
+            $scope.view = 'Loading'; // view is way the results are presented, all and starred is equal
             $scope.action = ''; // action is button pressed to get the populated list
             $scope.folderId = '0';
             $scope.feedId = '0';
@@ -34,11 +33,12 @@ angular.module('News').controller('MainController',
             $scope.moreArticles = true;
             var articlesGet = 0;
 
-            console.log($location);
+            //console.log($location);
 
             $scope.getStarred = function (offset) {
                 $scope.action = 'Starred';
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
                 ItemsService.getStarredItems(offset)
                     .then(function (result) {
                         $scope.view = 'All';
@@ -50,6 +50,7 @@ angular.module('News').controller('MainController',
             $scope.getAll = function (offset) {
                 $scope.action = 'All';
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
                 ItemsService.getAllItems(offset)
                     .then(function (result) {
                         $scope.view = 'All';
@@ -60,6 +61,7 @@ angular.module('News').controller('MainController',
 
             $scope.getFolders = function () {
                 $scope.action = 'Folders';
+                $scope.view = 'Loading';
                 FoldersService.getFolders()
                     .then(function (result) {
                         $scope.view = 'Folders';
@@ -70,6 +72,7 @@ angular.module('News').controller('MainController',
 
             $scope.getFeeds = function () {
                 $scope.action = 'Feeds';
+                $scope.view = 'Loading';
                 FeedsService.getFeeds()
                     .then(function (result) {
                         $scope.view = 'Feeds';
@@ -84,6 +87,7 @@ angular.module('News').controller('MainController',
                 $scope.folderId = folderId;
                 $scope.currentFolderName = folderName;
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
 
                 FoldersService.getFolderItems(folderId, offset)
                     .then(function (result) {
@@ -98,6 +102,7 @@ angular.module('News').controller('MainController',
                 $scope.feedId = feedId;
                 $scope.currentFeedTitle = feedTitle;
                 $scope.moreArticles = true;
+                $scope.view = 'Loading';
 
                 FeedsService.getFeedItems(feedId, offset)
                     .then(function (result) {
@@ -168,7 +173,7 @@ angular.module('News').controller('MainController',
 
             $scope.unsetRead = function(itemId) {
                 ItemsService.unsetRead(itemId).then(function(data){
-                  });
+                });
             };
 
             $scope.logOut = function () {
@@ -178,7 +183,6 @@ angular.module('News').controller('MainController',
             };
 
             if (LoginService.present) {
-                //console.log('This');
                 $scope.getAll(0);
             }
 

@@ -23,10 +23,11 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
+            UserService.retrieveFromCookies();
             $scope.data = UserService;
 
             $scope.testFormFields = function () {
-                var hostNameRegExp = new RegExp(/^https?:\/\/.*$/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+                var hostNameRegExp = new RegExp(/^https?/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
                 var userNameRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{3,16}$/
                 var passwordRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{6,18}$/
 
@@ -46,13 +47,19 @@ angular.module('News').controller('LoginController',
                     ExceptionsService.makeNewException({message:"password.is.not.in.correct.format"},-1);
                 }
 
+                if (UserService.hostName.slice(-1) === '/') {
+                    UserService.hostName = UserService.hostName.substring(0,UserService.hostName.length-1);
+                }
+
                 var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
 
                 if (!hostNameParseResult) {
-                    ExceptionsService.makeNewException({message:"host.name.is.not.in.correct.format"},-1);
+                    UserService.hostName = 'http://' + UserService.hostName;
+                    hostNameParseResult = true;
                 }
 
                 if (hostNameParseResult && userNameParseResult && passwordParseResult) {
+                    UserService.storeToCookies();
                     return true;
                 }
                 return false;
