@@ -5359,6 +5359,11 @@ form fieldset button {
 .accordion .accordion-group .accordion-heading .accordion-toggle {
   color: #475f77;
 }
+.accordion .accordion-group .accordion-heading .accordion-toggle span.unreadcount {
+  font-style: italic;
+  opacity: 0.5;
+  padding-left: 10px;
+}
 .accordion .accordion-group .accordion-heading .accordion-toggle span.title {
   padding-left: 10px;
 }
