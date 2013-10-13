@@ -20,8 +20,8 @@
  */
 
 angular.module('News').directive('checkPresence',
-    ['$http', '$location', '$timeout', 'LoginService', 'ExceptionsService',
-        function ($http, $location, $timeout, LoginService, ExceptionsService) {
+    ['$location', '$timeout', 'LoginService', 'ExceptionsService',
+        function ($location, $timeout, LoginService, ExceptionsService) {
             return {
                 restrict:"E",
                 link:function tick() {
@@ -49,7 +49,7 @@ angular.module('News').directive('checkPresence',
                                 ExceptionsService.makeNewException(data, status);
                             });
                     }
-                    LoginService.timerRef = $timeout(tick, LoginService.timeout);
+                    LoginService.startTimer(tick);
                 }
             };
         }]);
