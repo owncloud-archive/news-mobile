@@ -5436,6 +5436,7 @@ form fieldset button {
 }
 .accordion .showmore .btn:hover,
 .accordion .showmore .btn:active,
-.accordion .showmore .btn:visited {
+.accordion .showmore .btn:visited,
+.accordion .showmore .btn:focus {
   background-position: 0px;
 }
