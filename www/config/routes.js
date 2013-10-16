@@ -2,8 +2,9 @@
  *
  * ownCloud - News
  *
- * @author Bernhard Posselt
+ * @author Bernhard Posselt, Ilija Lazarevic
  * @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
+ * @copyright 2013 Ilija Lazarevic ikac.ikax@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -22,17 +23,25 @@
 // define your routes in here
 angular.module('News').config(['$routeProvider', function ($routeProvider) {
 
-    $routeProvider.when('/', {
-        templateUrl:'main.html',
-        controller:'MainController'
-    })
+    $routeProvider
+        .when('/', {
+            templateUrl:'main.html',
+            controller:'MainController',
+            resolve:['$http' , '$locale' , 'TranslationService', function ($http, $locale, TranslationService) {
+                return $http.get('../languages/' + $locale.id + '.json')
+                    .success(function (data, status) {
+                        TranslationService.lang = data;
+                    });
+            }]
+        })
         .when('/login', {
             templateUrl:'login.html',
             controller:'LoginController',
-            resolve: ['$http' , '$locale', 'TranslationService', function($http,$locale,TranslationService){
-                return $http.get('../languages/'+$locale.id+'.json').success(function(data, status){
-                    TranslationService.lang = data;
-                });
+            resolve:['$http' , '$locale' , 'TranslationService', function ($http, $locale, TranslationService) {
+                return $http.get('../languages/' + $locale.id + '.json')
+                    .success(function (data, status) {
+                        TranslationService.lang = data;
+                    });
             }]
         })
         .otherwise({

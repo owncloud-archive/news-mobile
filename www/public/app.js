@@ -17,17 +17,25 @@ angular.module('News', ['ngCookies']);
 // define your routes in here
 angular.module('News').config(['$routeProvider', function ($routeProvider) {
 
-    $routeProvider.when('/', {
-        templateUrl:'main.html',
-        controller:'MainController'
-    })
+    $routeProvider
+        .when('/', {
+            templateUrl:'main.html',
+            controller:'MainController',
+            resolve:['$http' , '$locale' , 'TranslationService', function ($http, $locale, TranslationService) {
+                return $http.get('../languages/' + $locale.id + '.json')
+                    .success(function (data, status) {
+                        TranslationService.lang = data;
+                    });
+            }]
+        })
         .when('/login', {
             templateUrl:'login.html',
             controller:'LoginController',
-            resolve: ['$http' , '$locale', 'TranslationService', function($http,$locale,TranslationService){
-                return $http.get('../languages/'+$locale.id+'.json').success(function(data, status){
-                    TranslationService.lang = data;
-                });
+            resolve:['$http' , '$locale' , 'TranslationService', function ($http, $locale, TranslationService) {
+                return $http.get('../languages/' + $locale.id + '.json')
+                    .success(function (data, status) {
+                        TranslationService.lang = data;
+                    });
             }]
         })
         .otherwise({
@@ -824,7 +832,7 @@ angular.module('News').factory('TimeService', [ function () {
 
 angular.module('News').factory('TranslationService', [ function () {
     return {
-        lang:null,
+        lang: null,
         translateLabel : function(text){
             return this.lang.labels[text];
         },
