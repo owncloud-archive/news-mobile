@@ -27,3 +27,12 @@ angular.module('News').filter('clearurl', function () {
         return regexp.exec(text)[0];
 	};
 });
+
+
+angular.module('News').filter('bool', [ function(){
+	return function (text) {
+		i=parseInt(text,10);
+		if(i===0) return 'true';
+		else return 'false';
+	};
+}]);

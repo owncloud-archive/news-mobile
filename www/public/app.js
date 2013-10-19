@@ -336,9 +336,9 @@ angular.module('News').directive('feedsListing',
             compile:function (element, attrs) {
                 var html = '' +
                     '<div class="accordion-heading">' +
-                    '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
+                    '<a class="accordion-toggle read-{{feed.unreadCount | bool}}" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
                     '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
-                    '<span class="title"><em>{{feed.unreadCount}}</em> - {{feed.title}}</span>' +
+                    '<span class="title">{{feed.title}} <em>({{feed.unreadCount}})</em></span>' +
                     '<br/>' +
                     '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
                     '<span ng-show="feed.added" class="itemadd">date added: <span>{{feed.added}}</span></span>' +
@@ -511,6 +511,15 @@ angular.module('News').filter('clearurl', function () {
         return regexp.exec(text)[0];
 	};
 });
+
+
+angular.module('News').filter('bool', [ function(){
+	return function (text) {
+		i=parseInt(text,10);
+		if(i===0) return 'true';
+		else return 'false';
+	};
+}]);
 
 angular.module('News').factory('CookiesService', ['$cookies', function ($cookies) {
     return {
