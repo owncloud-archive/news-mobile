@@ -36,7 +36,12 @@ angular.module('News').factory('CookiesService', ['$cookies', function ($cookies
         retrieveCookie:function (key) {
             if ($cookies.ownCloudNewsApp) {
                 var obj = JSON.parse($cookies.ownCloudNewsApp);
-                return atob(obj[key]);
+                if (obj[key]) {
+                    return atob(obj[key]);
+                }
+                else {
+                    return '';
+                }
             }
             else return '';
         },

@@ -540,7 +540,12 @@ angular.module('News').factory('CookiesService', ['$cookies', function ($cookies
         retrieveCookie:function (key) {
             if ($cookies.ownCloudNewsApp) {
                 var obj = JSON.parse($cookies.ownCloudNewsApp);
-                return atob(obj[key]);
+                if (obj[key]) {
+                    return atob(obj[key]);
+                }
+                else {
+                    return '';
+                }
             }
             else return '';
         },
@@ -774,10 +779,10 @@ angular.module('News').factory('TimeService', [ function () {
     var day = 60 * 60 * 24 * 1000; //miliseconds in a day
     var hour = 60 * 60 * 1000; //miliseconds in a hour
     var minute = 60 * 1000; //miliseconds in a minute
-    var dateNow = Date.now();
 
     return {
         getDateFromUTC:function (utc) {
+            var dateNow = Date.now();
             var itemDate = new Date(utc * 1000);
             var daysAgo = Math.floor((dateNow - itemDate) / day);
             var hoursAgo = Math.floor((dateNow - itemDate) / hour);
@@ -832,7 +837,7 @@ angular.module('News').factory('TimeService', [ function () {
 
 angular.module('News').factory('TranslationService', [ function () {
     return {
-        lang: null,
+        lang:null,
         translateLabel : function(text){
             return this.lang.labels[text];
         },
