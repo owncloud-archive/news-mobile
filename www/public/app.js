@@ -1,3 +1,6 @@
+(function(angular, $, undefined){
+
+'use strict';
 
 /**
  * Copyright (c) 2013, Bernhard Posselt <nukeawhale@gmail.com> 
@@ -869,3 +872,4 @@ angular.module('News').factory('UserService', [ 'CookiesService', function (Cook
     };
 }]);
 
+})(window.angular, jQuery);
