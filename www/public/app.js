@@ -12,7 +12,7 @@
 
 // this file is just for defining the main container to easily swap this in
 // tests
-angular.module('News', ['ngCookies']);
+angular.module('News', ['ngCookies','LocalStorageModule']);
 
 // define your routes in here
 angular.module('News').config(['$routeProvider', function ($routeProvider) {
@@ -62,7 +62,7 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
-            UserService.retrieveFromCookies();
+            UserService.retrieveFromStorage();
             $scope.data = UserService;
 
             $scope.testFormFields = function () {
@@ -98,7 +98,7 @@ angular.module('News').controller('LoginController',
                 }
 
                 if (hostNameParseResult && userNameParseResult && passwordParseResult) {
-                    UserService.storeToCookies();
+                    UserService.storeToStorage();
                     return true;
                 }
                 return false;
@@ -523,45 +523,6 @@ angular.module('News').filter('clearurl', function () {
 	};
 });
 
-angular.module('News').factory('CookiesService', ['$cookies', function ($cookies) {
-    return {
-        checkIfExist:function () {
-            if ($cookies.ownCloudNewsApp) return true;
-            else return false;
-        },
-        createCookieObject:function () {
-            $cookies.ownCloudNewsApp = '{}';
-        },
-        storeCookie:function (key, value) {
-            var obj = JSON.parse($cookies.ownCloudNewsApp);
-            obj[key] = btoa(value);
-            $cookies.ownCloudNewsApp = JSON.stringify(obj);
-        },
-        retrieveCookie:function (key) {
-            if ($cookies.ownCloudNewsApp) {
-                var obj = JSON.parse($cookies.ownCloudNewsApp);
-                if (obj[key]) {
-                    return atob(obj[key]);
-                }
-                else {
-                    return '';
-                }
-            }
-            else return '';
-        },
-        deleteCookie:function (key) {
-            if ($cookies.ownCloudNewsApp) {
-                var obj = JSON.parse($cookies.ownCloudNewsApp);
-                delete obj[key];
-                $cookies.ownCloudNewsApp = JSON.stringify(obj);
-            }
-        },
-        clearCookieObject:function () {
-            $cookies.ownCloudNewsApp = '{}';
-        }
-    };
-}]);
-
 angular.module('News').factory('ExceptionsService',
     ['TranslationService', function (TranslationService) {
         return {
@@ -743,6 +704,24 @@ angular.module('News').factory('ItemsService',
             };
         }]);
 
+angular.module('News').factory('LocalStorageService', ['localStorageService', function (localStorageService) {
+    return {
+        addValue:function (key, value) {
+            localStorageService.set(key, value);
+        },
+        getValue:function (key) {
+            var value = localStorageService.get(key);
+            return value;
+        },
+        removeValue:function (key) {
+            localStorageService.remove(key);
+        },
+        clearAll:function () {
+            localStorageService.clearAll();
+        }
+    };
+}]);
+
 angular.module('News').factory('LoginService',
     ['$http', '$timeout', 'UserService',
         function ($http, $timeout, UserService) {
@@ -847,27 +826,21 @@ angular.module('News').factory('TranslationService', [ function () {
     };
 }]);
 
-angular.module('News').factory('UserService', [ 'CookiesService', function (CookiesService) {
+angular.module('News').factory('UserService', ['LocalStorageService', function (LocalStorageService) {
     return {
         userName:'',
         password:'',
         hostName:'',
         withCredentials:false,
-        retrieveFromCookies:function () {
-            if(CookiesService.checkIfExist()){
-                this.userName = CookiesService.retrieveCookie('userName');
-                this.password = CookiesService.retrieveCookie('password');
-                this.hostName = CookiesService.retrieveCookie('hostName');
-            }
+        retrieveFromStorage:function () {
+            this.userName = LocalStorageService.getValue('userName');
+            this.password = LocalStorageService.getValue('password');
+            this.hostName = LocalStorageService.getValue('hostName');
         },
-        storeToCookies:function () {
-            if(!CookiesService.checkIfExist()){
-                CookiesService.createCookieObject();
-            }
-            CookiesService.clearCookieObject();
-            CookiesService.storeCookie('userName',this.userName);
-            CookiesService.storeCookie('password',this.password);
-            CookiesService.storeCookie('hostName',this.hostName);
+        storeToStorage:function () {
+            LocalStorageService.addValue('userName', this.userName);
+            LocalStorageService.addValue('password', this.password);
+            LocalStorageService.addValue('hostName', this.hostName);
         }
     };
 }]);

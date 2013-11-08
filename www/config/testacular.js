@@ -35,6 +35,7 @@ files = [
     'vendor/angular/angular.js',
     'vendor/angular/angular-mocks.js',
     'vendor/angular/angular-cookies.js',
+    'vendor/angular/angular-local-storage.js',
     'tests/stubs/app.js',
     'config/routes.js',
     'directives/*.js',

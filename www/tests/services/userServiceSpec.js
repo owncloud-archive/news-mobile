@@ -19,52 +19,52 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-describe('UserService', function() {
+describe('UserService', function () {
 
-	var userService;
+    var userService, localStorageService;
 
-	// use the news container
-	beforeEach(module('News'));
-    beforeEach(module('ngCookies'));
+    // use the news container
+    beforeEach(module('News'));
+    beforeEach(module('LocalStorageModule'));
 
-	beforeEach(inject(function (UserService, CookiesService) {
-		userService = UserService;
+    beforeEach(inject(function (UserService, LocalStorageService) {
+        userService = UserService;
+        localStorageService = LocalStorageService;
+        //userService.$inject = ['LocalStorageService'];
+    }));
 
-        userService.$inject = ['CookiesService'];
-	}));
-
-
-	it('All fields should be cleared', function () {
-		expect(userService.userName).toBe('');
-		expect(userService.password).toBe('');
-        expect(userService.hostName).toBe('');
-        expect(userService.withCredentials).toBe(false);
-	});
-
-    it('All fields from cookies should be undefined', function(){
-        userService.retrieveFromCookies();
-
+    it('All fields should be cleared', function () {
         expect(userService.userName).toBe('');
         expect(userService.password).toBe('');
         expect(userService.hostName).toBe('');
+        expect(userService.withCredentials).toBe(false);
     });
 
-    it('All fields should be storred in cookies', inject([ 'CookiesService', function(CookiesService){
+    it('All fields from cookies should be undefined', function () {
+        userService.retrieveFromStorage();
+
+        expect(userService.userName).toEqual(null);
+        expect(userService.password).toBeNull();
+        expect(userService.hostName).toBeNull();
+    });
+
+    it('All fields should be storred in cookies', function () {
         userService.userName = 'test';
         userService.password = 'test123';
         userService.hostName = 'http://test.com';
 
-        userService.storeToCookies();
+        userService.storeToStorage();
 
         userService.userName = '';
         userService.password = '';
         userService.hostName = '';
 
-        userService.retrieveFromCookies();
+        userService.retrieveFromStorage();
 
         expect(userService.userName).toBe('test');
         expect(userService.password).toBe('test123');
         expect(userService.hostName).toBe('http://test.com');
-    }]));
+    });
+
 
 });

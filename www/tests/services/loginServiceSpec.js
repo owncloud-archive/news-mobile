@@ -23,7 +23,7 @@ describe('LoginService', function () {
     var loginService, userService;
 
     beforeEach(module('News'));
-    beforeEach(module('ngCookies'));
+    beforeEach(module('LocalStorageModule'));
 
     beforeEach(inject(function(LoginService, $timeout, $httpBackend, UserService){
         loginService = LoginService;

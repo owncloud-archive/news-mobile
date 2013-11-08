@@ -19,21 +19,20 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('News').factory('UserService', ['LocalStorageService', function (LocalStorageService) {
+angular.module('News').factory('LocalStorageService', ['localStorageService', function (localStorageService) {
     return {
-        userName:'',
-        password:'',
-        hostName:'',
-        withCredentials:false,
-        retrieveFromStorage:function () {
-            this.userName = LocalStorageService.getValue('userName');
-            this.password = LocalStorageService.getValue('password');
-            this.hostName = LocalStorageService.getValue('hostName');
+        addValue:function (key, value) {
+            localStorageService.set(key, value);
         },
-        storeToStorage:function () {
-            LocalStorageService.addValue('userName', this.userName);
-            LocalStorageService.addValue('password', this.password);
-            LocalStorageService.addValue('hostName', this.hostName);
+        getValue:function (key) {
+            var value = localStorageService.get(key);
+            return value;
+        },
+        removeValue:function (key) {
+            localStorageService.remove(key);
+        },
+        clearAll:function () {
+            localStorageService.clearAll();
         }
     };
 }]);
