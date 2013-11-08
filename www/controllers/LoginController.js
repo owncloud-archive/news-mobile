@@ -23,7 +23,7 @@ angular.module('News').controller('LoginController',
     ['$scope', '$location', '$route' , '$locale', 'LoginService', 'UserService', 'ExceptionsService',
         function ($scope, $location, $route, $locale, LoginService, UserService, ExceptionsService) {
 
-            UserService.retrieveFromCookies();
+            UserService.retrieveFromStorage();
             $scope.data = UserService;
 
             $scope.testFormFields = function () {
@@ -59,7 +59,7 @@ angular.module('News').controller('LoginController',
                 }
 
                 if (hostNameParseResult && userNameParseResult && passwordParseResult) {
-                    UserService.storeToCookies();
+                    UserService.storeToStorage();
                     return true;
                 }
                 return false;

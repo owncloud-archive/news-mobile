@@ -24,10 +24,10 @@ angular.module('News').factory('TimeService', [ function () {
     var day = 60 * 60 * 24 * 1000; //miliseconds in a day
     var hour = 60 * 60 * 1000; //miliseconds in a hour
     var minute = 60 * 1000; //miliseconds in a minute
-    var dateNow = Date.now();
 
     return {
         getDateFromUTC:function (utc) {
+            var dateNow = Date.now();
             var itemDate = new Date(utc * 1000);
             var daysAgo = Math.floor((dateNow - itemDate) / day);
             var hoursAgo = Math.floor((dateNow - itemDate) / hour);
