@@ -21,4 +21,4 @@
 
 // this file is just for defining the main container to easily swap this in
 // tests
-angular.module('News', ['ngCookies','LocalStorageModule']);
+angular.module('News', ['ngRoute', 'ui.bootstrap', 'ngSanitize', 'LocalStorageModule']);
