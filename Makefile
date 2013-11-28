@@ -10,7 +10,7 @@ phantomjs=$(CURDIR)/node_modules/phantomjs/bin/phantomjs
 all: build
 
 build: deps
-	mkdir -p $(CURDIR)/public
+	mkdir -p $(CURDIR)/www/public
 	$(grunt) --config $(CURDIR)/Gruntfile.js build
 
 deps:

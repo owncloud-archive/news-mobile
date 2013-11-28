@@ -35,7 +35,7 @@
     </ul>
 </div>
 <!--Handling the header caption-->
-<div ng-switch="action" id="caption" class="caption">
+<div ng-switch on="action" id="caption" class="caption">
     <span ng-switch-when="All">{{ 'all.feeds.articles' | translator }}</span>
     <span ng-switch-when="Starred">{{ 'all.starred.articles' | translator}}</span>
     <span ng-switch-when="Folders">{{ 'all.folders' | translator }}</span>

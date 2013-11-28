@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 		meta: {
 			pkg: grunt.file.readJSON('package.json'),
 			version: '<%= meta.pkg.version %>',
-			production: 'public/'
+			production: 'www/public/'
 		},
 
 		concat: {
@@ -54,14 +54,14 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				src: [
-					'config/app.js',
-					'config/routes.js',
-					'config/cors.js',
-					'config/exceptions.js',
-					'controllers/**/*.js',
-					'directives/**/*.js',
-					'filters/**/*.js',
-					'services/**/*.js'
+					'www/config/app.js',
+					'www/config/routes.js',
+					'www/config/cors.js',
+					'www/config/exceptions.js',
+					'www/controllers/**/*.js',
+					'www/directives/**/*.js',
+					'www/filters/**/*.js',
+					'www/services/**/*.js'
 				],
 				dest: '<%= meta.production %>app.js'
 			}
@@ -81,12 +81,12 @@ module.exports = function(grunt) {
 		jshint: {
 			files: [
 				'Gruntfile.js',
-				'controllers/**/*.js',
-				'directives/**/*.js',
-				'filters/**/*.js',
-				'services/**/*.js',
+				'www/controllers/**/*.js',
+				'www/directives/**/*.js',
+				'www/filters/**/*.js',
+				'www/services/**/*.js',
 				'tests/**/*.js',
-				'config/*.js'],
+				'www/config/*.js'],
 			options: {
 				// options here to override JSHint defaults
 				globals: {
@@ -100,11 +100,11 @@ module.exports = function(grunt) {
 			// and wrap tasks if something changed
 			concat: {
 				files: [
-					'controllers/**/*.js',
-					'directives/**/*.js',
-					'filters/**/*.js',
-					'services/**/*.js',
-					'config/*.js'
+					'www/controllers/**/*.js',
+					'www/directives/**/*.js',
+					'www/filters/**/*.js',
+					'www/services/**/*.js',
+					'www/config/*.js'
 				],
 				tasks: ['build']
 			}
@@ -112,10 +112,10 @@ module.exports = function(grunt) {
 
 		testacular: {
 			unit: {
-				configFile: 'config/testacular.js'
+				configFile: 'tests/config/testacular.js'
 			},
 			continuous: {
-				configFile: 'config/testacular.js',
+				configFile: 'tests/config/testacular.js',
 				singleRun: true,
 				browsers: ['PhantomJS'],
 				reporters: ['progress', 'junit'],
