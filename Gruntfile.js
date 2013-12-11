@@ -28,14 +28,79 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-wrap');
 	grunt.loadNpmTasks('gruntacular');
 
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+
 
 	grunt.initConfig({
 
 		meta: {
 			pkg: grunt.file.readJSON('package.json'),
 			version: '<%= meta.pkg.version %>',
+            name: '<%= meta.pkg.name %>',
 			production: 'www/public/'
 		},
+
+        copy: {
+            assets: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'www/',
+                        src: [
+                            'css/**',
+                            'images/**',
+                            'img/**',
+                            'languages/**',
+                            'public/**',
+                            'templates/**',
+                            'vendor/**',
+                            'index_ffos.html'
+                        ],
+                        dest: 'platforms/firefoxos/assets/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'platforms/firefoxos/templates/',
+                        src: 'manifest.webapp',
+                        dest: 'platforms/firefoxos/assets/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'platforms/firefoxos/templates/',
+                        src: ['package.manifest','index.html'],
+                        dest: 'platforms/firefoxos/bin/'
+                    }
+                ]
+            },
+            archive: {
+                files: [
+                    {
+                        src: '<%= meta.name %>_<%= meta.version %>.zip',
+                        dest: 'platforms/firefoxos/bin/'
+                    }
+                ]
+            }
+        },
+
+        compress: {
+            main: {
+                options: {
+                    mode: 'zip',
+                    archive: '<%= meta.name %>_<%= meta.version %>.zip'
+                },
+                expand: true,
+                cwd: 'platforms/firefoxos/assets/',
+                src: '**',
+                dest: '/'
+            }
+        },
+
+        clean: {
+            firefoxos_assets: ['platforms/firefoxos/assets/','platforms/firefoxos/bin/'],
+            firefoxos_archive: ['<%= meta.name %>_<%= meta.version %>.zip']
+        },
 
 		concat: {
 			options: {
@@ -132,5 +197,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('watchjs', ['watch:concat']);
 	grunt.registerTask('ci', ['testacular:continuous']);
 	grunt.registerTask('testjs', ['testacular:unit']);
+    grunt.registerTask('firefoxos', ['clean:firefoxos_assets','clean:firefoxos_archive','copy:assets','compress','copy:archive','clean:firefoxos_archive'])
 
 };

@@ -1,0 +1,13 @@
+{
+    "name": "News",
+    "description": "Mobile client for the ownCloud News application",
+    "version": "0.2",
+    "launch_path": "/index_ffos.html",
+    "icons": {
+        "60": "/images/ocnews_ffos_60.png"
+    },
+    "developer": {
+        "name": "Ilija Lazarevic, Bernhard Posselt, Alessandro Cosentino",
+        "url": "https://github.com/owncloud/news-mobile"
+    }
+}
