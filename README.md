@@ -1,6 +1,5 @@
 # news-mobile
 
-
 News-mobile repository is dedicated to HTML5/JS/CSS based web application for accessing OwnCloud's News application feeds. Having in mind the development of these technologies, it is now possible to build applications for mobile platforms like Android using PhoneGap, which can turn web application in Android's one.
 
 Using AngularJS as JS framework for fast developing of rich and fully functional applications, it is possible for these applications to work on mobile platforms as same as in any web browser.
@@ -65,8 +64,42 @@ For testing purpouses, you'll want to install new built package on simulator, yo
 
 ### Firefox OS Simulator 
 
-If happens that you do not have Firefox OS running on a device, you can use Firefox OS simulator, which can be installed as Firefox browser addon. After installing it, and packaging application, there are some basic steps which will be covered in guiding you to get it going.
+If happens that you do not have Firefox OS running on a device, you can use Firefox OS simulator, which can be installed as [Firefox browser addon](https://addons.mozilla.org/de/firefox/addon/firefox-os-simulator/). Launch the simulator by going to  **Menu** > **Web Developer** > **Firefox OS Simulator**. After opening it's dashboard and packaging application, there are some basic steps which will be covered in guiding you to get it going.
 
 There are two options for installing application on simulator:
 * Running simulator and pointing it's browser to platforms/firefoxos/bin/ directory and get installation procedure going. This includes that news-mobile folder is served by Apache, or any other web server.
-* When openning simlator dashboard, click on Add Directory button, and point to the platforms/firefoxos/assets/ folder. After running ```grunt firefoxos```, this folder will have manifest.webapp file, which is enough for installing application from simulator dashboard.
+* When openning simlator dashboard, click on Add Directory button, and point to the platforms/firefoxos/assets/manifest.webapp file.
+
+# news-mobile development
+
+## Before you start
+* Install **Apache** and place the app in **/var/www**
+* Make sure that **AllowOverride** is enabled for **/var/www** in the **/etc/apache/httpd.conf**:
+
+```
+<Directory "/var/www">
+	AllowOverride All
+</Directory>
+```
+
+If you want to use a different webserver for development, you need to set the [correct content type for the manifest.webapp file](https://developer.mozilla.org/en-US/docs/Web/Apps/Manifest?redirectlocale=en-US&redirectslug=Apps%2FManifest#Serving_manifests) by yourself.
+
+## Browser
+
+The app can be developed locally in your browser. Simply go to [http://localhost/news-mobile/www/templates/index.html](http://localhost/news-mobile/www/templates/index.html)
+
+## Build the JavaScript
+
+Run:
+
+	```make watch```
+
+to set up a watch to compile the JavaScript files when they are saved.
+
+## Run the JavaScript Unit Tests
+
+Run:
+
+	```make testacular```
+
+to set up a watch to run the JavaScript unit tests when JavaScript files are saved.
