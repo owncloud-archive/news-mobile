@@ -197,6 +197,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('watchjs', ['watch:concat']);
 	grunt.registerTask('ci', ['testacular:continuous']);
 	grunt.registerTask('testjs', ['testacular:unit']);
-    grunt.registerTask('firefoxos', ['clean:firefoxos_assets','clean:firefoxos_archive','copy:assets','compress','copy:archive','clean:firefoxos_archive'])
+    grunt.registerTask('firefoxos', ['clean:firefoxos_assets','clean:firefoxos_archive','copy:assets','compress','copy:archive','clean:firefoxos_archive']);
 
 };

@@ -67,27 +67,11 @@ angular.module('News').controller('LoginController',
 
             $scope.testFormFields = function () {
                 var hostNameRegExp = new RegExp(/^https?/); ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
-                var userNameRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{3,16}$/
-                var passwordRegExp = new RegExp(/^[a-zA-Z0-9_-]{3,18}$/); // /^[a-z0-9_-]{6,18}$/
 
-                var userNameParseResult = userNameRegExp.test(UserService.userName);
-
-                $scope.userNameError = '';
-                $scope.passwordError = '';
-                $scope.hostNameError = '';
-
-                if (!userNameParseResult) {
-                    ExceptionsService.makeNewException({message:"user.name.is.not.in.correct.format"},-1);
-                }
-
-                var passwordParseResult = passwordRegExp.test(UserService.password);
-
-                if (!passwordParseResult) {
-                    ExceptionsService.makeNewException({message:"password.is.not.in.correct.format"},-1);
-                }
-
-                if (UserService.hostName.slice(-1) === '/') {
-                    UserService.hostName = UserService.hostName.substring(0,UserService.hostName.length-1);
+                if (UserService.hostName.length > 0) {
+                    if (UserService.hostName.slice(-1) === '/') {
+                        UserService.hostName = UserService.hostName.substring(0, UserService.hostName.length - 1);
+                    }
                 }
 
                 var hostNameParseResult = hostNameRegExp.test(UserService.hostName);
@@ -97,8 +81,7 @@ angular.module('News').controller('LoginController',
                     hostNameParseResult = true;
                 }
 
-                if (hostNameParseResult && userNameParseResult && passwordParseResult) {
-                    UserService.storeToStorage();
+                if (hostNameParseResult) {
                     return true;
                 }
                 return false;
@@ -109,6 +92,7 @@ angular.module('News').controller('LoginController',
                     LoginService.login()
                         .success(function (data, status) {
                             if (status === 200) {
+                                UserService.storeToStorage();
                                 LoginService.present = true;
                                 $location.path("/");
                             }
