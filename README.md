@@ -70,9 +70,9 @@ There are two options for installing application on simulator:
 * Running simulator and pointing it's browser to platforms/firefoxos/bin/ directory and get installation procedure going. This includes that news-mobile folder is served by Apache, or any other web server.
 * When openning simlator dashboard, click on Add Directory button, and point to the platforms/firefoxos/assets/manifest.webapp file.
 
-# news-mobile development
+## news-mobile development
 
-## Before you start
+### Before you start
 * Install **Apache** and place the app in **/var/www**
 * Make sure that **AllowOverride** is enabled for **/var/www** in the **/etc/apache/httpd.conf**:
 
@@ -84,11 +84,11 @@ There are two options for installing application on simulator:
 
 If you want to use a different webserver for development, you need to set the [correct content type for the manifest.webapp file](https://developer.mozilla.org/en-US/docs/Web/Apps/Manifest?redirectlocale=en-US&redirectslug=Apps%2FManifest#Serving_manifests) by yourself.
 
-## Browser
+### Browser
 
 The app can be developed locally in your browser. Simply go to [http://localhost/news-mobile/www/templates/index.html](http://localhost/news-mobile/www/templates/index.html)
 
-## Build the JavaScript
+### Build the JavaScript
 
 Run:
 
@@ -96,7 +96,7 @@ Run:
 
 to set up a watch to compile the JavaScript files when they are saved.
 
-## Run the JavaScript Unit Tests
+### Run the JavaScript Unit Tests
 
 Run:
 
