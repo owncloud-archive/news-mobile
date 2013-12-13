@@ -5353,13 +5353,13 @@ form fieldset button {
   color: #475f77;
   line-height: 20px;
 }
-.accordion .accordion-group .accordion-heading a.starred-true {
+.accordion .accordion-group .accordion-heading .starred-true {
   background-color: #f8fabb;
 }
-.accordion .accordion-group .accordion-heading a.read-false {
+.accordion .accordion-group .accordion-heading .read-false {
   color: #354b5e;
 }
-.accordion .accordion-group .accordion-heading a.read-true {
+.accordion .accordion-group .accordion-heading .read-true {
   font-style: italic;
   opacity: 0.5;
 }

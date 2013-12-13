@@ -25,7 +25,7 @@ angular.module('News').factory('LoginService',
             return {
                 present:false,
                 timerRef:null,
-                timeout:2000,
+                timeout:60000,
 
                 startTimer:function (tick) {
                     this.timerRef = $timeout(tick, this.timeout);

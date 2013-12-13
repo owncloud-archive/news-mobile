@@ -24,15 +24,17 @@ angular.module('News').directive('scrollTo',  function () {
         restrict:'A',
         link: function (scope, element, attrs) {
             element.bind('click', function (event) {
+
                 event.stopPropagation();
                 //scope.$on('$locationChangeStart', function (ev) {
                 //    ev.preventDefault();
                 //});
-                var location = attrs.scrollto;
+                var scrollto = attrs.scrollto;
 
                 //$location.hash(location);
                 //$anchorScroll(); //For scrolling without animation
-                $('html,body').animate({ scrollTop: $('#'+location).offset().top }, { duration: 'slow', easing: 'swing'});
+                $('html,body').animate({ scrollTop: $('#'+scrollto).offset().top }, { duration: 'slow', easing: 'swing'});
+
             });
         }
     };

@@ -135,6 +135,7 @@ form {
   font-size: larger;
 }
 
+
 .accordion {
   margin-bottom: 0px;
   color: @list-font-color;
@@ -147,14 +148,15 @@ form {
 
     .accordion-heading {
 
-      a.starred-true {
+      .starred-true {
         background-color: @starred-color;
       }
-      a.read-false { //background-color: @unread;
+
+      .read-false { //background-color: @unread;
         color: @bolded-text-color;
       }
 
-      a.read-true { //background-color: @unread;
+      .read-true { //background-color: @unread;
         font-style: italic;
         opacity: 0.5;
       }

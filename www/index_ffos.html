@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html ng-app="News" lang="en">
+<head>
+    <title>ownCloud News</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta name="author" content="Bernhard Posselt, Alessandro Cosentino, Ilija Lazarevic"/>
+    <meta name="keywords" content="ownCloud, rss, reader, news, atom"/>
+    <meta name="description" content="mobile client for the News app"/>
+
+    <!-- Application icon for browsers -->
+    <link rel="icon" type="image/png" href="images/ocnews_ffos_128.png">
+
+    <!-- Application CSS styles -->
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/responsive.css" type="text/css" media="all"/>
+    <!--<link rel="stylesheet" href="css/style.css" type="text/css" media="all"/>
+
+    <!-- Regular versions for development -->
+    <script type="text/javascript" src="vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="vendor/angular/angular.js"></script>
+
+    <script type="text/javascript" src="vendor/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="vendor/angular-local-storage/angular-local-storage.js"></script>
+    <script type="text/javascript" src="vendor/angular-sanitize/angular-sanitize.js"></script>
+
+    <!-- Minified versions for production ready version -->
+    <!--
+    <script type="text/javascript" src="vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="vendor/angular/angular.min.js"></script>
+
+    <script type="text/javascript" src="vendor/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="vendor/angular-local-storage/angular-local-storage.js"></script>
+    <script type="text/javascript" src="vendor/angular-sanitize/angular-sanitize.min.js"></script>
+    -->
+
+    <!-- Bootstrap libraries -->
+    <script type="text/javascript" src="vendor/bootstrap/bootstrap-button.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/bootstrap-transition.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/bootstrap-collapse.js"></script>
+
+    <!-- Application -->
+    <script type="text/javascript" src="public/app.js"></script>
+
+    <!-- optimizations for ios -->
+    <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
+    <link rel="apple-touch-icon" href="images/ocnews_ios_120.png">
+	  <meta name="viewport" content="width = 320">
+
+</head>
+<body>
+<div class="row-fluid">
+    <div class="container">
+        <div class="span12">
+            <div id="main" ng-view></div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

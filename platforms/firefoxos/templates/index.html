@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ownCloud News</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+</head>
+<body>
+<p>Packaged app installation page</p>
+<script>
+    // This URL must be a full url.
+    var manifestUrl = 'http://localhost/newsmobile/platforms/firefoxos/bin/package.manifest';
+    var req = navigator.mozApps.installPackage(manifestUrl);
+    req.onsuccess = function() {
+        alert(this.result.origin);
+    };
+    req.onerror = function() {
+        alert(this.error.name);
+    };
+</script>
+</body>
+</html>

@@ -25,20 +25,20 @@ angular.module('News').config(['$routeProvider', function ($routeProvider) {
 
     $routeProvider
         .when('/', {
-            templateUrl:'main.html',
+            templateUrl:'templates/main.html',
             controller:'MainController',
             resolve:['$http' , '$locale' , 'TranslationService', function ($http, $locale, TranslationService) {
-                return $http.get('../languages/' + $locale.id + '.json')
+                return $http.get('languages/' + $locale.id + '.json')
                     .success(function (data, status) {
                         TranslationService.lang = data;
                     });
             }]
         })
         .when('/login', {
-            templateUrl:'login.html',
+            templateUrl:'templates/login.html',
             controller:'LoginController',
             resolve:['$http' , '$locale' , 'TranslationService', function ($http, $locale, TranslationService) {
-                return $http.get('../languages/' + $locale.id + '.json')
+                return $http.get('languages/' + $locale.id + '.json')
                     .success(function (data, status) {
                         TranslationService.lang = data;
                     });

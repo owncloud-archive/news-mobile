@@ -156,30 +156,30 @@ angular.module('News').controller('MainController',
                 }
             };
 
-            $scope.setFavorite = function(feedId, guidHash) {
-                ItemsService.setFavorite(feedId, guidHash).then(function(data){
+            $scope.setFavorite = function (feedId, guidHash) {
+                ItemsService.setFavorite(feedId, guidHash).then(function (data) {
                 });
             };
 
-            $scope.unsetFavorite = function(feedId, guidHash) {
-                ItemsService.unsetFavorite(feedId, guidHash).then(function(data){
+            $scope.unsetFavorite = function (feedId, guidHash) {
+                ItemsService.unsetFavorite(feedId, guidHash).then(function (data) {
                 });
             };
 
-            $scope.setRead = function(itemId) {
-                 ItemsService.setRead(itemId).then(function(data){
-                 });
+            $scope.setRead = function (itemId) {
+                ItemsService.setRead(itemId).then(function (data) {
+                });
             };
 
-            $scope.unsetRead = function(itemId) {
-                ItemsService.unsetRead(itemId).then(function(data){
+            $scope.unsetRead = function (itemId) {
+                ItemsService.unsetRead(itemId).then(function (data) {
                 });
             };
 
             $scope.logOut = function () {
                 LoginService.present = false;
                 LoginService.killTimer();
-                $location.path('/login');
+                $location.path('#/login');
             };
 
             if (LoginService.present) {

@@ -47,5 +47,9 @@ nbproject
   
 # Mac OS
 .DS_Store
-platforms/ios
-platforms/android
+
+# Platforms build files
+local.properties
+assets/
+bin/
+
