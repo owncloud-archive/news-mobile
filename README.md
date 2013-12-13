@@ -90,16 +90,12 @@ The app can be developed locally in your browser. Simply go to [http://localhost
 
 ### Build the JavaScript
 
-Run:
-
-	```make watch```
+Run: ```make watch```
 
 to set up a watch to compile the JavaScript files when they are saved.
 
 ### Run the JavaScript Unit Tests
 
-Run:
-
-	```make testacular```
+Run: ```make testacular```
 
 to set up a watch to run the JavaScript unit tests when JavaScript files are saved.
