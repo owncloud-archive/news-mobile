@@ -1,7 +1,7 @@
 {
   "name": "News",
   "description": "OwnCloud News mobile app",
-  "version": "0.2",
+  "version": "0.2.0",
   "private": true,
   "homepage": "https://github.com/owncloud/news-mobile",
   "repository": {

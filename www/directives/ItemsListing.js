@@ -98,6 +98,9 @@ angular.module('News').directive('itemsListing',
                         });
                     }
                 };
+
+                $(element).hide();
+                $(element).fadeIn();
             }
         };
     }]);

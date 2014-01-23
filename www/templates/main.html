@@ -48,9 +48,7 @@
 <div ng-switch on="view">
     <div ng-switch-when="All">
         <accordion class="nav nav-pills nav-stacked">
-
             <items-listing ng-repeat="item in data.items" data="item"></items-listing>
-
             <div ng-hide="data.items" class="accordion-group">
                 <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse"
@@ -59,7 +57,6 @@
                     </a>
                 </div>
             </div>
-
             <div class="showmore" ng-show="data.items">
                 <button class="btn btn-large" scroll-to scrollto="header">
                     <span class="hidden-phone">{{ 'page.top' | translator }}</span>
@@ -76,7 +73,7 @@
 
     <!-- Showing folders list -->
     <div ng-switch-when="Folders">
-        <accordion class="accordion nav nav-pills nav-stacked">
+        <accordion class="nav nav-pills nav-stacked">
 
             <folders-listing ng-repeat="folder in data.folders"
                              data="folder"
@@ -136,18 +133,18 @@
         </accordion>
     </div>
 
-        <div class="accordion" id="accordion4" ng-switch-when="Loading">
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse"
-                       data-parent="#accordion2">
-                        <img ng-src="images/ajax-loader_1_navy.gif">
-                        <span class="title">{{ 'fetching.content' | translator }}</span>
-                        <br/>
-                    </a>
-                </div>
+    <div class="accordion" id="accordion4" ng-switch-when="Loading">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   data-parent="#accordion2">
+                    <img ng-src="images/ajax-loader_1_navy.gif">
+                    <span class="title">{{ 'fetching.content' | translator }}</span>
+                    <br/>
+                </a>
             </div>
         </div>
+    </div>
 
 </div>
 <div class="footer">

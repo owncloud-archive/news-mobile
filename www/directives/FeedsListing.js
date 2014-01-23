@@ -28,16 +28,16 @@ angular.module('News').directive('feedsListing',
                 getFeedItems:'&getfeeditems'
             },
             replace:true,
-            template:'<div class="accordion-group {{feed.id}}"></div>',
+            template:'<div></div>',
             compile:function (element, attrs) {
                 var html = '' +
-                    '<div class="accordion-heading">' +
-                    '<a class="accordion-toggle read-{{feed.unreadCount==0}}" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
+                    '<div class="listing {{feed.id}}">' +
+                    '<a class="read-{{feed.unreadCount==0}}" data-toggle="collapse" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
                     '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
-                    '<span class="title">{{feed.title}} <em ng-show="feed.unreadCount>0">({{feed.unreadCount}})</em></span>' +
+                    '<span class="title">{{feed.title}} <em ng-show="feed.unreadCount">({{feed.unreadCount}})</em></span>' +
                     '<br/>' +
-                    '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
-                    '<span ng-show="feed.added" class="itemadd">date added: <span>{{feed.added}}</span></span>' +
+                    '<span ng-show="feed.added" class="itemadd hidden-phone">web site: <span>{{feed.link | clearurl}}</span></span>' +
+                    '<span ng-show="feed.added" class="itemadd hidden-phone">date added: <span>{{feed.added}}</span></span>' +
                     '</a>' +
                     '</div>';
 

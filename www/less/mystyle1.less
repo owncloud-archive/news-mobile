@@ -135,6 +135,30 @@ form {
   font-size: larger;
 }
 
+.listing {
+  color: @list-font-color;
+  margin-bottom: 0px;
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: -1px;
+  border: 1px solid @grey;
+
+  a {
+    display: block;
+    color: @list-font-color;
+    .padding-vside(10px);
+    .padding-hside(15px);
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    span.title {
+      text-transform: capitalize;
+      padding-left: 10px;
+    }
+  }
+}
 
 .accordion {
   margin-bottom: 0px;
