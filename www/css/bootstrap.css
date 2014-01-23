@@ -5341,6 +5341,29 @@ form fieldset button {
   padding-left: 3%;
   font-size: larger;
 }
+.listing {
+  color: #475f77;
+  margin-bottom: 0px;
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: -1px;
+  border: 1px solid #dcddd8;
+}
+.listing a {
+  display: block;
+  color: #475f77;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.listing a:hover {
+  text-decoration: none;
+}
+.listing a span.title {
+  text-transform: capitalize;
+  padding-left: 10px;
+}
 .accordion {
   margin-bottom: 0px;
   color: #475f77;

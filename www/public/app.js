@@ -327,16 +327,16 @@ angular.module('News').directive('feedsListing',
                 getFeedItems:'&getfeeditems'
             },
             replace:true,
-            template:'<div class="accordion-group {{feed.id}}"></div>',
+            template:'<div></div>',
             compile:function (element, attrs) {
                 var html = '' +
-                    '<div class="accordion-heading">' +
-                    '<a class="accordion-toggle read-{{feed.unreadCount==0}}" data-toggle="collapse" data-parent="#accordion3" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
+                    '<div class="listing {{feed.id}}">' +
+                    '<a class="read-{{feed.unreadCount==0}}" data-toggle="collapse" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
                     '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
-                    '<span class="title">{{feed.title}} <em ng-show="feed.unreadCount>0">({{feed.unreadCount}})</em></span>' +
+                    '<span class="title">{{feed.title}} <em ng-show="feed.unreadCount">({{feed.unreadCount}})</em></span>' +
                     '<br/>' +
-                    '<span ng-show="feed.added" class="itemadd">web site: <span>{{feed.link | clearurl}}</span></span>' +
-                    '<span ng-show="feed.added" class="itemadd">date added: <span>{{feed.added}}</span></span>' +
+                    '<span ng-show="feed.added" class="itemadd hidden-phone">web site: <span>{{feed.link | clearurl}}</span></span>' +
+                    '<span ng-show="feed.added" class="itemadd hidden-phone">date added: <span>{{feed.added}}</span></span>' +
                     '</a>' +
                     '</div>';
 
@@ -360,11 +360,11 @@ angular.module('News').directive('foldersListing',
                 getFolderItems:'&getfolderitems'
             },
             replace:true,
-            template:'<div class="accordion-group {{folder.id}}"></div>',
+            template:'<div></div>',
             compile:function (element, attrs) {
                 var html = '' +
-                    '<div class="accordion-heading">' +
-                    '<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
+                    '<div class="listing {{folder.id}}">' +
+                    '<a data-toggle="collapse" href ng-click="getFolderItems(folder.id,0,folder.name)">' +
                     '<i class="icon-folder-open"></i><span class="title">{{folder.name}}</span><br/>' +
                     '</a>' +
                     '</div>';
@@ -459,6 +459,9 @@ angular.module('News').directive('itemsListing',
                         });
                     }
                 };
+
+                $(element).hide();
+                $(element).fadeIn();
             }
         };
     }]);
