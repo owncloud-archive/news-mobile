@@ -24,6 +24,8 @@ angular.module('News').filter('clearurl', function () {
     var regexp = new RegExp(reg);
 
 	return function (text) {
-        return regexp.exec(text)[0];
+        if (text) {
+            return regexp.exec(text)[0];
+        }
 	};
 });

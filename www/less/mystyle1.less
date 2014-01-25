@@ -191,27 +191,6 @@ form {
 
       .accordion-toggle {
         color: @list-font-color;
-
-        span.title {
-          :first-letter {
-            text-transform: uppercase;
-          };
-          padding-left: 10px;
-        }
-
-        span.itemadd {
-          font-style: italic;
-          white-space: nowrap;
-          font-size: 10px;
-          display: inline-block;
-
-          span:first-child { //background-color: @reddish;
-            color: @bolded-text-color;
-            .padding-hside(3px);
-            font-weight: bold;
-          }
-
-        }
       }
     }
 
@@ -247,6 +226,28 @@ form {
       }
     }
   }
+
+  span.title {
+    :first-letter {
+      text-transform: uppercase;
+    };
+    padding-left: 10px;
+  }
+
+  span.itemadd {
+    font-style: italic;
+    white-space: nowrap;
+    font-size: 10px;
+    display: inline-block;
+
+    span:first-child { //background-color: @reddish;
+      color: @bolded-text-color;
+      .padding-hside(3px);
+      font-weight: bold;
+    }
+
+  }
+
 //button for show more in listings
   .btn {
     .radius(0px);

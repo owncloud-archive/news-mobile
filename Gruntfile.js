@@ -77,7 +77,7 @@ module.exports = function(grunt) {
             archive: {
                 files: [
                     {
-                        src: '<%= meta.name %>_<%= meta.version %>.zip',
+                        src: '<%= meta.name %>.<%= meta.version %>.zip',
                         dest: 'platforms/firefoxos/bin/'
                     }
                 ]
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
             main: {
                 options: {
                     mode: 'zip',
-                    archive: '<%= meta.name %>_<%= meta.version %>.zip'
+                    archive: '<%= meta.name %>.<%= meta.version %>.zip'
                 },
                 expand: true,
                 cwd: 'platforms/firefoxos/assets/',
@@ -99,7 +99,7 @@ module.exports = function(grunt) {
 
         clean: {
             firefoxos_assets: ['platforms/firefoxos/assets/','platforms/firefoxos/bin/'],
-            firefoxos_archive: ['<%= meta.name %>_<%= meta.version %>.zip']
+            firefoxos_archive: ['<%= meta.name %>.<%= meta.version %>.zip']
         },
 
 		concat: {
@@ -109,8 +109,6 @@ module.exports = function(grunt) {
 				banner: '/**\n' +
 				' * Copyright (c) 2013, Bernhard Posselt ' +
 				'<nukeawhale@gmail.com> \n' +
-				' * Copyright (c) 2013, Alessandro Cosentino ' +
-				'<cosenal@gmail.com> \n' +
 				' * Copyright (c) 2013, Ilija Lazarevic ' +
 				'<ikac.ikax@gmail.com> \n' +
 				' * This file is licensed under the Affero ' +
