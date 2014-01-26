@@ -33,10 +33,10 @@ angular.module('News').directive('feedsListing',
                 var html = '' +
                     '<div class="listing {{feed.id}}">' +
                     '<a class="read-{{feed.unreadCount==0}}" data-toggle="collapse" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
-                    '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
+                    '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic">' +
                     '<span class="title">{{feed.title}} <em ng-show="feed.unreadCount">({{feed.unreadCount}})</em></span>' +
                     '<br/>' +
-                    '<span ng-show="feed.added" class="itemadd hidden-phone">web site: <span>{{feed.link | clearurl}}</span></span>' +
+                    '<span ng-show="feed.link" class="itemadd hidden-phone">web site: <span>{{feed.link | clearurl}}</span></span>' +
                     '<span ng-show="feed.added" class="itemadd hidden-phone">date added: <span>{{feed.added}}</span></span>' +
                     '</a>' +
                     '</div>';

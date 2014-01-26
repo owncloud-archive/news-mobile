@@ -4,7 +4,6 @@
 
 /**
  * Copyright (c) 2013, Bernhard Posselt <nukeawhale@gmail.com> 
- * Copyright (c) 2013, Alessandro Cosentino <cosenal@gmail.com> 
  * Copyright (c) 2013, Ilija Lazarevic <ikac.ikax@gmail.com> 
  * This file is licensed under the Affero General Public License version 3 or later. 
  * See the COPYING file.
@@ -332,10 +331,10 @@ angular.module('News').directive('feedsListing',
                 var html = '' +
                     '<div class="listing {{feed.id}}">' +
                     '<a class="read-{{feed.unreadCount==0}}" data-toggle="collapse" href ng-click="getFeedItems(feed.id,0,feed.title)">' +
-                    '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic" class="hidden-phone">' +
+                    '<img ng-src="{{feed.faviconLink}}" width="32" height="32" alt="pic">' +
                     '<span class="title">{{feed.title}} <em ng-show="feed.unreadCount">({{feed.unreadCount}})</em></span>' +
                     '<br/>' +
-                    '<span ng-show="feed.added" class="itemadd hidden-phone">web site: <span>{{feed.link | clearurl}}</span></span>' +
+                    '<span ng-show="feed.link" class="itemadd hidden-phone">web site: <span>{{feed.link | clearurl}}</span></span>' +
                     '<span ng-show="feed.added" class="itemadd hidden-phone">date added: <span>{{feed.added}}</span></span>' +
                     '</a>' +
                     '</div>';
@@ -498,7 +497,9 @@ angular.module('News').filter('clearurl', function () {
     var regexp = new RegExp(reg);
 
 	return function (text) {
-        return regexp.exec(text)[0];
+        if (text) {
+            return regexp.exec(text)[0];
+        }
 	};
 });
 
